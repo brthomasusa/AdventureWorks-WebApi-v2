@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using AdventureWorks.Models.Base;
 
 namespace AdventureWorks.Models.Base.HumanResources
 {
-    public class EmployeeBase
+    public class EmployeeBase : EntityBase
     {
         public int BusinessEntityID { get; set; }
 
