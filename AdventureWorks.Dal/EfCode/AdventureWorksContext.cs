@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Models.Sales;
-// using AdventureWorks.Models.ViewModel;
+using AdventureWorks.Models.ViewModel;
 using AdventureWorks.Dal.EfCode.Configuration.HumanResources;
 using AdventureWorks.Dal.EfCode.Configuration.Person;
 using AdventureWorks.Dal.EfCode.Configuration.Purchasing;
@@ -38,92 +41,92 @@ namespace AdventureWorks.Dal.EfCode
         public virtual DbSet<JobCandidate> JobCandidate { get; set; }
         public virtual DbSet<Shift> Shift { get; set; }
 
-        // public virtual DbQuery<PersonEmployee> PersonEmployee { get; set; }
-        // public virtual DbQuery<VendorContact> VendorContact { get; set; }
-        // public virtual DbQuery<VendorAddress> VendorAddress { get; set; }
-        // public virtual DbQuery<PhoneViewModel> PhoneViewModel { get; set; }
-        // public virtual DbQuery<AddressViewModel> AddressViewModel { get; set; }
-        // public virtual DbQuery<VendorContactViewModel> VendorContactViewModel { get; set; }
-        // public virtual DbQuery<VendorViewModel> VendorViewModel { get; set; }
-        // public virtual DbQuery<EmployeeViewModel> EmployeeViewModel { get; set; }
+        public virtual DbQuery<PersonEmployee> PersonEmployee { get; set; }
+        public virtual DbQuery<VendorContact> VendorContact { get; set; }
+        public virtual DbQuery<VendorAddress> VendorAddress { get; set; }
+        public virtual DbQuery<PhoneViewModel> PhoneViewModel { get; set; }
+        public virtual DbQuery<AddressViewModel> AddressViewModel { get; set; }
+        public virtual DbQuery<VendorContactViewModel> VendorContactViewModel { get; set; }
+        public virtual DbQuery<VendorViewModel> VendorViewModel { get; set; }
+        public virtual DbQuery<EmployeeViewModel> EmployeeViewModel { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Query<PersonEmployee>().ToView("vEmployee", "HumanResources");
-            // modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.ModifiedDate));
+            modelBuilder.Query<PersonEmployee>().ToView("vEmployee", "HumanResources");
+            modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.ModifiedDate));
 
-            // modelBuilder.Query<VendorContact>().ToView("vVendorWithContacts", "Purchasing");
-            // modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.ModifiedDate));
+            modelBuilder.Query<VendorContact>().ToView("vVendorWithContacts", "Purchasing");
+            modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.ModifiedDate));
 
-            // modelBuilder.Query<VendorAddress>().ToView("vVendorWithAddresses", "Purchasing");
-            // modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.ModifiedDate));  
+            modelBuilder.Query<VendorAddress>().ToView("vVendorWithAddresses", "Purchasing");
+            modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.ModifiedDate));  
 
-            // modelBuilder.Query<PhoneViewModel>().ToQuery(() => PhoneViewModel.FromSql(
-            //   @"SELECT BusinessEntityID, PhoneNumber, ph.PhoneNumberTypeID, phtype.Name AS PhoneNumberType
-            //     FROM Person.PersonPhone ph
-            //     INNER JOIN Person.PhoneNumberType phtype ON ph.PhoneNumberTypeID = phtype.PhoneNumberTypeID"         
-            // ).AsQueryable());
+            modelBuilder.Query<PhoneViewModel>().ToQuery(() => PhoneViewModel.FromSql(
+              @"SELECT BusinessEntityID, PhoneNumber, ph.PhoneNumberTypeID, phtype.Name AS PhoneNumberType
+                FROM Person.PersonPhone ph
+                INNER JOIN Person.PhoneNumberType phtype ON ph.PhoneNumberTypeID = phtype.PhoneNumberTypeID"         
+            ).AsQueryable());
 
-            // modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.ModifiedDate));  
+            modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.ModifiedDate));  
 
-            // modelBuilder.Query<AddressViewModel>().ToQuery(() => AddressViewModel.FromSql(
-            //   @"SELECT bea.BusinessEntityID, a.AddressID, AddressLine1, AddressLine2, City, 
-            //     a.StateProvinceID, StateProvinceCode, PostalCode, a.SpatialLocation,
-            //     CountryRegionCode, bea.AddressTypeID, t.Name AS AddressTypeName
-            //     FROM Person.Address a
-            //     INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
-            //     INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
-            //     INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID"          
-            // ).AsQueryable());
+            modelBuilder.Query<AddressViewModel>().ToQuery(() => AddressViewModel.FromSql(
+              @"SELECT bea.BusinessEntityID, a.AddressID, AddressLine1, AddressLine2, City, 
+                a.StateProvinceID, StateProvinceCode, PostalCode, a.SpatialLocation,
+                CountryRegionCode, bea.AddressTypeID, t.Name AS AddressTypeName
+                FROM Person.Address a
+                INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
+                INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
+                INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID"          
+            ).AsQueryable());
 
-            // modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.ModifiedDate)); 
+            modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.ModifiedDate)); 
 
-            // modelBuilder.Query<VendorContactViewModel>().ToQuery(() => VendorContactViewModel.FromSql(
-            //   @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
-            //         pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
-            //         pp.Demographics, email.EmailAddressID, email.EmailAddress, pw.PasswordHash AS EmailPasswordHash,
-            //         pw.PasswordSalt AS EmailPasswordSalt, bec.ContactTypeID, ct.Name AS ContactPosition, bec.BusinessEntityID AS VendorID
-            //     FROM Person.Person pp
-            //     INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
-            //     INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
-            //     INNER JOIN Person.BusinessEntityContact bec ON pp.BusinessEntityID = bec.PersonID
-            //     INNER JOIN Person.ContactType ct ON bec.ContactTypeID = ct.ContactTypeID
-            //     WHERE bec.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"          
-            // ).AsQueryable());
+            modelBuilder.Query<VendorContactViewModel>().ToQuery(() => VendorContactViewModel.FromSql(
+              @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
+                    pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
+                    pp.Demographics, email.EmailAddressID, email.EmailAddress, pw.PasswordHash AS EmailPasswordHash,
+                    pw.PasswordSalt AS EmailPasswordSalt, bec.ContactTypeID, ct.Name AS ContactPosition, bec.BusinessEntityID AS VendorID
+                FROM Person.Person pp
+                INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
+                INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
+                INNER JOIN Person.BusinessEntityContact bec ON pp.BusinessEntityID = bec.PersonID
+                INNER JOIN Person.ContactType ct ON bec.ContactTypeID = ct.ContactTypeID
+                WHERE bec.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"          
+            ).AsQueryable());
 
-            // modelBuilder.Query<VendorContactViewModel>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<VendorContactViewModel>(query => query.Ignore(e => e.ModifiedDate));
+            modelBuilder.Query<VendorContactViewModel>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<VendorContactViewModel>(query => query.Ignore(e => e.ModifiedDate));
 
-            // modelBuilder.Query<VendorViewModel>().ToQuery(() => VendorViewModel.FromSql(
-            //   @"SELECT ven.BusinessEntityID, ven.AccountNumber, ven.Name,
-            //     CAST(ven.CreditRating AS int) AS CreditRating, ven.PreferredVendorStatus AS PreferredVendor, 
-            //     ven.PurchasingWebServiceURL, ven.ActiveFlag AS IsActive
-            //     FROM Purchasing.Vendor ven"          
-            // ).AsQueryable());
+            modelBuilder.Query<VendorViewModel>().ToQuery(() => VendorViewModel.FromSql(
+              @"SELECT ven.BusinessEntityID, ven.AccountNumber, ven.Name,
+                CAST(ven.CreditRating AS int) AS CreditRating, ven.PreferredVendorStatus AS PreferredVendor, 
+                ven.PurchasingWebServiceURL, ven.ActiveFlag AS IsActive
+                FROM Purchasing.Vendor ven"          
+            ).AsQueryable());
 
-            // modelBuilder.Query<VendorViewModel>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<VendorViewModel>(query => query.Ignore(e => e.ModifiedDate));
+            modelBuilder.Query<VendorViewModel>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<VendorViewModel>(query => query.Ignore(e => e.ModifiedDate));
 
-            // modelBuilder.Query<EmployeeViewModel>().ToQuery(() => EmployeeViewModel.FromSql(
-            //   @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
-            //       pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
-            //       pp.Demographics, email.EmailAddressID, email.EmailAddress, pw.PasswordHash AS EmailPasswordHash,
-            //       pw.PasswordSalt AS EmailPasswordSalt, ee.NationalIDNumber, ee.LoginID, ee.JobTitle, ee.BirthDate,
-            //       ee.MaritalStatus, ee.Gender, ee.HireDate, ee.SalariedFlag AS IsSalaried, ee.VacationHours,
-            //       ee.SickLeaveHours, ee.CurrentFlag AS IsActive
-            //   FROM Person.Person pp
-            //   INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
-            //   INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
-            //   INNER JOIN HumanResources.Employee ee ON ee.BusinessEntityID = pp.BusinessEntityID"          
-            // ).AsQueryable());
+            modelBuilder.Query<EmployeeViewModel>().ToQuery(() => EmployeeViewModel.FromSql(
+              @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
+                  pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
+                  pp.Demographics, email.EmailAddressID, email.EmailAddress, pw.PasswordHash AS EmailPasswordHash,
+                  pw.PasswordSalt AS EmailPasswordSalt, ee.NationalIDNumber, ee.LoginID, ee.JobTitle, ee.BirthDate,
+                  ee.MaritalStatus, ee.Gender, ee.HireDate, ee.SalariedFlag AS IsSalaried, ee.VacationHours,
+                  ee.SickLeaveHours, ee.CurrentFlag AS IsActive
+              FROM Person.Person pp
+              INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
+              INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
+              INNER JOIN HumanResources.Employee ee ON ee.BusinessEntityID = pp.BusinessEntityID"          
+            ).AsQueryable());
 
-            // modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.RowGuid));
-            // modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.ModifiedDate));            
+            modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.ModifiedDate));            
 
             modelBuilder.ApplyConfiguration(new BusinessEntityConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());
