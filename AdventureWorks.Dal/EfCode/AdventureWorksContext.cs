@@ -13,8 +13,6 @@ namespace AdventureWorks.Dal.EfCode
 {
     public class AdventureWorksContext : DbContext
     {
-        public int BusinessEntityID { get; set; }
-
         public AdventureWorksContext(DbContextOptions<AdventureWorksContext> options) : base(options) { }
 
         public virtual DbSet<BusinessEntity> BusinessEntity { get; set; }
