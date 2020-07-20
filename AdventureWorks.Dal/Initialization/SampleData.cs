@@ -28,7 +28,9 @@ namespace AdventureWorks.Dal.Initialization
                     },
                     Phones =
                     {   
-                        new PersonPhone { PhoneNumber = "697-555-0142", PhoneNumberTypeID = 1 }                                                
+                        new PersonPhone { PhoneNumber = "697-555-0142", PhoneNumberTypeID = 1 },
+                        new PersonPhone { PhoneNumber = "697-123-8901", PhoneNumberTypeID = 2 },
+                        new PersonPhone { PhoneNumber = "697-123-4567", PhoneNumberTypeID = 3 }                                                
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -237,7 +239,49 @@ namespace AdventureWorks.Dal.Initialization
                             }
                         }
                     }
-                }
+                },                
+            },
+
+            new BusinessEntity
+            {
+                PersonObj = new Person
+                {
+                    PersonType = "EM",
+                    IsEasternNameStyle = false,
+                    FirstName = "Freddy",
+                    MiddleName = "L",
+                    LastName = "Krueger",
+                    EmailPromotion = EmailPromoPreference.NoPromotions,
+                    EmailAddressObj = new EmailAddress
+                    {
+                        PersonEmailAddress = "mr.mayhem@adventure-works.com"
+                    },
+                    PasswordObj = new PersonPWord
+                    {
+                        PasswordHash = "s+FUWADIZzXBKpcbxe4OwL2uiJmjLogJNYXXHvc1X/k=",
+                        PasswordSalt = "FlCpzTU="
+                    },
+                    EmployeeObj = new Employee
+                    {
+                        NationalIDNumber = "147994146",
+                        LoginID = "adventure-works\\freddyk",
+                        JobTitle = "Research and Development Engineer",
+                        BirthDate = new DateTime(1986,6,5),
+                        MaritalStatus = "S",
+                        Gender = "F",
+                        HireDate = new DateTime(2008,12,29),
+                        VacationHours = 62,
+                        SickLeaveHours = 51,
+                        IsActive = true,
+                        PayHistories = {
+                            new EmployeePayHistory {
+                                RateChangeDate = new DateTime(2008,12,29),
+                                Rate = 40.8654M,
+                                PayFrequency = PayFrequency.Monthly
+                            }
+                        }
+                    }
+                },                
             },
 
             new BusinessEntity
@@ -266,6 +310,7 @@ namespace AdventureWorks.Dal.Initialization
                     }
                 }
             },
+
             new BusinessEntity
             {
                 PersonObj = new Person
@@ -292,6 +337,7 @@ namespace AdventureWorks.Dal.Initialization
                     }
                 }
             },
+
             new BusinessEntity
             {
                 PersonObj = new Person
@@ -318,6 +364,7 @@ namespace AdventureWorks.Dal.Initialization
                     }
                 }
             },
+
             new BusinessEntity
             {
                 PersonObj = new Person
@@ -344,6 +391,7 @@ namespace AdventureWorks.Dal.Initialization
                     }
                 }
             },
+
             new BusinessEntity
             {
                 PersonObj = new Person
@@ -367,6 +415,57 @@ namespace AdventureWorks.Dal.Initialization
                     Phones = 
                     {
                         new PersonPhone {PhoneNumber = "816-555-0142", PhoneNumberTypeID = 3}                        
+                    }
+                }
+            },
+
+            new BusinessEntity
+            {
+                PersonObj = new Person
+                {
+                    PersonType = "VC",
+                    IsEasternNameStyle = false,
+                    Title = "Ms.",
+                    FirstName = "Terri",
+                    MiddleName = "B.",
+                    LastName = "Phide",
+                    EmailPromotion = EmailPromoPreference.AdventureWorksAndPartners,
+                    EmailAddressObj = new EmailAddress
+                    {
+                        PersonEmailAddress = "terri.phide@adventure-works.com"
+                    },
+                    PasswordObj = new PersonPWord
+                    {
+                        PasswordHash = "elZhadf87Lkl3cXx4oYxXdV31zWENyCgo3VUn5l5l/c=",
+                        PasswordSalt = "K4sEsXg="
+                    },
+                    Phones = 
+                    {
+                        new PersonPhone {PhoneNumber = "214-555-0100", PhoneNumberTypeID = 1},
+                        new PersonPhone {PhoneNumber = "469-987-1001", PhoneNumberTypeID = 3}                        
+                    }
+                }
+            },
+
+            new BusinessEntity
+            {
+                PersonObj = new Person
+                {
+                    PersonType = "VC",
+                    IsEasternNameStyle = false,
+                    Title = "Mr.",
+                    FirstName = "Johnny",
+                    MiddleName = "Dwayne",
+                    LastName = "Dough",
+                    EmailPromotion = EmailPromoPreference.AdventureWorksAndPartners,
+                    EmailAddressObj = new EmailAddress
+                    {
+                        PersonEmailAddress = "j.dough@adventure-works.com"
+                    },
+                    PasswordObj = new PersonPWord
+                    {
+                        PasswordHash = "elZhadf87Lkl3cXx4oYxXdV31zWENyCgo3VUn5l5l/c=",
+                        PasswordSalt = "K4sEsXg="
                     }
                 }
             },
@@ -403,7 +502,41 @@ namespace AdventureWorks.Dal.Initialization
                     PreferredVendor = true,
                     IsActive = true
                 }
-            }
+            },
+
+            new BusinessEntity
+            {
+                VendorObj = new Vendor
+                {
+                    AccountNumber = "DFWBIRE0001",
+                    Name = "DFW Bike Resellers",
+                    CreditRating = CreditRating.Superior,
+                    PreferredVendor = true,
+                    IsActive = true
+                }
+            },
+            new BusinessEntity
+            {
+                VendorObj = new Vendor
+                {
+                    AccountNumber = "DESOTOB0001",
+                    Name = "Desoto Bike Mart",
+                    CreditRating = CreditRating.Above_Average,
+                    PreferredVendor = true,
+                    IsActive = true
+                }
+            },
+            new BusinessEntity
+            {
+                VendorObj = new Vendor
+                {
+                    AccountNumber = "CYCLERU0001",
+                    Name = "Cycles-R-Us",
+                    CreditRating = CreditRating.Superior,
+                    PreferredVendor = true,
+                    IsActive = true
+                }
+            }            
         };
 
         public static IEnumerable<Address> GetPeopleAddresses() => new List<Address>
@@ -462,7 +595,7 @@ namespace AdventureWorks.Dal.Initialization
                 {
                     AddressTypeID = 2
                 }
-            }
+            }           
         };
 
         public static IEnumerable<Address> GetVendorAddresses() => new List<Address>
@@ -499,7 +632,41 @@ namespace AdventureWorks.Dal.Initialization
                 {
                     AddressTypeID = 3
                 }
-            }
+            },
+            new Address
+            {
+                AddressLine1 = "1900 Desoto Court",
+                City = "Desoto",
+                PostalCode = "75123",
+                StateProvinceID = 73,
+                BusinessEntityAddressObj = new BusinessEntityAddress
+                {
+                    AddressTypeID = 2
+                }
+            },
+            new Address
+            {
+                AddressLine1 = "211 East Pleasant Run Rd",
+                AddressLine2 = "#A",
+                City = "Desoto",
+                PostalCode = "75115",
+                StateProvinceID = 73,
+                BusinessEntityAddressObj = new BusinessEntityAddress
+                {
+                    AddressTypeID = 2
+                }
+            },
+            new Address
+            {
+                AddressLine1 = "6266 Melody Lane",
+                City = "Dallas",
+                PostalCode = "75231",
+                StateProvinceID = 73,
+                BusinessEntityAddressObj = new BusinessEntityAddress
+                {
+                    AddressTypeID = 2
+                }
+            }             
         };
 
         public static IEnumerable<SalesTerritory> GetSalesTerritories() => new List<SalesTerritory>

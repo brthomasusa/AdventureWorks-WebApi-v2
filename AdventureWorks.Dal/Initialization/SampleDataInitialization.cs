@@ -83,14 +83,14 @@ namespace AdventureWorks.Dal.Initialization
                     ctx.SalesTerritory.AddRange(SampleData.GetSalesTerritories());
                     ctx.SaveChanges();
 
-                    AddVendorAddressesToDb(ctx);
-                    AddPeopleAddressesToDb(ctx);
+                    AddAddressesAndContactsToVendor(ctx);
+                    AddAddressesToEmployees(ctx);
                     AddEmployeeDeptHistoryToDb(ctx);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine($"*** SeedData() Error: {ex}");
             }
         }
 
@@ -100,65 +100,7 @@ namespace AdventureWorks.Dal.Initialization
             SeedData(ctx);
         }
 
-        public static void AddPeopleToDb(AdventureWorksContext ctx)
-        {
-            BusinessEntity businessEntity1 = new BusinessEntity { };
-            BusinessEntity businessEntity2 = new BusinessEntity { };
-            ctx.BusinessEntity.AddRange(new List<BusinessEntity> { businessEntity1, businessEntity2 });
-
-            var PersonObj1 = new Person
-            {
-                BusinessEntityID = businessEntity1.BusinessEntityID,
-                PersonType = "EM",
-                IsEasternNameStyle = false,
-                FirstName = "Ken",
-                MiddleName = "J",
-                LastName = "Sanchez",
-                EmailPromotion = EmailPromoPreference.NoPromotions,
-                EmailAddressObj = new EmailAddress
-                {
-                    PersonEmailAddress = "ken@adventure-works.com"
-                },
-                Phones = 
-                {
-                    new PersonPhone {PhoneNumber = "697-555-0142", PhoneNumberTypeID = 1}                    
-                },
-                PasswordObj = new PersonPWord
-                {
-                    PasswordHash = "pbFwXWE99vobT6g+vPWFy93NtUU/orrIWafF01hccfM=",
-                    PasswordSalt = "bE3XiWw="
-                }
-            };
-
-            var PersonObj2 = new Person
-            {
-                BusinessEntityID = businessEntity2.BusinessEntityID,
-                PersonType = "EM",
-                IsEasternNameStyle = false,
-                FirstName = "Terri",
-                MiddleName = "Lee",
-                LastName = "Duffy",
-                EmailPromotion = EmailPromoPreference.AdventureWorksAndPartners,
-                EmailAddressObj = new EmailAddress
-                {
-                    PersonEmailAddress = "terri@adventure-works.com"
-                },
-                Phones = 
-                {
-                    new PersonPhone {PhoneNumber = "819-555-0175", PhoneNumberTypeID = 3}                    
-                },
-                PasswordObj = new PersonPWord
-                {
-                    PasswordHash = "bawRVNrZQYQ05qF05Gz6VLilnviZmrqBReTTAGAudm0=",
-                    PasswordSalt = "EjJaC3U="
-                }
-            };
-
-            ctx.Person.AddRange(new List<Person> { PersonObj1, PersonObj2 });
-            ctx.SaveChanges();
-        }
-
-        private static void AddPeopleAddressesToDb(AdventureWorksContext ctx)
+        private static void AddAddressesToEmployees(AdventureWorksContext ctx)
         {
             if (ctx.Person.Any())
             {
@@ -336,18 +278,19 @@ namespace AdventureWorks.Dal.Initialization
             }
         }
 
-
-        private static void AddVendorAddressesToDb(AdventureWorksContext ctx)
+        private static void AddAddressesAndContactsToVendor(AdventureWorksContext ctx)
         {
             if (ctx.Vendor.Any())
             {
+                var vendorAddresses = SampleData.GetVendorAddresses();
+
+                // AUSTRALI0001
                 var vendor = ctx.Vendor.AsNoTracking()
                     .Where(v => v.AccountNumber == "AUSTRALI0001")
                     .Select(c => new { ID = c.BusinessEntityID })
                     .SingleOrDefault();
-
-                var vendorAddresses = SampleData.GetVendorAddresses();
-                var address = vendorAddresses.FirstOrDefault(a => a.AddressLine1 == "28 San Marino Ct" && a.City == "Bellingham");
+                
+                var address = vendorAddresses.First(a => a.AddressLine1 == "28 San Marino Ct" && a.City == "Bellingham");
                 if (address != null)
                 {
                     address.BusinessEntityAddressObj.BusinessEntityID = vendor.ID;
@@ -370,16 +313,16 @@ namespace AdventureWorks.Dal.Initialization
                 var bc1 = new BusinessEntityContact { BusinessEntityID = vendor.ID, PersonID = contact1.ID, ContactTypeID = 18 };
                 var bc2 = new BusinessEntityContact { BusinessEntityID = vendor.ID, PersonID = contact2.ID, ContactTypeID = 19 };
                 var bc3 = new BusinessEntityContact { BusinessEntityID = vendor.ID, PersonID = contact3.ID, ContactTypeID = 17 };
-
                 ctx.BusinessEntityContact.AddRange(new List<BusinessEntityContact> { bc1, bc2, bc3 });
 
 
+                // TRIKES0001
                 vendor = ctx.Vendor.AsNoTracking()
                     .Where(v => v.AccountNumber == "TRIKES0001")
                     .Select(c => new { ID = c.BusinessEntityID })
                     .SingleOrDefault();
 
-                address = vendorAddresses.FirstOrDefault(a => a.AddressLine1 == "90 Sunny Ave" && a.City == "Berkeley");
+                address = vendorAddresses.First(a => a.AddressLine1 == "90 Sunny Ave" && a.City == "Berkeley");
                 if (address != null)
                 {
                     address.BusinessEntityAddressObj.BusinessEntityID = vendor.ID;
@@ -392,16 +335,16 @@ namespace AdventureWorks.Dal.Initialization
                     .SingleOrDefault();
 
                 var bc4 = new BusinessEntityContact { BusinessEntityID = vendor.ID, PersonID = contact4.ID, ContactTypeID = 18 };
-
                 ctx.BusinessEntityContact.Add(bc4);
 
 
+                // LIGHTSP0001
                 vendor = ctx.Vendor.AsNoTracking()
                     .Where(v => v.AccountNumber == "LIGHTSP0001")
                     .Select(c => new { ID = c.BusinessEntityID })
                     .SingleOrDefault();
 
-                address = vendorAddresses.FirstOrDefault(a => a.AddressLine1 == "298 Sunnybrook Drive" && a.City == "Spring Valley");
+                address = vendorAddresses.First(a => a.AddressLine1 == "298 Sunnybrook Drive" && a.City == "Spring Valley");
                 if (address != null)
                 {
                     address.BusinessEntityAddressObj.BusinessEntityID = vendor.ID;
@@ -414,8 +357,65 @@ namespace AdventureWorks.Dal.Initialization
                     .SingleOrDefault();
 
                 var bc5 = new BusinessEntityContact { BusinessEntityID = vendor.ID, PersonID = contact5.ID, ContactTypeID = 17 };
-
                 ctx.BusinessEntityContact.Add(bc5);
+
+                // DFWBIRE0001
+                var dfwVendor = ctx.Vendor.AsNoTracking()
+                    .Where(v => v.AccountNumber == "DFWBIRE0001")
+                    .Select(c => new { ID = c.BusinessEntityID })
+                    .SingleOrDefault();
+
+                var terriPhide = ctx.Person.AsNoTracking()
+                    .Where(c => c.FirstName == "Terri" && c.LastName == "Phide")
+                    .Select(c => new { ID = c.BusinessEntityID })
+                    .SingleOrDefault();
+
+                var bc6 = new BusinessEntityContact { BusinessEntityID = dfwVendor.ID, PersonID = terriPhide.ID, ContactTypeID = 17 };
+                ctx.BusinessEntityContact.Add(bc6);
+
+
+                // DESOTOB0001
+                var desotoVendor = ctx.Vendor.AsNoTracking()
+                    .Where(v => v.AccountNumber == "DESOTOB0001")
+                    .Select(c => new { ID = c.BusinessEntityID })
+                    .SingleOrDefault();
+
+                var address1 = vendorAddresses.First(a => a.AddressLine1 == "1900 Desoto Court" && a.City == "Desoto");
+                if (address1 != null)
+                {
+                    address1.BusinessEntityAddressObj.BusinessEntityID = desotoVendor.ID;
+                    ctx.Address.Add(address1);
+                }
+
+                var address2 = vendorAddresses.FirstOrDefault(a => a.AddressLine1 == "211 East Pleasant Run Rd" && a.City == "Desoto");
+                if (address2 != null)
+                {
+                    address2.BusinessEntityAddressObj.BusinessEntityID = desotoVendor.ID;
+                    ctx.Address.Add(address2);
+                }
+
+                var johnnyDough = ctx.Person.AsNoTracking()
+                    .Where(c => c.FirstName == "Johnny" && c.LastName == "Dough")
+                    .Select(c => new { ID = c.BusinessEntityID })
+                    .SingleOrDefault();
+
+                var bc7 = new BusinessEntityContact { BusinessEntityID = desotoVendor.ID, PersonID = johnnyDough.ID, ContactTypeID = 17 };
+                ctx.BusinessEntityContact.Add(bc7);
+
+
+                // CYCLERU0001
+                var rusVendor = ctx.Vendor.AsNoTracking()
+                    .Where(v => v.AccountNumber == "DESOTOB0001")
+                    .Select(c => new { ID = c.BusinessEntityID })
+                    .SingleOrDefault();
+
+                address = vendorAddresses.FirstOrDefault(a => a.AddressLine1 == "6266 Melody Lane" && a.City == "Dallas");
+                if (address != null)
+                {
+                    address.BusinessEntityAddressObj.BusinessEntityID = rusVendor.ID;
+                    ctx.Address.Add(address);
+                }
+
 
                 ctx.SaveChanges();
             }
