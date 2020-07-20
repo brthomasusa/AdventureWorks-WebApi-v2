@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using AdventureWorks.Models.Base;
+using AdventureWorks.Models.Base.HumanResources;
 
 namespace AdventureWorks.Models.HumanResources
 {
