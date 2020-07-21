@@ -42,33 +42,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
         }
 
         [Fact]
-        public void ShouldRetrieveAllVendorsWithRelatedContacts()
-        {           
-            // SampleDataInitialization.InitializeData(ctx);
-
-            // var vendorList = (
-            //     from vendorTbl in ctx.Vendor
-            //     join becTbl in ctx.BusinessEntityContact on vendorTbl.BusinessEntityID equals becTbl.BusinessEntityID
-            //     join personTbl in ctx.Person on becTbl.PersonID equals personTbl.BusinessEntityID
-            //     select new
-            //     {
-            //         VendorID = vendorTbl.BusinessEntityID,
-            //         AccountNumber = vendorTbl.AccountNumber,
-            //         VendorName = vendorTbl.Name,
-            //         ContactFirstName = personTbl.FirstName,
-            //         ContactLastName = personTbl.LastName,
-            //         ContactPhone = personTbl.Phones[0].PhoneNumber,
-            //         ContactEmail = personTbl.EmailAddressObj.PersonEmailAddress
-            //     }
-            // ).ToList();
-
-            // int vendorListCount = vendorList.Count();
-
-            // Assert.NotNull(vendorList);
-            // Assert.Equal(8, vendorListCount);
-        }
-
-        [Fact]
         public void ShouldRetrieveOneVendorContactFromView()
         {
             SampleDataInitialization.InitializeData(ctx);

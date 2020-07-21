@@ -40,15 +40,22 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
             var employeeObj = ctx.Person
                 .AsNoTracking()
                 .Where(person => person.PersonType == "EM" && person.EmployeeObj.NationalIDNumber == "811994146")
-                .Include(person => person.EmployeeObj)
-                    .ThenInclude(employee => employee.DepartmentHistories)
-                .Include(person => person.EmployeeObj)
-                    .ThenInclude(employee => employee.PayHistories)
                 .Single<AdventureWorks.Models.Person.Person>();
 
             Assert.NotNull(employeeObj);
-            Assert.True(employeeObj.EmployeeObj.PayHistories.Count() == 1);
-            Assert.True(employeeObj.EmployeeObj.DepartmentHistories.Count() == 1);
+        }
+
+        [Fact]
+        public void ShouldRetrieveCompleteEmployeeObjectGraphByLoginID()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+
+            var employeeObj = ctx.Person
+                .AsNoTracking()
+                .Where(person => person.PersonType == "EM" && person.EmployeeObj.LoginID == "adventure-works\\freddyk")
+                .Single<AdventureWorks.Models.Person.Person>();
+
+            Assert.NotNull(employeeObj);
         }
 
         [Fact]
