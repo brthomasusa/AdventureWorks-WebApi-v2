@@ -27,10 +27,10 @@ namespace AdventureWorks.Dal.Initialization
                         PersonEmailAddress = "ken@adventure-works.com"
                     },
                     Phones =
-                    {   
+                    {
                         new PersonPhone { PhoneNumber = "697-555-0142", PhoneNumberTypeID = 1 },
                         new PersonPhone { PhoneNumber = "697-123-8901", PhoneNumberTypeID = 2 },
-                        new PersonPhone { PhoneNumber = "697-123-4567", PhoneNumberTypeID = 3 }                                                
+                        new PersonPhone { PhoneNumber = "697-123-4567", PhoneNumberTypeID = 3 }
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -73,9 +73,9 @@ namespace AdventureWorks.Dal.Initialization
                     {
                         PersonEmailAddress = "terri@adventure-works.com"
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone{PhoneNumber = "819-555-0175", PhoneNumberTypeID = 3}                        
+                        new PersonPhone{PhoneNumber = "819-555-0175", PhoneNumberTypeID = 3}
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -97,6 +97,11 @@ namespace AdventureWorks.Dal.Initialization
                         PayHistories = {
                             new EmployeePayHistory {
                                 RateChangeDate = new DateTime(2008,1,31),
+                                Rate = 40.00M,
+                                PayFrequency = PayFrequency.Biweekly
+                            },
+                            new EmployeePayHistory {
+                                RateChangeDate = new DateTime(2010,11,3),
                                 Rate = 63.4615M,
                                 PayFrequency = PayFrequency.Biweekly
                             }
@@ -119,9 +124,9 @@ namespace AdventureWorks.Dal.Initialization
                     {
                         PersonEmailAddress = "gail@adventure-works.com"
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "849-555-0139", PhoneNumberTypeID = 1}                        
+                        new PersonPhone {PhoneNumber = "849-555-0139", PhoneNumberTypeID = 1}
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -165,9 +170,9 @@ namespace AdventureWorks.Dal.Initialization
                     {
                         PersonEmailAddress = "jossef@adventure-works.com"
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "122-555-0189", PhoneNumberTypeID = 3}                        
+                        new PersonPhone {PhoneNumber = "122-555-0189", PhoneNumberTypeID = 3}
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -210,9 +215,9 @@ namespace AdventureWorks.Dal.Initialization
                     {
                         PersonEmailAddress = "diane1@adventure-works.com"
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "815-555-0138", PhoneNumberTypeID = 1}                        
+                        new PersonPhone {PhoneNumber = "815-555-0138", PhoneNumberTypeID = 1}
                     },
                     PasswordObj = new PersonPWord
                     {
@@ -239,7 +244,7 @@ namespace AdventureWorks.Dal.Initialization
                             }
                         }
                     }
-                },                
+                },
             },
 
             new BusinessEntity
@@ -281,7 +286,7 @@ namespace AdventureWorks.Dal.Initialization
                             }
                         }
                     }
-                },                
+                },
             },
 
             new BusinessEntity
@@ -304,9 +309,9 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "elZhadf87Lkl3cXx4oYxXdV31zWENyCgo3VUn5l5l/c=",
                         PasswordSalt = "K4sEsXg="
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "273-555-0100", PhoneNumberTypeID = 1}                        
+                        new PersonPhone {PhoneNumber = "273-555-0100", PhoneNumberTypeID = 1}
                     }
                 }
             },
@@ -331,9 +336,9 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "gF+ZjCfYSXM0eyoxiL1+TQR2Ok2GEYIULuT6jM0rSwg=",
                         PasswordSalt = "PYj/pzk="
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "315-555-0100", PhoneNumberTypeID = 3}                        
+                        new PersonPhone {PhoneNumber = "315-555-0100", PhoneNumberTypeID = 3}
                     }
                 }
             },
@@ -358,9 +363,9 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "ImD3R5/BA0YeT1Yy1LCk3Iuj2QQPz4BybsiOooaka4c=",
                         PasswordSalt = "VDufoKM="
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "114-555-0100", PhoneNumberTypeID = 3}                        
+                        new PersonPhone {PhoneNumber = "114-555-0100", PhoneNumberTypeID = 3}
                     }
                 }
             },
@@ -385,9 +390,9 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "B8H846iy+ZWO8Ed1QCuYWXFN8x4zzUGCDhjGsIfRmaA=",
                         PasswordSalt = "DNuHuX0="
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "459-555-0100", PhoneNumberTypeID = 1}                        
+                        new PersonPhone {PhoneNumber = "459-555-0100", PhoneNumberTypeID = 1}
                     }
                 }
             },
@@ -412,9 +417,9 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
                         PasswordSalt = "d2tgUmM="
                     },
-                    Phones = 
+                    Phones =
                     {
-                        new PersonPhone {PhoneNumber = "816-555-0142", PhoneNumberTypeID = 3}                        
+                        new PersonPhone {PhoneNumber = "816-555-0142", PhoneNumberTypeID = 3}
                     }
                 }
             },
@@ -439,10 +444,10 @@ namespace AdventureWorks.Dal.Initialization
                         PasswordHash = "elZhadf87Lkl3cXx4oYxXdV31zWENyCgo3VUn5l5l/c=",
                         PasswordSalt = "K4sEsXg="
                     },
-                    Phones = 
+                    Phones =
                     {
                         new PersonPhone {PhoneNumber = "214-555-0100", PhoneNumberTypeID = 1},
-                        new PersonPhone {PhoneNumber = "469-987-1001", PhoneNumberTypeID = 3}                        
+                        new PersonPhone {PhoneNumber = "469-987-1001", PhoneNumberTypeID = 3}
                     }
                 }
             },
@@ -536,7 +541,7 @@ namespace AdventureWorks.Dal.Initialization
                     PreferredVendor = true,
                     IsActive = true
                 }
-            }            
+            }
         };
 
         public static IEnumerable<Address> GetPeopleAddresses() => new List<Address>
@@ -595,7 +600,7 @@ namespace AdventureWorks.Dal.Initialization
                 {
                     AddressTypeID = 2
                 }
-            }           
+            }
         };
 
         public static IEnumerable<Address> GetVendorAddresses() => new List<Address>
@@ -666,7 +671,7 @@ namespace AdventureWorks.Dal.Initialization
                 {
                     AddressTypeID = 2
                 }
-            }             
+            }
         };
 
         public static IEnumerable<SalesTerritory> GetSalesTerritories() => new List<SalesTerritory>

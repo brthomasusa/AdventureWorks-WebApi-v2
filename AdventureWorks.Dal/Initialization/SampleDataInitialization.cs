@@ -193,6 +193,12 @@ namespace AdventureWorks.Dal.Initialization
                     .Select(obj => new { deptID = obj.DepartmentID })
                     .SingleOrDefault();
 
+                var toolDesign = ctx.Department
+                    .AsNoTracking()
+                    .Where(d => d.Name == "Tool Design")
+                    .Select(obj => new { deptID = obj.DepartmentID })
+                    .SingleOrDefault();
+
                 var shift = ctx.Shift
                     .AsNoTracking()
                     .Where(s => s.Name == "Day")
@@ -224,9 +230,17 @@ namespace AdventureWorks.Dal.Initialization
                 var deptHistory2 = new EmployeeDepartmentHistory
                 {
                     BusinessEntityID = emp2.ID,
-                    DepartmentID = engineering.deptID,
+                    DepartmentID = toolDesign.deptID,
                     ShiftID = shift.ID,
                     StartDate = new DateTime(2008, 1, 31)
+                };
+
+                var deptHistory2A = new EmployeeDepartmentHistory
+                {
+                    BusinessEntityID = emp2.ID,
+                    DepartmentID = engineering.deptID,
+                    ShiftID = shift.ID,
+                    StartDate = new DateTime(2010, 11, 3)
                 };
 
                 var emp3 = ctx.Person
@@ -272,7 +286,7 @@ namespace AdventureWorks.Dal.Initialization
                 };
 
                 // Add new EmployeeDepartmentHistory entities to the database
-                ctx.EmployeeDepartmentHistory.AddRange(new List<EmployeeDepartmentHistory> { deptHistory1, deptHistory2, deptHistory3, deptHistory4, deptHistory5 });
+                ctx.EmployeeDepartmentHistory.AddRange(new List<EmployeeDepartmentHistory> { deptHistory1, deptHistory2, deptHistory2A, deptHistory3, deptHistory4, deptHistory5 });
 
                 ctx.SaveChanges();
             }
@@ -289,7 +303,7 @@ namespace AdventureWorks.Dal.Initialization
                     .Where(v => v.AccountNumber == "AUSTRALI0001")
                     .Select(c => new { ID = c.BusinessEntityID })
                     .SingleOrDefault();
-                
+
                 var address = vendorAddresses.First(a => a.AddressLine1 == "28 San Marino Ct" && a.City == "Bellingham");
                 if (address != null)
                 {

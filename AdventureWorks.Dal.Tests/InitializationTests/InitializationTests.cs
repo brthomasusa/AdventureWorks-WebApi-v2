@@ -35,7 +35,7 @@ namespace AdventureWorks.Dal.Tests.InitializationTests
         {
             SampleDataInitialization.InitializeData(ctx);
             var payHistories = ctx.EmployeePayHistory.ToList();
-            Assert.Equal(6, payHistories.Count());
+            Assert.Equal(7, payHistories.Count());
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace AdventureWorks.Dal.Tests.InitializationTests
         {
             SampleDataInitialization.InitializeData(ctx);
             var deptHistories = ctx.EmployeeDepartmentHistory.ToList();
-            Assert.Equal(5, deptHistories.Count());
+            Assert.Equal(6, deptHistories.Count());
         }
 
         [Fact]

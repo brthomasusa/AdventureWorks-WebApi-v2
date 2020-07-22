@@ -26,10 +26,13 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
                     .ThenInclude(employee => employee.PayHistories)
                 .Single<AdventureWorks.Models.Person.Person>();
 
+            var payHistoryCount = employeeObj.EmployeeObj.PayHistories.Count;
+            var deptHistoryCount = employeeObj.EmployeeObj.DepartmentHistories.Count;
+
             Assert.NotNull(employeeObj);
+            Assert.Equal(2, payHistoryCount);
+            Assert.Equal(2, deptHistoryCount);
             Assert.Equal("245797967", employeeObj.EmployeeObj.NationalIDNumber);
-            Assert.True(employeeObj.EmployeeObj.PayHistories.Count() == 1);
-            Assert.True(employeeObj.EmployeeObj.DepartmentHistories.Count() == 1);
         }
 
         [Fact]
@@ -59,7 +62,7 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
         }
 
         [Fact]
-        public void ShouldRetrieveOneEmployeeFromView()
+        public void ShouldRetrieveOneEmployeeFromPersonEmployeeView()
         {
             SampleDataInitialization.InitializeData(ctx);
 
@@ -68,6 +71,30 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
                 .First<PersonEmployee>();
 
             Assert.Equal("ken@adventure-works.com", employee.EmailAddress);
+        }
+
+        [Fact]
+        public void ShouldRetrieveOneEmployeeByFirstAndLastName()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+
+            var employee = ctx.Employee
+                .Where(e => e.PersonNavigation.FirstName == "Terri" && e.PersonNavigation.LastName == "Duffy")
+                .First();
+
+            Assert.Equal(18, employee.BusinessEntityID);
+        }
+
+        [Fact]
+        public void ShouldRetrieveOneEmployeeByBusinessEntityID()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+
+            var bizEntityID = 18;
+            var employee = ctx.Employee.Find(bizEntityID);
+
+
+            Assert.Equal("Duffy", employee.PersonNavigation.LastName);
         }
 
         [Fact]
@@ -96,6 +123,30 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
             Assert.Equal("Terri", employee.FirstName);
             Assert.Equal("Duffy", employee.LastName);
             Assert.Equal(1, employee.VacationHours);
-        }        
+        }
+
+        [Fact]
+        public void ShouldRetrieveOneDepartmentByID()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+
+            short deptID = 15;
+            var dept = ctx.Department.Find(deptID);
+
+            Assert.NotNull(dept);
+            Assert.Equal("Engineering", dept.Name);
+        }
+
+        [Fact]
+        public void ShouldRetrieveOneDepartmentByName()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+
+            var deptName = "Engineering";
+            var dept = ctx.Department.Where(d => d.Name == deptName).First();
+
+            Assert.Equal(15, dept.DepartmentID);
+            Assert.Equal("Research and Development", dept.GroupName);
+        }
     }
 }
