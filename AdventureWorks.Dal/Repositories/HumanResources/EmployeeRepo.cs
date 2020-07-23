@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using AdventureWorks.Dal.EfCode;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Person;
@@ -22,6 +25,48 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public EmployeeRepo(DbContextOptions<AdventureWorksContext> options) : base(options) { }
 
         public IEnumerable<PersonEmployee> GetAllPeopleEmployees() => Context.PersonEmployee.ToList();
+
+        public override int SaveChanges()
+        {
+            try
+            {
+                return Context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var msg = "Error: The employee you are trying to delete does not exist. Try refreshing your screen.";
+
+                throw new AdventureWorksConcurrencyExeception(msg, ex);
+            }
+            catch (RetryLimitExceededException ex)
+            {
+                throw new AdventureWorksRetryLimitExceededException("There is a problem with your connection.", ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlException)
+                {
+                    if (sqlException.Message.Contains("AK_Employee_Login", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee login!", ex);
+                    }
+                    else if (sqlException.Message.Contains("AK_Employee_NationalIDNumber", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: There is an existing employee with this National ID number!", ex);
+                    }
+                    else if (sqlException.Message.Contains("IX_Address_AddressLine1_AddressLine2_City_StateProvinceID_PostalCode", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: There is an existing entity with this address!", ex);
+                    }
+                }
+
+                throw new AdventureWorksException("An error occurred while updating the database", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new AdventureWorksException("An error occurred while updating the database", ex);
+            }
+        }
 
         public IEnumerable<PersonClass> GetAllEmployees()
             => Context.Person
@@ -48,18 +93,28 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             => Context.PersonEmployee
                 .FirstOrDefault(ee => ee.BusinessEntityID == personID);
 
-        public int AddEmployee(BusinessEntity employee, Address employeeAddress)
+        public int AddEmployee(BusinessEntity employee)
         {
             Context.BusinessEntity.Add(employee);
             SaveChanges();
 
-            int businessEntityID = employee.BusinessEntityID;
+            return employee.BusinessEntityID;
+        }
 
-            employeeAddress.BusinessEntityAddressObj.BusinessEntityID = businessEntityID;
-            Context.Address.Add(employeeAddress);
-            SaveChanges();
+        public int AddEmployee(BusinessEntity employee, Address employeeAddress)
+        {
+            Action dbTransaction = () =>
+            {
+                int employeeID = AddEmployee(employee);
 
-            return businessEntityID;
+                employeeAddress.BusinessEntityAddressObj.BusinessEntityID = employeeID;
+                Context.Address.Add(employeeAddress);
+                SaveChanges();
+            };
+
+            ExecuteInATransaction(dbTransaction);
+
+            return employee.BusinessEntityID;
         }
 
         public int UpdateEmployee(PersonClass employee)

@@ -19,6 +19,8 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         PersonClass FindEmployee(Expression<Func<PersonClass, bool>> predicate);
 
+        int AddEmployee(BusinessEntity employee);
+
         int AddEmployee(BusinessEntity employee, Address employeeAddress);
 
         int UpdateEmployee(PersonClass employee);
