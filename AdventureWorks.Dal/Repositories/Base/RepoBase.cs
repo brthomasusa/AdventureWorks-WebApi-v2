@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
@@ -112,7 +113,7 @@ namespace AdventureWorks.Dal.Repositories.Base
             return persist ? SaveChanges() : 0;
         }
 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             try
             {
@@ -145,9 +146,8 @@ namespace AdventureWorks.Dal.Repositories.Base
                 {
                     actionToExecute();
                     trans.Commit();
-                    // trans.Rollback();
                 }
             });
-        }        
+        }
     }
 }

@@ -183,5 +183,35 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
 
             }
         }
+
+        [Fact]
+        public void ShouldRaiseErrorDuplicateDepartmentName()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+            ExecuteInATransaction(RunTheTest);
+
+            void RunTheTest()
+            {
+                Action testCode = () =>
+                {
+                    ctx.Department.Add
+                    (
+                        new Department
+                        {
+                            Name = "Engineering",
+                            GroupName = "Research and Development"
+                        }
+                    );
+
+                    ctx.SaveChanges();
+                };
+
+                var ex = Record.Exception(testCode);
+
+                Assert.NotNull(ex);
+                Assert.IsType<DbUpdateException>(ex);
+                Assert.True(ex.InnerException.Message.Contains("AK_Department_Name", StringComparison.OrdinalIgnoreCase));
+            }
+        }
     }
 }
