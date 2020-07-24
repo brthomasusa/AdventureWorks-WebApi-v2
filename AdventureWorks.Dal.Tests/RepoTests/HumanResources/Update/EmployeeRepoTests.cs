@@ -151,5 +151,44 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
                 Assert.Equal("98055-8055", employeeAddress.PostalCode);
             }
         }
+
+        [Fact]
+        public void ShouldUpdateEmployeeDepartmentHistory()
+        {
+            // DepartmentHistory has 6 fields, the first 4 are part of the primary
+            // and can not be edited. To edit the data requires replacing the record
+
+            ExecuteInATransaction(RunTheTest);
+
+            void RunTheTest()
+            {
+                var employeeID = 16;
+                var employee = _employeeRepo.FindEmployee(e => e.EmployeeObj.BusinessEntityID == employeeID);
+
+                var deptHistory = employee.EmployeeObj.DepartmentHistories
+                    .Where(hist => hist.DepartmentID == 10 && hist.ShiftID == 3 && hist.StartDate == new DateTime(2008, 1, 24))
+                    .FirstOrDefault<EmployeeDepartmentHistory>();
+
+                Assert.NotNull(deptHistory);
+
+                var newDeptHistory = new EmployeeDepartmentHistory
+                {
+                    DepartmentID = deptHistory.DepartmentID,
+                    ShiftID = deptHistory.ShiftID,
+                    StartDate = new DateTime(2008, 2, 28)
+                };
+
+                employee.EmployeeObj.DepartmentHistories.Add(newDeptHistory);
+                employee.EmployeeObj.DepartmentHistories.Remove(deptHistory);
+                _employeeRepo.UpdateEmployee(employee);
+
+                employee = _employeeRepo.FindEmployee(e => e.EmployeeObj.BusinessEntityID == employeeID);
+                var afterEdit = employee.EmployeeObj.DepartmentHistories
+                    .Where(hist => hist.DepartmentID == 10 && hist.ShiftID == 3 && hist.StartDate == new DateTime(2008, 2, 28))
+                    .FirstOrDefault<EmployeeDepartmentHistory>();
+
+                Assert.NotNull(afterEdit);
+            }
+        }
     }
 }
