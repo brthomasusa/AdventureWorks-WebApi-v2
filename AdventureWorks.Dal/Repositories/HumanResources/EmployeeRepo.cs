@@ -26,6 +26,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public IEnumerable<PersonEmployee> GetAllPeopleEmployees() => Context.PersonEmployee.ToList();
 
+        public IEnumerable<EmployeeViewModel> GetAllEmployeeViewModels() => Context.EmployeeViewModel.ToList();
+
+        public EmployeeViewModel FindEmployeeViewModel(Expression<Func<EmployeeViewModel, bool>> predicate)
+            => Context.EmployeeViewModel.Where(predicate).FirstOrDefault();
+
         public override int SaveChanges()
         {
             try
@@ -68,6 +73,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
+        // TODO If just populating a list, then the includes are not needed
         public IEnumerable<PersonClass> GetAllEmployees()
             => Context.Person
                 .Where(p => p.PersonType == "EM")

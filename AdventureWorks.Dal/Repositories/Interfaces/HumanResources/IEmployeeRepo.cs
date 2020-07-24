@@ -15,6 +15,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         PersonEmployee FindPersonEmployee(int personID);
 
+        IEnumerable<EmployeeViewModel> GetAllEmployeeViewModels();
+
+        EmployeeViewModel FindEmployeeViewModel(Expression<Func<EmployeeViewModel, bool>> predicate);
+
         IEnumerable<PersonClass> GetAllEmployees();
 
         PersonClass FindEmployee(Expression<Func<PersonClass, bool>> predicate);

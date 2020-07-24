@@ -386,11 +386,8 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 _employeeRepo.AddEmployee(bizEntity, eeAddress);
             };
 
-            var ex = Record.Exception(testCode);
-
-            Assert.NotNull(ex);
-            Assert.IsType<AdventureWorksUniqueIndexException>(ex);
-            Assert.Equal("Error: There is an existing entity with this address!", ex.Message);
+            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
         }
     }
 }
