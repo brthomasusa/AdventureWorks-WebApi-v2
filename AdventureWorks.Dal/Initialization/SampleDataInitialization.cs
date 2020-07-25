@@ -398,6 +398,7 @@ namespace AdventureWorks.Dal.Initialization
                 if (address1 != null)
                 {
                     address1.BusinessEntityAddressObj.BusinessEntityID = desotoVendor.ID;
+                    address1.BusinessEntityAddressObj.AddressTypeID = 3;
                     ctx.Address.Add(address1);
                 }
 
@@ -405,6 +406,7 @@ namespace AdventureWorks.Dal.Initialization
                 if (address2 != null)
                 {
                     address2.BusinessEntityAddressObj.BusinessEntityID = desotoVendor.ID;
+                    address2.BusinessEntityAddressObj.AddressTypeID = 7;
                     ctx.Address.Add(address2);
                 }
 
@@ -419,7 +421,7 @@ namespace AdventureWorks.Dal.Initialization
 
                 // CYCLERU0001
                 var rusVendor = ctx.Vendor.AsNoTracking()
-                    .Where(v => v.AccountNumber == "DESOTOB0001")
+                    .Where(v => v.AccountNumber == "CYCLERU0001")
                     .Select(c => new { ID = c.BusinessEntityID })
                     .SingleOrDefault();
 
@@ -427,6 +429,7 @@ namespace AdventureWorks.Dal.Initialization
                 if (address != null)
                 {
                     address.BusinessEntityAddressObj.BusinessEntityID = rusVendor.ID;
+                    address.BusinessEntityAddressObj.AddressTypeID = 3;
                     ctx.Address.Add(address);
                 }
 

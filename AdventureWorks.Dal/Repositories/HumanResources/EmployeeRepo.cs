@@ -39,7 +39,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                var msg = "Error: The employee you are trying to delete does not exist. Try refreshing your screen.";
+                var msg = "Error: The employee you are trying to update does not exist. Try refreshing your screen.";
 
                 throw new AdventureWorksConcurrencyExeception(msg, ex);
             }

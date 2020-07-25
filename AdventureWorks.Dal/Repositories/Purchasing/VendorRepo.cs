@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using AdventureWorks.Dal.EfCode;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Models.CustomTypes;
@@ -20,6 +23,40 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         internal VendorRepo(DbContextOptions<AdventureWorksContext> options) : base(options) { }
 
+        public override int SaveChanges()
+        {
+            try
+            {
+                return Context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var msg = "Error: The vendor you are trying to update does not exist. Try refreshing your screen.";
+
+                throw new AdventureWorksConcurrencyExeception(msg, ex);
+            }
+            catch (RetryLimitExceededException ex)
+            {
+                throw new AdventureWorksRetryLimitExceededException("There is a problem with your connection.", ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlException)
+                {
+                    if (sqlException.Message.Contains("AK_Vendor_AccountNumber", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate vendor account number!", ex);
+                    }
+                }
+
+                throw new AdventureWorksException("An error occurred while updating the database", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new AdventureWorksException("An error occurred while updating the database", ex);
+            }
+        }
+
         public IEnumerable<VendorContact> GetVendorContactViewModelsForAllVendors()
             => Context.VendorContact.ToList();
 
@@ -27,6 +64,12 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             => Context.VendorContact
                 .Where(v => v.BusinessEntityID == vendorID)
                 .ToList();
+
+
+        public IEnumerable<VendorViewModel> GetAllVendorViewModels() => Context.VendorViewModel.ToList();
+
+        public VendorViewModel FindVendorViewModel(Expression<Func<VendorViewModel, bool>> predicate)
+            => Context.VendorViewModel.Where(predicate).FirstOrDefault();
 
         public IEnumerable<VendorAddress> GetVendorAddressViewModelsForAllVendors()
             => Context.VendorAddress.ToList();
@@ -142,16 +185,10 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
                 Context.Person.Add(vendorContact);
                 Context.Vendor.Add(vendor);
+
+                vendorAddress.BusinessEntityAddressObj.BusinessEntityID = vendorID;
                 Context.Address.Add(vendorAddress);
                 SaveChanges();
-
-                // Link Address to Vendor                
-                Context.BusinessEntityAddress.Add(new BusinessEntityAddress
-                {
-                    BusinessEntityID = vendorID,
-                    AddressID = vendorAddress.AddressID,
-                    AddressTypeID = 3
-                });
 
                 // Link Contact (PersonClass) to Vendor
                 vendor.BusinessEntityContacts.Add(new BusinessEntityContact
@@ -165,25 +202,12 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             }
         }
 
-        public int AddVendorAddress(int vendorID, int addressTypeID, Address address)
+        public int AddVendorAddress(int vendorID, Address address)
         {
-            ExecuteInATransaction(DoWork);
+            Context.Address.Add(address);
+            SaveChanges();
+
             return address.AddressID;
-
-            void DoWork()
-            {
-                Context.Address.Add(address);
-                SaveChanges();
-
-                var vendor = Table.Find(vendorID);
-                vendor.BusinessEntityAddresses.Add(new BusinessEntityAddress
-                {
-                    BusinessEntityID = vendor.BusinessEntityID,
-                    AddressID = address.AddressID,
-                    AddressTypeID = addressTypeID
-                });
-                SaveChanges();
-            }
         }
 
         public int AddVendorContact(int vendorID, int contactTypeID, PersonClass contact)

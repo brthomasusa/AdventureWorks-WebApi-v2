@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
@@ -12,6 +14,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
         IEnumerable<VendorContact> GetVendorContactViewModelsForAllVendors();
 
         IEnumerable<VendorContact> GetVendorContactViewModelsForOneVendor(int vendorID);
+
+        IEnumerable<VendorViewModel> GetAllVendorViewModels();
+
+        VendorViewModel FindVendorViewModel(Expression<Func<VendorViewModel, bool>> predicate);
 
         IEnumerable<VendorAddress> GetVendorAddressViewModelsForAllVendors();
 
@@ -31,7 +37,7 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 
         int Add(Vendor vendor, PersonClass vendorContact, Address vendorAddress);
 
-        int AddVendorAddress(int vendorID, int addressTypeID, Address address);
+        int AddVendorAddress(int vendorID, Address address);
 
         int AddVendorContact(int vendorID, int contactTypeID, PersonClass contact);
 
