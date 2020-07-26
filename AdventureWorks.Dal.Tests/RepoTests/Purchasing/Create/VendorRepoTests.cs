@@ -144,5 +144,85 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
             count = addresses.Count();
             Assert.Equal(2, count);
         }
+
+        [Fact]
+        public void ShouldAddNewContactToVendorWithNoExistingContacts()
+        {
+            var vendorID = 2;
+            var vendor = _vendorRepo.Find(vendorID);
+            var contacts = _vendorRepo.GetVendorContacts(vendor.BusinessEntityID);
+
+            Assert.NotNull(contacts);
+            int count = contacts.Count();
+            Assert.Equal(0, count);
+
+            var contact = new PersonClass
+            {
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                FirstName = "Don",
+                LastName = "King",
+                EmailPromotion = EmailPromoPreference.AdventureWorksOnly,
+                EmailAddressObj = new EmailAddress
+                {
+                    PersonEmailAddress = "dking@adventure-works.com"
+                },
+                PasswordObj = new PersonPWord
+                {
+                    PasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                    PasswordSalt = "d2tgUmM="
+                },
+                Phones =
+                {
+                    new PersonPhone {PhoneNumber = "555-111-5555", PhoneNumberTypeID = 3}
+                }
+            };
+
+            var personID = _vendorRepo.AddVendorContact(vendor.BusinessEntityID, 18, contact);
+            contacts = _vendorRepo.GetVendorContacts(vendor.BusinessEntityID);
+            Assert.NotNull(contacts);
+            count = contacts.Count();
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void ShouldAddNewContactToVendorWithExistingContacts()
+        {
+            var vendorID = 3;
+            var vendor = _vendorRepo.Find(vendorID);
+            var contacts = _vendorRepo.GetVendorContacts(vendor.BusinessEntityID);
+
+            Assert.NotNull(contacts);
+            int count = contacts.Count();
+            Assert.Equal(1, count);
+
+            var contact = new PersonClass
+            {
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                FirstName = "Don",
+                LastName = "King",
+                EmailPromotion = EmailPromoPreference.AdventureWorksOnly,
+                EmailAddressObj = new EmailAddress
+                {
+                    PersonEmailAddress = "dking@adventure-works.com"
+                },
+                PasswordObj = new PersonPWord
+                {
+                    PasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                    PasswordSalt = "d2tgUmM="
+                },
+                Phones =
+                {
+                    new PersonPhone {PhoneNumber = "555-111-5555", PhoneNumberTypeID = 3}
+                }
+            };
+
+            var personID = _vendorRepo.AddVendorContact(vendor.BusinessEntityID, 18, contact);
+            contacts = _vendorRepo.GetVendorContacts(vendor.BusinessEntityID);
+            Assert.NotNull(contacts);
+            count = contacts.Count();
+            Assert.Equal(2, count);
+        }
     }
 }
