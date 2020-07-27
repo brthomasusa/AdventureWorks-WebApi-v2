@@ -47,6 +47,10 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
                     {
                         throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate vendor account number!", ex);
                     }
+                    else if (sqlException.Message.Contains("IX_Address_AddressLine1_AddressLine2_City_StateProvinceID_PostalCode", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: There is an existing entity with this address!", ex);
+                    }
                 }
 
                 throw new AdventureWorksException("An error occurred while updating the database", ex);

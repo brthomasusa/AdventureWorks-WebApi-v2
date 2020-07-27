@@ -93,7 +93,7 @@ namespace AdventureWorks.Dal.Tests.InitializationTests
         {
             SampleDataInitialization.InitializeData(ctx);
             var addressTypes = ctx.AddressType.ToList();
-            Assert.Equal(6, addressTypes.Count());
+            Assert.Equal(7, addressTypes.Count());
         }
 
         [Fact]

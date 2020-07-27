@@ -1,15 +1,13 @@
 using System.Linq;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
-using AdventureWorks.Models.CustomTypes;
-using AdventureWorks.Models.Person;
-using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
 using PersonClass = AdventureWorks.Models.Person.Person;
 using Xunit;
 
 namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
 {
+    [Collection("AdventureWorks.Dal")]
     public class VendorRepoTests : RepoTestsBase
     {
         private readonly IVendorRepo _vendorRepo;

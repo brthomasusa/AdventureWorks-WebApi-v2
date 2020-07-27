@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Models.CustomTypes;
@@ -46,6 +48,32 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
                 var result = _vendorRepo.Find(bizEntityID);
 
                 Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionDuplicateAccountNumber()
+        {
+            ExecuteInATransaction(RunTheTest);
+
+            void RunTheTest()
+            {
+                var vendor = new Vendor
+                {
+                    AccountNumber = "LIGHTSP0001",
+                    Name = "Test Vendor",
+                    CreditRating = CreditRating.Superior,
+                    PreferredVendor = true,
+                    IsActive = true
+                };
+
+                Action testCode = () =>
+                {
+                    _vendorRepo.Add(vendor);
+                };
+
+                var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+                Assert.Equal("Error: This operation would result in a duplicate vendor account number!", exception.Message);
             }
         }
 
@@ -143,6 +171,34 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
             Assert.NotNull(addresses);
             count = addresses.Count();
             Assert.Equal(2, count);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionDuplicateEntityAddress()
+        {
+            var vendorID = 5;
+            var vendor = _vendorRepo.Find(vendorID);
+
+            var address = new Address
+            {
+                AddressLine1 = "298 Sunnybrook Drive",
+                City = "Spring Valley",
+                PostalCode = "91977",
+                StateProvinceID = 9,
+                BusinessEntityAddressObj = new BusinessEntityAddress
+                {
+                    AddressTypeID = 3
+                }
+            };
+
+            Action testCode = () =>
+            {
+                _vendorRepo.AddVendorAddress(vendor.BusinessEntityID, address);
+            };
+
+            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
+
         }
 
         [Fact]
