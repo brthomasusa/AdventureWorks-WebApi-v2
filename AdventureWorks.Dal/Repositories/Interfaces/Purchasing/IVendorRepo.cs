@@ -11,13 +11,20 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 {
     public interface IVendorRepo : IRepo<Vendor>
     {
+        IEnumerable<AddressViewModel> GetVendorAddressViewModels(int vendorID);
+
         IEnumerable<VendorContactViewModel> GetVendorContactViewModels(int vendorID);
 
-        IEnumerable<VendorViewModel> GetAllVendorViewModels();
+        IEnumerable<VendorViewModel> GetVendorViewModels();
+
+        AddressViewModel GetAddressViewModel(int addressID);
+
+        VendorContactViewModel GetVendorContactViewModel(int personID);
+
+        VendorViewModel GetVendorViewModel(int vendorID);
+
 
         VendorViewModel FindVendorViewModel(Expression<Func<VendorViewModel, bool>> predicate);
-
-        IEnumerable<AddressViewModel> GetVendorAddressViewModelsForOneVendor(int vendorID);
 
         IEnumerable<PersonClass> GetVendorContacts(int vendorID);
 

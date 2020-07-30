@@ -9,7 +9,6 @@ using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
-using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Models.ViewModel;
@@ -61,23 +60,40 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             }
         }
 
+        public IEnumerable<AddressViewModel> GetVendorAddressViewModels(int vendorID)
+            => Context.AddressViewModel
+                .Where(v => v.BusinessEntityID == vendorID)
+                .ToList()
+                .OrderBy(a => a.AddressID);
+
         public IEnumerable<VendorContactViewModel> GetVendorContactViewModels(int vendorID)
             => Context.VendorContactViewModel
                 .Where(v => v.VendorID == vendorID)
                 .ToList()
                 .OrderBy(c => c.BusinessEntityID);
 
+        public IEnumerable<VendorViewModel> GetVendorViewModels()
+            => Context.VendorViewModel
+                .ToList()
+                .OrderBy(v => v.BusinessEntityID);
 
-        public IEnumerable<VendorViewModel> GetAllVendorViewModels() => Context.VendorViewModel.ToList();
+        public AddressViewModel GetAddressViewModel(int addressID)
+            => Context.AddressViewModel
+                .Where(a => a.AddressID == addressID)
+                .FirstOrDefault();
+
+        public VendorContactViewModel GetVendorContactViewModel(int personID)
+            => Context.VendorContactViewModel
+                .Where(v => v.BusinessEntityID == personID)
+                .FirstOrDefault();
+
+        public VendorViewModel GetVendorViewModel(int vendorID)
+            => Context.VendorViewModel
+                .Where(v => v.BusinessEntityID == vendorID)
+                .FirstOrDefault();
 
         public VendorViewModel FindVendorViewModel(Expression<Func<VendorViewModel, bool>> predicate)
             => Context.VendorViewModel.Where(predicate).FirstOrDefault();
-
-        public IEnumerable<AddressViewModel> GetVendorAddressViewModelsForOneVendor(int vendorID)
-            => Context.AddressViewModel
-                .Where(v => v.BusinessEntityID == vendorID)
-                .ToList()
-                .OrderBy(a => a.AddressID);
 
         public override Vendor Find(Expression<Func<Vendor, bool>> predicate)
             => Table.Where(predicate)

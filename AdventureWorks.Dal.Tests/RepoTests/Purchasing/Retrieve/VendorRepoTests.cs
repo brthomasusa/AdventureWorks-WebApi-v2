@@ -46,7 +46,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
             void RunTheTest()
             {
                 var vendorID = 3;
-                var vendorAddresses = _vendorRepo.GetVendorAddressViewModelsForOneVendor(vendorID);
+                var vendorAddresses = _vendorRepo.GetVendorAddressViewModels(vendorID);
 
                 Assert.NotNull(vendorAddresses);
                 int count = vendorAddresses.Count();
