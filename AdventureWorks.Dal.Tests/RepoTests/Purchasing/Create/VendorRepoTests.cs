@@ -136,7 +136,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
             Assert.NotNull(addressResult);
             Assert.Equal(address.AddressLine1, addressResult.AddressLine1);
 
-            var contactResult = _vendorRepo.GetVendorContact(vendor.BusinessEntityID, contact.BusinessEntityID, vendor.BusinessEntityContacts[0].ContactTypeID);
+            var contactResult = _vendorRepo.GetVendorContact(contact.BusinessEntityID);
             Assert.NotNull(contactResult);
             Assert.Equal(contact.EmailAddressObj.PersonEmailAddress, contactResult.EmailAddressObj.PersonEmailAddress);
         }

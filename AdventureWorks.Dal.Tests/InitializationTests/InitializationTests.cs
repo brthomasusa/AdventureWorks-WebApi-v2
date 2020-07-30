@@ -168,20 +168,20 @@ namespace AdventureWorks.Dal.Tests.InitializationTests
             Assert.Equal(181, states.Count());
         }
 
-        // [Fact]
-        // public void ShouldLoadEmployeesFromView()
-        // {
-        //     SampleDataInitialization.InitializeData(ctx);
-        //     var employees = ctx.PersonEmployee.ToList();
-        //     Assert.Equal(5, employees.Count());
-        // }
+        [Fact]
+        public void ShouldLoadAddressViewModels()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+            var addresses = ctx.AddressViewModel.ToList();
+            Assert.Equal(11, addresses.Count());
+        }
 
-        // [Fact]
-        // public void ShouldLoadVendorContactsFromView()
-        // {
-        //     SampleDataInitialization.InitializeData(ctx);
-        //     var vendorContacts = ctx.VendorContact.ToList();
-        //     Assert.Equal(5, vendorContacts.Count());
-        // }
+        [Fact]
+        public void ShouldLoadVendorContactViewModels()
+        {
+            SampleDataInitialization.InitializeData(ctx);
+            var vendorContacts = ctx.VendorContactViewModel.ToList();
+            Assert.Equal(7, vendorContacts.Count());
+        }
     }
 }

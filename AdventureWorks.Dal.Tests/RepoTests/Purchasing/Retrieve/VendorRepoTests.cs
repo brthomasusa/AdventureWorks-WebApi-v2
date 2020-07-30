@@ -23,68 +23,34 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         }
 
         [Fact]
-        public void ShouldGetVendorContactViewModelsForAllVendors()
-        {
-            ExecuteInATransaction(RunTheTest);
-
-            void RunTheTest()
-            {
-                var vendorContacts = _vendorRepo.GetVendorContactViewModelsForAllVendors();
-
-                Assert.NotNull(vendorContacts);
-                var count = vendorContacts.Count();
-                Assert.Equal(8, count);
-            }
-        }
-
-        [Fact]
-        public void ShouldGetVendorAddressViewModelForAllVendors()
-        {
-            ExecuteInATransaction(RunTheTest);
-
-            void RunTheTest()
-            {
-                var vendorAddresses = _vendorRepo.GetVendorAddressViewModelsForAllVendors();
-
-                Assert.NotNull(vendorAddresses);
-                var count = vendorAddresses.Count();
-                Assert.Equal(6, count);
-            }
-        }
-
-        [Fact]
-        public void ShouldGetVendorContactViewModelsForOneVendor()
+        public void ShouldGetVendorContactViewModels()
         {
             ExecuteInATransaction(RunTheTest);
 
             void RunTheTest()
             {
                 var vendorID = 7;
-                var vendorContacts = _vendorRepo.GetVendorContactViewModelsForOneVendor(vendorID).ToList();
+                var vendorContacts = _vendorRepo.GetVendorContactViewModels(vendorID);
 
                 Assert.NotNull(vendorContacts);
                 var count = vendorContacts.Count();
                 Assert.Equal(3, count);
-                Assert.Equal("Australia Bike Retailer", vendorContacts[0].Name);
-                Assert.Equal("Australia Bike Retailer", vendorContacts[1].Name);
-                Assert.Equal("Australia Bike Retailer", vendorContacts[2].Name);
             }
         }
 
         [Fact]
-        public void ShouldGetVendorAddressViewModelForOneVendor()
+        public void ShouldGetVendorAddressViewModelsForOneVendor()
         {
             ExecuteInATransaction(RunTheTest);
 
             void RunTheTest()
             {
-                var vendorID = 5;
-                var vendorAddress = _vendorRepo.GetVendorAddressViewModelForOneVendor(vendorID);
+                var vendorID = 3;
+                var vendorAddresses = _vendorRepo.GetVendorAddressViewModelsForOneVendor(vendorID);
 
-                Assert.NotNull(vendorAddress);
-                Assert.Equal("298 Sunnybrook Drive", vendorAddress.AddressLine1);
-                Assert.Equal("Spring Valley", vendorAddress.City);
-                Assert.Equal("California", vendorAddress.StateProvinceName);
+                Assert.NotNull(vendorAddresses);
+                int count = vendorAddresses.Count();
+                Assert.Equal(2, count);
             }
         }
 
@@ -199,7 +165,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         [Fact]
         public void ShouldGetOneContactForVendorUsingBizEntityContact()
         {
-            PersonClass vendorContact = _vendorRepo.GetVendorContact(7, 9, 17);
+            PersonClass vendorContact = _vendorRepo.GetVendorContact(9);
 
             Assert.NotNull(vendorContact);
             Assert.Equal("Jo", vendorContact.FirstName);

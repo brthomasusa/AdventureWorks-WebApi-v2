@@ -61,13 +61,11 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             }
         }
 
-        public IEnumerable<VendorContact> GetVendorContactViewModelsForAllVendors()
-            => Context.VendorContact.ToList();
-
-        public IEnumerable<VendorContact> GetVendorContactViewModelsForOneVendor(int vendorID)
-            => Context.VendorContact
-                .Where(v => v.BusinessEntityID == vendorID)
-                .ToList();
+        public IEnumerable<VendorContactViewModel> GetVendorContactViewModels(int vendorID)
+            => Context.VendorContactViewModel
+                .Where(v => v.VendorID == vendorID)
+                .ToList()
+                .OrderBy(c => c.BusinessEntityID);
 
 
         public IEnumerable<VendorViewModel> GetAllVendorViewModels() => Context.VendorViewModel.ToList();
@@ -75,14 +73,11 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
         public VendorViewModel FindVendorViewModel(Expression<Func<VendorViewModel, bool>> predicate)
             => Context.VendorViewModel.Where(predicate).FirstOrDefault();
 
-        public IEnumerable<VendorAddress> GetVendorAddressViewModelsForAllVendors()
-            => Context.VendorAddress.ToList();
-
-
-        public VendorAddress GetVendorAddressViewModelForOneVendor(int vendorID)
-            => Context.VendorAddress
+        public IEnumerable<AddressViewModel> GetVendorAddressViewModelsForOneVendor(int vendorID)
+            => Context.AddressViewModel
                 .Where(v => v.BusinessEntityID == vendorID)
-                .FirstOrDefault<VendorAddress>();
+                .ToList()
+                .OrderBy(a => a.AddressID);
 
         public override Vendor Find(Expression<Func<Vendor, bool>> predicate)
             => Table.Where(predicate)
@@ -134,25 +129,6 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         public PersonClass GetVendorContact(int personID)
             => Context.Person.Where(p => p.BusinessEntityID == personID).FirstOrDefault();
-
-        public PersonClass GetVendorContact(int vendorID, int personID, int contactTypeID)
-        {
-            var vendor = Table
-                .Where(v => v.BusinessEntityID == vendorID)
-                .Include(bec => bec.BusinessEntityContacts)
-                .FirstOrDefault();
-
-            var bizEntityContact = vendor.BusinessEntityContacts
-                .ToList()
-                .Find(bec => bec.PersonID == personID && bec.ContactTypeID == contactTypeID);
-
-            return Context.Person
-                .Where(p => p.BusinessEntityID == bizEntityContact.PersonID)
-                .Include(p => p.EmailAddressObj)
-                .Include(p => p.PasswordObj)
-                .Include(p => p.Phones)
-                .FirstOrDefault();
-        }
 
         public int Add(Vendor vendor)
         {
