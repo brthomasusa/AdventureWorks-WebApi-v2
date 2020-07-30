@@ -86,7 +86,21 @@ namespace AdventureWorks.Service.Controllers
             return Ok(contact);            
         }
 
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public ActionResult<Vendor> CreateVendor(Vendor vendor)
+        {
+            if (vendor == null)
+            {
+                return BadRequest();
+            }
+            
+            var vendorID = _vendorRepo.Add(vendor);
 
+            return CreatedAtAction(nameof(GetById), new { vendorID = vendorID },vendor);
+        } 
 
 
 

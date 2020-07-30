@@ -31,6 +31,11 @@ namespace AdventureWorks.Service.Filters
                     error = "Concurrency Issue";
                     actionResult = new BadRequestObjectResult(new {error = error, message = message, StackTrace = stackTrace});
                     break;
+                case AdventureWorksUniqueIndexException une:
+                    // Return 400
+                    error = "Duplicate value detected!";
+                    actionResult = new BadRequestObjectResult(new {error = error, message = message, StackTrace = stackTrace});
+                    break;                    
                 case AdventureWorksException awe:
                     // Return 400
                     error = "AdventureWorksException";

@@ -13,7 +13,7 @@ namespace AdventureWorks.Models.Base.Purchasing
         public int BusinessEntityID { get; set; }
 
         [Required, DataType(DataType.Text), Display(Name="Account Number")]
-        [StringLength(15, ErrorMessage = "Account number length can't be more than 8 characters.")]
+        [StringLength(15, ErrorMessage = "Account number length can't be more than 15 characters.")]
         public string AccountNumber { get; set; }
 
         [Required, DataType(DataType.Text), Display(Name="Vendor Name")]
@@ -21,6 +21,7 @@ namespace AdventureWorks.Models.Base.Purchasing
         public string Name { get; set; }
 
         [Required]
+        [Range(1, 5)]
         public CreditRating CreditRating { get; set; }
 
         [Required, Display(Name="Preferred Vendor")]

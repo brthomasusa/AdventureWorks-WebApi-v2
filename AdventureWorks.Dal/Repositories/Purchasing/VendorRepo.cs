@@ -128,7 +128,11 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
         }
 
         public PersonClass GetVendorContact(int personID)
-            => Context.Person.Where(p => p.BusinessEntityID == personID).FirstOrDefault();
+            => Context.Person.Where(p => p.BusinessEntityID == personID)
+            .Include(c => c.EmailAddressObj)
+            .Include(c => c.PasswordObj)
+            .Include(c => c.Phones)
+            .FirstOrDefault();
 
         public int Add(Vendor vendor)
         {
