@@ -25,33 +25,73 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         [Fact]
         public void ShouldGetVendorContactViewModels()
         {
-            ExecuteInATransaction(RunTheTest);
+            var vendorID = 7;
+            var vendorContacts = _vendorRepo.GetVendorContactViewModels(vendorID);
 
-            void RunTheTest()
-            {
-                var vendorID = 7;
-                var vendorContacts = _vendorRepo.GetVendorContactViewModels(vendorID);
+            Assert.NotNull(vendorContacts);
+            var count = vendorContacts.Count();
+            Assert.Equal(3, count);
+        }
 
-                Assert.NotNull(vendorContacts);
-                var count = vendorContacts.Count();
-                Assert.Equal(3, count);
-            }
+        [Theory]
+        [InlineData(8, "j.dough@adventure-works.com")]
+        [InlineData(9, "jo3@adventure-works.com")]
+        [InlineData(10, "terri.phide@adventure-works.com")]
+        [InlineData(11, "marie0@adventure-works.com")]
+        [InlineData(12, "william3@adventure-works.com")]
+        [InlineData(13, "paula2@adventure-works.com")]
+        [InlineData(19, "charelene0@adventure-works.com")]
+        public void ShouldGetASpecificVendorContactViewModel(int personID, string emailAddress)
+        {
+            var contact = _vendorRepo.GetVendorContactViewModel(personID);
+            Assert.Equal(emailAddress, contact.EmailAddress);
         }
 
         [Fact]
-        public void ShouldGetVendorAddressViewModelsForOneVendor()
+        public void ShouldGetVendorAddressViewModels()
         {
-            ExecuteInATransaction(RunTheTest);
+            var vendorID = 3;
+            var vendorAddresses = _vendorRepo.GetVendorAddressViewModels(vendorID);
 
-            void RunTheTest()
-            {
-                var vendorID = 3;
-                var vendorAddresses = _vendorRepo.GetVendorAddressViewModels(vendorID);
+            Assert.NotNull(vendorAddresses);
+            int count = vendorAddresses.Count();
+            Assert.Equal(2, count);
+        }
 
-                Assert.NotNull(vendorAddresses);
-                int count = vendorAddresses.Count();
-                Assert.Equal(2, count);
-            }
+        [Theory]
+        [InlineData(1, "28 San Marino Ct")]
+        [InlineData(2, "90 Sunny Ave")]
+        [InlineData(3, "298 Sunnybrook Drive")]
+        [InlineData(4, "1900 Desoto Court")]
+        [InlineData(5, "211 East Pleasant Run Rd")]
+        [InlineData(6, "6266 Melody Lane")]
+        public void ShouldGetOneVendorAddressViewModel(int addressID, string line1)
+        {
+            var address = _vendorRepo.GetAddressViewModel(addressID);
+            Assert.Equal(line1, address.AddressLine1);
+        }
+
+        [Fact]
+        public void ShouldGetVendorViewModels()
+        {
+            var vendors = _vendorRepo.GetVendorViewModels();
+
+            Assert.NotNull(vendors);
+            var count = vendors.Count();
+            Assert.Equal(6, count);
+        }
+
+        [Theory]
+        [InlineData(2, "CYCLERU0001")]
+        [InlineData(3, "DESOTOB0001")]
+        [InlineData(4, "DFWBIRE0001")]
+        [InlineData(5, "LIGHTSP0001")]
+        [InlineData(6, "TRIKES0001")]
+        [InlineData(7, "AUSTRALI0001")]
+        public void ShouldGetOneVendorViewModel(int vendorID, string acctNumber)
+        {
+            var vendor = _vendorRepo.GetVendorViewModel(vendorID);
+            Assert.Equal(acctNumber, vendor.AccountNumber);
         }
 
         [Fact]
