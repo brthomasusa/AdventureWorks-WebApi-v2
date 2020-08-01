@@ -9,27 +9,28 @@ namespace AdventureWorks.Models.Base.Purchasing
 {
     public class VendorBase : EntityBase
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int BusinessEntityID { get; set; }
 
-        [Required, DataType(DataType.Text), Display(Name="Account Number")]
+        [Required, Display(Name = "Account Number")]
         [StringLength(15, ErrorMessage = "Account number length can't be more than 15 characters.")]
         public string AccountNumber { get; set; }
 
-        [Required, DataType(DataType.Text), Display(Name="Vendor Name")]
+        [Required, Display(Name = "Vendor Name")]
         [StringLength(50, ErrorMessage = "Vendor name can't be more than 50 characters.")]
         public string Name { get; set; }
 
         [Required]
-        [Range(1, 5)]
+        [Range(1, 5, ErrorMessage = "Valid values are intergers 1 through 5.")]
         public CreditRating CreditRating { get; set; }
 
-        [Required, Display(Name="Preferred Vendor")]
+        [Required, Display(Name = "Preferred Vendor")]
         public bool PreferredVendor { get; set; } = true;
 
-        [Required, Display(Name="Active")]
+        [Required, Display(Name = "Active")]
         public bool IsActive { get; set; } = true;
 
-        public string PurchasingWebServiceURL { get; set; }          
+        [DataType(DataType.Url)]
+        public string PurchasingWebServiceURL { get; set; }
     }
 }

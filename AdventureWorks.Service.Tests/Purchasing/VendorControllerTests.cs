@@ -258,6 +258,126 @@ namespace AdventureWorks.Service.Tests.Purchasing
         }
 
         // TODO HttpPost tests
+        [Fact]
+        public async void ShouldFailToGetContactViewModelOfVendor()
+        {
+            ResetDatabase();
+
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync($"{serviceAddress}{rootAddress}/ContactViewModel/1");
+                Assert.False(response.IsSuccessStatusCode);
+                Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            }
+        }
+
+        [Fact]
+        public async void ShouldCreateOneVendor()
+        {
+            ResetDatabase();
+
+            var vendor = new Vendor
+            {
+                AccountNumber = "TESTVEN0001",
+                Name = "Test Vendor",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            using (var client = new HttpClient())
+            {
+                string jsonVendor = JsonConvert.SerializeObject(vendor);
+                HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"{serviceAddress}{rootAddress}/", content);
+
+                Assert.True(response.IsSuccessStatusCode);
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Vendor>(jsonResponse);
+                Assert.Equal(vendor.AccountNumber, result.AccountNumber);
+            }
+        }
+
+        [Fact]
+        public async void ShouldAddVendorContactToVendor()
+        {
+            ResetDatabase();
+
+            var vendorContact = new PersonClass
+            {
+                PersonType = "V8",
+                IsEasternNameStyle = false,
+                FirstName = "Don",
+                LastName = "King",
+                EmailPromotion = EmailPromoPreference.AdventureWorksOnly,
+                EmailAddressObj = new EmailAddress
+                {
+                    PersonEmailAddress = "dking@adventure-works.com"
+                },
+                PasswordObj = new PersonPWord
+                {
+                    PasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                    PasswordSalt = "d2tgUmM="
+                },
+                Phones =
+                {
+                    new PersonPhone {PhoneNumber = "555-111-5555", PhoneNumberTypeID = 3}
+                }
+            };
+
+            using (var client = new HttpClient())
+            {
+                string jsonVendorContact = JsonConvert.SerializeObject(vendorContact);
+                HttpContent content = new StringContent(jsonVendorContact, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"{serviceAddress}{rootAddress}/3/VendorContact/17", content);
+
+                Assert.True(response.IsSuccessStatusCode);
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<PersonClass>(jsonResponse);
+                Assert.Equal(vendorContact.EmailAddressObj.PersonEmailAddress, result.EmailAddressObj.PersonEmailAddress);
+            }
+        }
+
+        [Fact]
+        public async void ShouldFailAddVendorContactBadPersonType()
+        {
+            ResetDatabase();
+
+            var vendorContact = new PersonClass
+            {
+                PersonType = "V8",
+                IsEasternNameStyle = false,
+                FirstName = "Don",
+                LastName = "King",
+                EmailPromotion = EmailPromoPreference.AdventureWorksOnly,
+                EmailAddressObj = new EmailAddress
+                {
+                    PersonEmailAddress = "dking@adventure-works.com"
+                },
+                PasswordObj = new PersonPWord
+                {
+                    PasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                    PasswordSalt = "d2tgUmM="
+                },
+                Phones =
+                {
+                    new PersonPhone {PhoneNumber = "555-111-5555", PhoneNumberTypeID = 3}
+                }
+            };
+
+            using (var client = new HttpClient())
+            {
+                string jsonVendorContact = JsonConvert.SerializeObject(vendorContact);
+                HttpContent content = new StringContent(jsonVendorContact, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync($"{serviceAddress}{rootAddress}/3/VendorContact/17", content);
+
+                Assert.False(response.IsSuccessStatusCode);
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            }
+        }
+
 
         // TODO HttpPut tests
 

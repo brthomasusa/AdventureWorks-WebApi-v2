@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Models.Person;
@@ -153,7 +152,7 @@ namespace AdventureWorks.Service.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public ActionResult<Vendor> CreateVendor(Vendor vendor)
+        public ActionResult<Vendor> CreateVendor([FromBody] Vendor vendor)
         {
             if (vendor == null)
             {
@@ -165,7 +164,21 @@ namespace AdventureWorks.Service.Controllers
             return CreatedAtAction(nameof(GetById), new { vendorID = vendorID }, vendor);
         }
 
+        [HttpPost("{vendorID}/VendorContact/{contactTypeID}")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public ActionResult<PersonClass> CreateVendorContact([FromBody] PersonClass contact, int vendorID, int contactTypeID)
+        {
+            if (contact == null)
+            {
+                return BadRequest();
+            }
 
+            _vendorRepo.AddVendorContact(vendorID, contactTypeID, contact);
+
+            return CreatedAtAction(nameof(GetVendorContact), new { personID = contact.BusinessEntityID }, contact);
+        }
 
 
 
