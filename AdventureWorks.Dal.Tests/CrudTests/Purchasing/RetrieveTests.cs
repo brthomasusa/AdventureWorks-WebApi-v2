@@ -42,20 +42,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
         }
 
         [Fact]
-        public void ShouldRetrieveOneVendorContactFromView()
-        {
-            SampleDataInitialization.InitializeData(ctx);
-
-            var vendorID = 5;
-
-            var vendorContact = ctx.VendorContact
-                .Where(vc => vc.BusinessEntityID == vendorID)
-                .First<VendorContact>();
-
-            Assert.Equal("Light Speed", vendorContact.Name);
-        }
-
-        [Fact]
         public void ShouldRetrieveAllVendorContactViewModels()
         {
             SampleDataInitialization.InitializeData(ctx);
@@ -66,7 +52,7 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
 
             Assert.NotNull(results);
             var count = results.Count;
-            Assert.Equal(7, count);            
+            Assert.Equal(7, count);
         }
 
         [Fact]
@@ -85,8 +71,8 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
             Assert.NotNull(results);
             var count = results.Count;
             Assert.Equal(3, count);
-            Assert.Equal("Moberly", results[0].LastName);            
-            Assert.Equal("Zimmerman", results[2].LastName); 
+            Assert.Equal("Moberly", results[0].LastName);
+            Assert.Equal("Zimmerman", results[2].LastName);
         }
 
         [Fact]
@@ -102,7 +88,7 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
             Assert.NotNull(result);
             Assert.Equal("paula2@adventure-works.com", result.EmailAddress);
             Assert.Equal("VC", result.PersonType);
-            Assert.Equal("Vendor Contact", result.PersonTypeLong);          
+            Assert.Equal("Vendor Contact", result.PersonTypeLong);
         }
 
         [Fact]
@@ -116,7 +102,7 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
 
             Assert.NotNull(results);
             var count = results.Count;
-            Assert.Equal(6, count);             
+            Assert.Equal(6, count);
         }
 
         [Fact]
@@ -132,6 +118,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.Purchasing
             Assert.NotNull(result);
             Assert.Equal(CreditRating.Superior, result.CreditRating);
             Assert.Equal("Superior", result.CreditRatingText);
-        }            
+        }
     }
 }

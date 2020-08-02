@@ -6,24 +6,23 @@ namespace AdventureWorks.Models.Base
 {
     public class AddressBase : EntityBase
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AddressID { get; set; }
 
-        [Required, DataType(DataType.Text), StringLength(60), Display(Name="Address Line 1")]
+        [Required, StringLength(60), Display(Name = "Address Line 1")]
         public string AddressLine1 { get; set; }
 
-        [DataType(DataType.Text), StringLength(60), Display(Name="Address Line 2")]
+        [StringLength(60), Display(Name = "Address Line 2")]
         public string AddressLine2 { get; set; }
 
-        [Required, DataType(DataType.Text), StringLength(30)]
+        [Required, StringLength(30)]
         public string City { get; set; }
 
         [Required]
         public int StateProvinceID { get; set; }
 
-        [Required, DataType(DataType.Text), StringLength(15), Display(Name="Postal Code")]
+        [Required, StringLength(15), Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
 
-        public SqlGeography SpatialLocation { get; set; }        
+        public SqlGeography SpatialLocation { get; set; }
     }
 }

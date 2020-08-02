@@ -11,10 +11,6 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
     public interface IEmployeeRepo : IRepo<Employee>
     {
-        IEnumerable<PersonEmployee> GetAllPeopleEmployees();
-
-        PersonEmployee FindPersonEmployee(int personID);
-
         IEnumerable<EmployeeViewModel> GetAllEmployeeViewModels();
 
         EmployeeViewModel FindEmployeeViewModel(Expression<Func<EmployeeViewModel, bool>> predicate);

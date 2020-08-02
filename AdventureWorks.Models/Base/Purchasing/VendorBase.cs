@@ -9,7 +9,6 @@ namespace AdventureWorks.Models.Base.Purchasing
 {
     public class VendorBase : EntityBase
     {
-        [Key]
         public int BusinessEntityID { get; set; }
 
         [Required, Display(Name = "Account Number")]

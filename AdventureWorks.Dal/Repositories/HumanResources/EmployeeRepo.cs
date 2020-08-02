@@ -24,8 +24,6 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public EmployeeRepo(DbContextOptions<AdventureWorksContext> options) : base(options) { }
 
-        public IEnumerable<PersonEmployee> GetAllPeopleEmployees() => Context.PersonEmployee.ToList();
-
         public IEnumerable<EmployeeViewModel> GetAllEmployeeViewModels() => Context.EmployeeViewModel.ToList();
 
         public EmployeeViewModel FindEmployeeViewModel(Expression<Func<EmployeeViewModel, bool>> predicate)
@@ -94,10 +92,6 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 .Include(ee => ee.EmployeeObj).ThenInclude(ee => ee.DepartmentHistories)
                 .Include(ee => ee.EmployeeObj).ThenInclude(ee => ee.PayHistories)
                 .FirstOrDefault<PersonClass>();
-
-        public PersonEmployee FindPersonEmployee(int personID)
-            => Context.PersonEmployee
-                .FirstOrDefault(ee => ee.BusinessEntityID == personID);
 
         public int AddEmployee(BusinessEntity employee)
         {

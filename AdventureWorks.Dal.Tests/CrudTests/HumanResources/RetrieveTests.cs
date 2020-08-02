@@ -62,18 +62,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
         }
 
         [Fact]
-        public void ShouldRetrieveOneEmployeeFromPersonEmployeeView()
-        {
-            SampleDataInitialization.InitializeData(ctx);
-
-            var employee = ctx.PersonEmployee
-                .Where(vc => vc.BusinessEntityID == 1)
-                .First<PersonEmployee>();
-
-            Assert.Equal("ken@adventure-works.com", employee.EmailAddress);
-        }
-
-        [Fact]
         public void ShouldRetrieveOneEmployeeByFirstAndLastName()
         {
             SampleDataInitialization.InitializeData(ctx);

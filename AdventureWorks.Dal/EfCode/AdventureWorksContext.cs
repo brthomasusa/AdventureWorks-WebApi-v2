@@ -41,9 +41,6 @@ namespace AdventureWorks.Dal.EfCode
         public virtual DbSet<JobCandidate> JobCandidate { get; set; }
         public virtual DbSet<Shift> Shift { get; set; }
 
-        public virtual DbQuery<PersonEmployee> PersonEmployee { get; set; }
-        public virtual DbQuery<VendorContact> VendorContact { get; set; }
-        public virtual DbQuery<VendorAddress> VendorAddress { get; set; }
         public virtual DbQuery<PhoneViewModel> PhoneViewModel { get; set; }
         public virtual DbQuery<AddressViewModel> AddressViewModel { get; set; }
         public virtual DbQuery<VendorContactViewModel> VendorContactViewModel { get; set; }
@@ -52,26 +49,14 @@ namespace AdventureWorks.Dal.EfCode
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Query<PersonEmployee>().ToView("vEmployee", "HumanResources");
-            modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<PersonEmployee>(query => query.Ignore(e => e.ModifiedDate));
-
-            modelBuilder.Query<VendorContact>().ToView("vVendorWithContacts", "Purchasing");
-            modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<VendorContact>(query => query.Ignore(e => e.ModifiedDate));
-
-            modelBuilder.Query<VendorAddress>().ToView("vVendorWithAddresses", "Purchasing");
-            modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<VendorAddress>(query => query.Ignore(e => e.ModifiedDate));  
-
             modelBuilder.Query<PhoneViewModel>().ToQuery(() => PhoneViewModel.FromSql(
               @"SELECT BusinessEntityID, PhoneNumber, ph.PhoneNumberTypeID, phtype.Name AS PhoneNumberType
                 FROM Person.PersonPhone ph
-                INNER JOIN Person.PhoneNumberType phtype ON ph.PhoneNumberTypeID = phtype.PhoneNumberTypeID"         
+                INNER JOIN Person.PhoneNumberType phtype ON ph.PhoneNumberTypeID = phtype.PhoneNumberTypeID"
             ).AsQueryable());
 
             modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.ModifiedDate));  
+            modelBuilder.Query<PhoneViewModel>(query => query.Ignore(e => e.ModifiedDate));
 
             modelBuilder.Query<AddressViewModel>().ToQuery(() => AddressViewModel.FromSql(
               @"SELECT bea.BusinessEntityID, a.AddressID, AddressLine1, AddressLine2, City, 
@@ -80,11 +65,11 @@ namespace AdventureWorks.Dal.EfCode
                 FROM Person.Address a
                 INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
                 INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
-                INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID"          
+                INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID"
             ).AsQueryable());
 
             modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.ModifiedDate)); 
+            modelBuilder.Query<AddressViewModel>(query => query.Ignore(e => e.ModifiedDate));
 
             modelBuilder.Query<VendorContactViewModel>().ToQuery(() => VendorContactViewModel.FromSql(
               @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
@@ -96,7 +81,7 @@ namespace AdventureWorks.Dal.EfCode
                 INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
                 INNER JOIN Person.BusinessEntityContact bec ON pp.BusinessEntityID = bec.PersonID
                 INNER JOIN Person.ContactType ct ON bec.ContactTypeID = ct.ContactTypeID
-                WHERE bec.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"          
+                WHERE bec.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"
             ).AsQueryable());
 
             modelBuilder.Query<VendorContactViewModel>(query => query.Ignore(e => e.RowGuid));
@@ -106,7 +91,7 @@ namespace AdventureWorks.Dal.EfCode
               @"SELECT ven.BusinessEntityID, ven.AccountNumber, ven.Name,
                 CAST(ven.CreditRating AS int) AS CreditRating, ven.PreferredVendorStatus AS PreferredVendor, 
                 ven.PurchasingWebServiceURL, ven.ActiveFlag AS IsActive
-                FROM Purchasing.Vendor ven"          
+                FROM Purchasing.Vendor ven"
             ).AsQueryable());
 
             modelBuilder.Query<VendorViewModel>(query => query.Ignore(e => e.RowGuid));
@@ -122,11 +107,11 @@ namespace AdventureWorks.Dal.EfCode
               FROM Person.Person pp
               INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
               INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
-              INNER JOIN HumanResources.Employee ee ON ee.BusinessEntityID = pp.BusinessEntityID"          
+              INNER JOIN HumanResources.Employee ee ON ee.BusinessEntityID = pp.BusinessEntityID"
             ).AsQueryable());
 
             modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.RowGuid));
-            modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.ModifiedDate));            
+            modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.ModifiedDate));
 
             modelBuilder.ApplyConfiguration(new BusinessEntityConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());

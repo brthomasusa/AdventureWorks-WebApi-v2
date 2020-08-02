@@ -7,10 +7,10 @@ namespace AdventureWorks.Models.ViewModel
 {
     public class VendorContactViewModel : PersonBase
     {
-        [NotMapped, Display(Name="Contact Type")]
-        public string PersonTypeLong 
-        { 
-            get 
+        [NotMapped, Display(Name = "Person Type")]
+        public string PersonTypeLong
+        {
+            get
             {
                 var personTypeDesc = string.Empty;
 
@@ -36,32 +36,32 @@ namespace AdventureWorks.Models.ViewModel
                         break;
                 }
 
-                return personTypeDesc;               
-            } 
+                return personTypeDesc;
+            }
         }
 
         [Required]
         public int EmailAddressID { get; set; }
 
-        [Required, DataType(DataType.EmailAddress), Display(Name="Email Address")]
+        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
         [StringLength(50, ErrorMessage = "Email address has a maximum length of 50 characters.")]
         public string EmailAddress { get; set; }
 
-        [Required, DataType(DataType.Text), Display(Name="Email Password Hash")]
+        [Required, DataType(DataType.Text), Display(Name = "Email Password Hash")]
         [StringLength(128, ErrorMessage = "Password hash has a maximum length of 128 characters.")]
         public string EmailPasswordHash { get; set; }
 
-        [Required, DataType(DataType.Text), Display(Name="Email Password Salt")]
+        [Required, DataType(DataType.Text), Display(Name = "Email Password Salt")]
         [StringLength(10, ErrorMessage = "Password salt has a maximum length of 10 characters.")]
         public string EmailPasswordSalt { get; set; }
 
-        [NotMapped, Display(Name="Email Promo Preference")]
+        [NotMapped, Display(Name = "Email Promo Preference")]
         public string EmailPromotionPreference { get; set; }
 
         [Required]
         public int ContactTypeID { get; set; }
 
-        [Display(Name="Position")]
+        [Display(Name = "Position")]
         public string ContactPosition { get; set; }
 
         public int VendorID { get; set; }

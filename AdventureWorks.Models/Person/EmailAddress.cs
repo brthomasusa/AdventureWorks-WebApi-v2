@@ -9,10 +9,8 @@ namespace AdventureWorks.Models.Person
     [Table("EmailAddress", Schema = "Person")]
     public class EmailAddress : EntityBase
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BusinessEntityID { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EmailAddressID { get; set; }
 
         [DataType(DataType.EmailAddress), Display(Name = "Email Address")]

@@ -9,10 +9,9 @@ namespace AdventureWorks.Models.Person
     [Table("PersonPhone", Schema = "Person")]
     public class PersonPhone : EntityBase
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BusinessEntityID { get; set; }
 
-        [Required, DataType(DataType.PhoneNumber), StringLength(25), Display(Name="Phone Number")]
+        [Required, DataType(DataType.PhoneNumber), StringLength(25), Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
         public int PhoneNumberTypeID { get; set; }
