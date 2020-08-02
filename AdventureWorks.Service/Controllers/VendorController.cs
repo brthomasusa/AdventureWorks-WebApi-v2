@@ -11,11 +11,11 @@ namespace AdventureWorks.Service.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class VendorController : ControllerBase
+    public class VendorsController : ControllerBase
     {
         private readonly IVendorRepo _vendorRepo;
 
-        public VendorController(IVendorRepo repo)
+        public VendorsController(IVendorRepo repo)
         {
             _vendorRepo = repo;
         }

@@ -19,7 +19,7 @@ namespace AdventureWorks.Service.Tests.Purchasing
     {
         public VendorControllerTests()
         {
-            rootAddress = "api/vendor";
+            rootAddress = "api/vendors";
         }
 
         [Fact]
@@ -306,7 +306,7 @@ namespace AdventureWorks.Service.Tests.Purchasing
 
             var vendorContact = new PersonClass
             {
-                PersonType = "V8",
+                PersonType = "VC",
                 IsEasternNameStyle = false,
                 FirstName = "Don",
                 LastName = "King",

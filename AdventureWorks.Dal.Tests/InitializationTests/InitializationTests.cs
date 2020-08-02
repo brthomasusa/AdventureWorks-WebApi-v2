@@ -3,6 +3,7 @@ using AdventureWorks.Dal.Initialization;
 using AdventureWorks.Dal.Tests.Base;
 using Xunit;
 
+
 namespace AdventureWorks.Dal.Tests.InitializationTests
 {
     [Collection("AdventureWorks.Dal")]
