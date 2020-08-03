@@ -6,6 +6,7 @@ namespace AdventureWorks.Models.Base
 {
     public class AddressBase : EntityBase
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AddressID { get; set; }
 
         [Required, StringLength(60), Display(Name = "Address Line 1")]

@@ -5,16 +5,16 @@ namespace AdventureWorks.Models.ViewModel
 {
     public class AddressViewModel : AddressBase
     {
-        [Required, Display(Name="EntityID")]
+        [Required, Display(Name = "EntityID")]
         public int BusinessEntityID { get; set; }
 
-        [Display(Name="State")]
+        [Display(Name = "State")]
         public string StateProvinceCode { get; set; }
 
-        [Display(Name="Country")]
+        [Display(Name = "Country")]
         public string CountryRegionCode { get; set; }
 
-        [Display(Name="Address Type")]
+        [Display(Name = "Address Type")]
         public string AddressTypeName { get; set; }
 
         [Required]
