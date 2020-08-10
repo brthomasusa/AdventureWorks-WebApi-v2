@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
+using NLog;
 
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Initialization;
@@ -27,6 +28,7 @@ using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Service.Filters;
+using LoggerService;
 
 namespace AdventureWorks.Service
 {
@@ -37,6 +39,7 @@ namespace AdventureWorks.Service
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
             _env = env;
         }
@@ -51,7 +54,9 @@ namespace AdventureWorks.Service
                 {
                     j.ContractResolver = new DefaultContractResolver();
                     j.Formatting = Formatting.Indented;
-                });  
+                });
+
+            services.AddSingleton<ILoggerManager, LoggerManager>();
 
             services.AddCors(options =>
             {
@@ -64,7 +69,7 @@ namespace AdventureWorks.Service
             services.AddDbContextPool<AdventureWorksContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("AdventureWorks_Testing"))
             );
-                    
+
             services.AddScoped<IEmployeeRepo, EmployeeRepo>();
             services.AddScoped<IDepartmentRepo, DepartmentRepo>();
             services.AddScoped<IBusinessEntityAddressRepo, BusinessEntityAddressRepo>();
@@ -88,7 +93,7 @@ namespace AdventureWorks.Service
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-            });            
+            });
 
         }
 

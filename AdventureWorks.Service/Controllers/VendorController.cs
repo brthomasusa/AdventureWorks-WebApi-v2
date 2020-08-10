@@ -5,6 +5,7 @@ using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Models.ViewModel;
 using PersonClass = AdventureWorks.Models.Person.Person;
+using LoggerService;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -14,10 +15,13 @@ namespace AdventureWorks.Service.Controllers
     public class VendorsController : ControllerBase
     {
         private readonly IVendorRepo _vendorRepo;
+        private ILoggerManager _logger;
 
-        public VendorsController(IVendorRepo repo)
+        public VendorsController(IVendorRepo repo, ILoggerManager logger)
         {
             _vendorRepo = repo;
+            _logger = logger;
+            _logger.LogInfo("VendorsController: logging is working.");
         }
 
         [HttpGet]
