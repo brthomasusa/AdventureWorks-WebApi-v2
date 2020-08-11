@@ -2,63 +2,17 @@
     // Use IntelliSense to find out which attributes exist for C# debugging
     // Use hover for the description of the existing attributes
     // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-    "version": "0.2.0",   
+    "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/AdventureWorks.Service/bin/Debug/netcoreapp2.1/AdventureWorks.Service.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-              "action": "openExternally",
-              "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-      
-            },
-            "env": {
-              "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-              "/Views": "${workspaceFolder}/Views"
-            }
-        },        
-        {
-            "name": "httprepl",
-            "type": "coreclr",
-            "request": "launch",
-            "program": "dotnet",
-            "args": ["httprepl", "http://localhost:5000"],
-            "cwd": "${workspaceFolder}",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-        },
-        {
-            "name": ".NET Core Launch (console-DALTEST)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/AdventureWorks.Dal.Tests/bin/Debug/netcoreapp2.1/AdventureWorks.Dal.Tests.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/AdventureWorks.Dal.Tests",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
-            "name": ".NET Core Launch (console-SvcTEST)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/AdventureWorks.Service.Tests/bin/Debug/netcoreapp2.1/AdventureWorks.Service.Tests.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/AdventureWorks.Service.Tests",
+            "cwd": "${workspaceFolder}/AdventureWorks.Service",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

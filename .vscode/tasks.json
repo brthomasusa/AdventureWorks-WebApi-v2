@@ -6,8 +6,8 @@
             "command": "dotnet",
             "type": "process",
             "args": [
-                "build -m",
-                "${workspaceFolder}/AdventureWorks.Dal.Tests/AdventureWorks.Dal.Tests.csproj",
+                "build",
+                "${workspaceFolder}/AdventureWorks.Service/AdventureWorks.Service.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
