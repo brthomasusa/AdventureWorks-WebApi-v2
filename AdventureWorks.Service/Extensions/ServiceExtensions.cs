@@ -81,5 +81,14 @@ namespace AdventureWorks.Service.Extensions
                 c.IncludeXmlComments(xmlPath);
             });
         }
+
+        public static void ConfigureDependencyInjection(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            services.AddScoped<IBusinessEntityAddressRepo, BusinessEntityAddressRepo>();
+            services.AddScoped<IVendorRepo, VendorRepo>();
+        }
     }
 }

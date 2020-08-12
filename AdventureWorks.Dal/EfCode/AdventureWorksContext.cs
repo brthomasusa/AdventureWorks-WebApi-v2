@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
@@ -47,8 +48,15 @@ namespace AdventureWorks.Dal.EfCode
         public virtual DbQuery<VendorViewModel> VendorViewModel { get; set; }
         public virtual DbQuery<EmployeeViewModel> EmployeeViewModel { get; set; }
 
+
+        public virtual DbQuery<VendorDomainObj> VendorDomainObj { get; set; }
+        public virtual DbQuery<AddressDomainObj> AddressDomainObj { get; set; }
+        public virtual DbQuery<ContactDomainObj> ContactDomainObj { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /***                       View models                           ***/
+
             modelBuilder.Query<PhoneViewModel>().ToQuery(() => PhoneViewModel.FromSql(
               @"SELECT BusinessEntityID, PhoneNumber, ph.PhoneNumberTypeID, phtype.Name AS PhoneNumberType
                 FROM Person.PersonPhone ph
@@ -112,6 +120,51 @@ namespace AdventureWorks.Dal.EfCode
 
             modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.RowGuid));
             modelBuilder.Query<EmployeeViewModel>(query => query.Ignore(e => e.ModifiedDate));
+
+            /***                       Domain objects                           ***/
+
+            // VendorDomainObj
+            modelBuilder.Query<VendorDomainObj>().ToQuery(() => VendorDomainObj.FromSql(
+              @"SELECT ven.BusinessEntityID, ven.AccountNumber, ven.Name,
+                CAST(ven.CreditRating AS int) AS CreditRating, ven.PreferredVendorStatus AS PreferredVendor, 
+                ven.PurchasingWebServiceURL, ven.ActiveFlag AS IsActive
+                FROM Purchasing.Vendor ven"
+            ).AsQueryable());
+
+            modelBuilder.Query<VendorDomainObj>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<VendorDomainObj>(query => query.Ignore(e => e.ModifiedDate));
+
+            // ContactDomainObj
+            modelBuilder.Query<ContactDomainObj>().ToQuery(() => ContactDomainObj.FromSql(
+              @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
+                  pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
+                  pp.Demographics, email.EmailAddressID, email.EmailAddress, pw.PasswordHash AS EmailPasswordHash,
+                  pw.PasswordSalt AS EmailPasswordSalt, bec.ContactTypeID, bec.BusinessEntityID AS ParentEntityID
+              FROM Person.Person pp
+              INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
+              INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
+              INNER JOIN Person.BusinessEntityContact bec ON pp.BusinessEntityID = bec.PersonID
+              INNER JOIN Person.ContactType ct ON bec.ContactTypeID = ct.ContactTypeID"
+            ).AsQueryable());
+
+            modelBuilder.Query<ContactDomainObj>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<ContactDomainObj>(query => query.Ignore(e => e.ModifiedDate));
+
+            // AddressDomainObj
+            modelBuilder.Query<AddressDomainObj>().ToQuery(() => AddressDomainObj.FromSql(
+              @"SELECT a.AddressID, AddressLine1, AddressLine2, City, a.StateProvinceID,
+                  PostalCode, a.SpatialLocation, bea.AddressTypeID, bea.BusinessEntityID AS ParentEntityID 
+              FROM Person.Address a
+              INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
+              INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
+              INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID
+              WHERE bea.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)
+              ORDER BY bea.BusinessEntityID"
+            ).AsQueryable());
+
+            modelBuilder.Query<AddressDomainObj>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<AddressDomainObj>(query => query.Ignore(e => e.ModifiedDate));
+
 
             modelBuilder.ApplyConfiguration(new BusinessEntityConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());

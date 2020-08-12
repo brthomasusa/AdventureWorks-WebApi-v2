@@ -53,13 +53,7 @@ namespace AdventureWorks.Service
             services.ConfigureCors();
             services.ConfigureSqlServerContext(Configuration.GetConnectionString("AdventureWorks_Testing"));
             services.ConfigureSwagger();
-
-            services.AddSingleton<ILoggerManager, LoggerManager>();
-            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
-            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
-            services.AddScoped<IBusinessEntityAddressRepo, BusinessEntityAddressRepo>();
-            services.AddScoped<IVendorRepo, VendorRepo>();
-
+            services.ConfigureDependencyInjection();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
