@@ -52,6 +52,7 @@ namespace AdventureWorks.Dal.EfCode
         public virtual DbQuery<VendorDomainObj> VendorDomainObj { get; set; }
         public virtual DbQuery<AddressDomainObj> AddressDomainObj { get; set; }
         public virtual DbQuery<ContactDomainObj> ContactDomainObj { get; set; }
+        public virtual DbQuery<EmployeeDomainObj> EmployeeDomainObj { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -158,13 +159,28 @@ namespace AdventureWorks.Dal.EfCode
               INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
               INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
               INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID
-              WHERE bea.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)
-              ORDER BY bea.BusinessEntityID"
+              WHERE bea.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"
             ).AsQueryable());
 
             modelBuilder.Query<AddressDomainObj>(query => query.Ignore(e => e.RowGuid));
             modelBuilder.Query<AddressDomainObj>(query => query.Ignore(e => e.ModifiedDate));
 
+            // EmployeeDomainObj
+            modelBuilder.Query<EmployeeDomainObj>().ToQuery(() => EmployeeDomainObj.FromSql(
+              @"SELECT pp.BusinessEntityID, pp.PersonType, pp.NameStyle AS IsEasternNameStyle, pp.Title, pp.FirstName,
+                  pp.MiddleName, pp.LastName, pp.Suffix, pp.EmailPromotion, pp.AdditionalContactInfo, 
+                  pp.Demographics, email.EmailAddress, pw.PasswordHash, pw.PasswordSalt, 
+                  ee.NationalIDNumber, ee.LoginID, ee.JobTitle, ee.BirthDate,
+                  ee.MaritalStatus, ee.Gender, ee.HireDate, ee.SalariedFlag AS IsSalaried, ee.VacationHours,
+                  ee.SickLeaveHours, ee.CurrentFlag AS IsActive
+              FROM Person.Person pp
+              INNER JOIN Person.EmailAddress email ON pp.BusinessEntityID = email.BusinessEntityID
+              INNER JOIN Person.[Password] pw ON pp.BusinessEntityID = pw.BusinessEntityID
+              INNER JOIN HumanResources.Employee ee ON ee.BusinessEntityID = pp.BusinessEntityID"
+            ).AsQueryable());
+
+            modelBuilder.Query<EmployeeDomainObj>(query => query.Ignore(e => e.RowGuid));
+            modelBuilder.Query<EmployeeDomainObj>(query => query.Ignore(e => e.ModifiedDate));
 
             modelBuilder.ApplyConfiguration(new BusinessEntityConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());

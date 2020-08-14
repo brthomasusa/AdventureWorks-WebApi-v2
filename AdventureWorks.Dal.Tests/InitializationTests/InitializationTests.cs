@@ -184,5 +184,62 @@ namespace AdventureWorks.Dal.Tests.InitializationTests
             var vendorContacts = ctx.VendorContactViewModel.ToList();
             Assert.Equal(7, vendorContacts.Count());
         }
+
+        [Fact]
+        public void ShouldLoadVendorDomainModelRecords()
+        {
+            var vendorDomainObjs = ctx.VendorDomainObj.ToList();
+            int count = vendorDomainObjs.Count();
+            Assert.Equal(6, count);
+        }
+
+        [Theory]
+        [InlineData(2, 0)]
+        [InlineData(3, 1)]
+        [InlineData(4, 1)]
+        [InlineData(5, 1)]
+        [InlineData(6, 1)]
+        [InlineData(7, 3)]
+        public void ShouldLoadContactDomainObjForEachVendor(int vendorID, int numberOfRecords)
+        {
+            var vendorContactDomainObjs = ctx.ContactDomainObj.Where(c => c.ParentEntityID == vendorID);
+            int count = vendorContactDomainObjs.Count();
+            Assert.Equal(count, numberOfRecords);
+        }
+
+        [Theory]
+        [InlineData(2, 1)]
+        [InlineData(3, 2)]
+        [InlineData(4, 0)]
+        [InlineData(5, 1)]
+        [InlineData(6, 1)]
+        [InlineData(7, 1)]
+        public void ShouldLoadAddressDomainObjForEachVendor(int vendorID, int numberOfRecords)
+        {
+            var vendorAddressDomainObjs = ctx.AddressDomainObj.Where(c => c.ParentEntityID == vendorID);
+            int count = vendorAddressDomainObjs.Count();
+            Assert.Equal(count, numberOfRecords);
+        }
+
+        [Fact]
+        public void ShouldLoadAllEmployeeDomainObjs()
+        {
+            var employees = ctx.EmployeeDomainObj.ToList();
+            var count = employees.Count();
+            Assert.Equal(6, count);
+        }
+
+        [Theory]
+        [InlineData(1, "adventure-works\\ken0")]
+        [InlineData(14, "adventure-works\\freddyk")]
+        [InlineData(15, "adventure-works\\diane1")]
+        [InlineData(16, "adventure-works\\jossef0")]
+        [InlineData(17, "adventure-works\\gail0")]
+        [InlineData(18, "adventure-works\\terri0")]
+        public void ShouldGetEachEmployeeDomainObj(int employeeID, string loginID)
+        {
+            var employee = ctx.EmployeeDomainObj.First(e => e.BusinessEntityID == employeeID);
+            Assert.Equal(loginID, employee.LoginID);
+        }
     }
 }
