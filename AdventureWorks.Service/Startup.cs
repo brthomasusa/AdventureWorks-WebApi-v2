@@ -20,12 +20,6 @@ using NLog;
 
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Initialization;
-using AdventureWorks.Dal.Repositories;
-using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
-using AdventureWorks.Dal.Repositories.Interfaces.Person;
-using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
-using AdventureWorks.Dal.Repositories.Person;
-using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Service.Extensions;
 using AdventureWorks.Service.Filters;
 using LoggerService;
