@@ -15,5 +15,9 @@ namespace AdventureWorks.Dal.Repositories.Base
         void Update(T entity);
 
         void Delete(T entity);
+
+        void ExecuteInATransaction(Action actionToExecute);
+
+        void Save();
     }
 }
