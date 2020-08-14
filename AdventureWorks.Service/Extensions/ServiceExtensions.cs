@@ -18,7 +18,6 @@ using AdventureWorks.Dal.Repositories;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
-using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Service.Extensions;
@@ -85,8 +84,6 @@ namespace AdventureWorks.Service.Extensions
         public static void ConfigureDependencyInjection(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
-            services.AddScoped<IEmployeeRepo, EmployeeRepo>();
-            services.AddScoped<IDepartmentRepo, DepartmentRepo>();
             services.AddScoped<IBusinessEntityAddressRepo, BusinessEntityAddressRepo>();
             services.AddScoped<IVendorRepo, VendorRepo>();
         }
