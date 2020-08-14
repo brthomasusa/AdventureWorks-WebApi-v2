@@ -1,11 +1,7 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
@@ -13,12 +9,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 using AdventureWorks.Dal.EfCode;
-using AdventureWorks.Dal.Initialization;
-using AdventureWorks.Dal.Repositories;
-using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
+using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
-using AdventureWorks.Service.Extensions;
 using AdventureWorks.Service.Filters;
 using LoggerService;
 
@@ -82,6 +75,7 @@ namespace AdventureWorks.Service.Extensions
         public static void ConfigureDependencyInjection(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+            services.AddScoped<IRepositoryCollection, RepositoryCollection>();
             services.AddScoped<IVendorRepo, VendorRepo>();
         }
     }
