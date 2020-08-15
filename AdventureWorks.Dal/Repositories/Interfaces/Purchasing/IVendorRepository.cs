@@ -1,6 +1,5 @@
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
-using AdventureWorks.Models.Base;
 using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
