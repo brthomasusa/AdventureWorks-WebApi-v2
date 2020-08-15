@@ -8,7 +8,7 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
     {
         PagedList<AddressDomainObj> GetAddresses(AddressParameters addressParameters);
 
-        AddressDomainObj GetAddressID(int addressID);
+        AddressDomainObj GetAddressByID(int addressID);
 
         void CreateAddress(AddressDomainObj address);
 

@@ -9,31 +9,31 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Person
 {
-    public class AddressRepository : RepositoryBase<AddressDomainObj>, IAddressRepository
+    public class ContactRepository : RepositoryBase<ContactDomainObj>, IContactRepository
     {
-        public AddressRepository(AdventureWorksContext context) : base(context) { }
+        public ContactRepository(AdventureWorksContext context) : base(context) { }
 
-        public PagedList<AddressDomainObj> GetAddresses(AddressParameters addressParameters)
+        public PagedList<ContactDomainObj> GetContacts(ContactParameters contactParameters)
         {
             return null;
         }
 
-        public AddressDomainObj GetAddressByID(int addressID)
+        public ContactDomainObj GetContactByID(int contactID)
         {
             return null;
         }
 
-        public void CreateAddress(AddressDomainObj address)
+        public void CreateContact(ContactDomainObj contact)
         {
 
         }
 
-        public void UpdateAddress(AddressDomainObj address)
+        public void UpdateContact(ContactDomainObj contact)
         {
 
         }
 
-        public void DeleteAddress(AddressDomainObj address)
+        public void DeleteContact(ContactDomainObj contact)
         {
 
         }
