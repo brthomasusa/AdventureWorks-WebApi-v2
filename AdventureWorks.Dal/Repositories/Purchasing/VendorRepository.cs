@@ -44,7 +44,6 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
                 DbContext.Vendor.Add(vendor);
                 Save();
             }
-
         }
 
         public void UpdateVendor(VendorDomainObj vendorDomainObj)
@@ -57,7 +56,7 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         public void DeleteVendor(VendorDomainObj vendorDomainObj)
         {
-            // There is a TSql trigger that prevents deletion of vendors!
+            // There is a tsql trigger that prevents deletion of vendors!
             vendorDomainObj.IsActive = false;
             var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
             vendor.Map(vendorDomainObj);

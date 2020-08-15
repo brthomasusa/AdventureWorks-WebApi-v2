@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using AdventureWorks.Models.Base;
+using AdventureWorks.Models.Person;
 
 namespace AdventureWorks.Models.DomainModels
 {
@@ -7,5 +10,7 @@ namespace AdventureWorks.Models.DomainModels
         public int ContactTypeID { get; set; }
 
         public int ParentEntityID { get; set; }
+
+        public List<PersonPhone> Phones { get; set; } = new List<PersonPhone>();
     }
 }
