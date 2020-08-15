@@ -47,14 +47,22 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         }
 
-        public void UpdateVendor(VendorDomainObj vendor)
+        public void UpdateVendor(VendorDomainObj vendorDomainObj)
         {
-            Update(vendor);
+            var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+            vendor.Map(vendorDomainObj);
+            DbContext.Vendor.Update(vendor);
+            Save();
         }
 
-        public void DeleteVendor(VendorDomainObj vendor)
+        public void DeleteVendor(VendorDomainObj vendorDomainObj)
         {
-            Delete(vendor);
+            // There is a TSql trigger that prevents deletion of vendors!
+            vendorDomainObj.IsActive = false;
+            var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+            vendor.Map(vendorDomainObj);
+            DbContext.Vendor.Update(vendor);
+            Save();
         }
     }
 }

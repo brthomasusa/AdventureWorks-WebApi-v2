@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -36,6 +38,27 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
             var vendor = _vendorRepo.GetVendorByID(vendorDomainObj.BusinessEntityID);
             Assert.NotNull(vendor);
             Assert.Equal("TESTVEN0001", vendor.AccountNumber);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionDuplicateVendorAccountNumberWhileCreating()
+        {
+            var vendorDomainObj = new VendorDomainObj
+            {
+                AccountNumber = "CYCLERU0001",
+                Name = "Test Vendor",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            Action testCode = () =>
+            {
+                _vendorRepo.CreateVendor(vendorDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            Assert.Equal("Error: This operation would result in a duplicate vendor account number!", exception.Message);
         }
     }
 }
