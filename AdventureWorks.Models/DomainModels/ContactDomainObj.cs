@@ -11,6 +11,7 @@ namespace AdventureWorks.Models.DomainModels
 
         public int ParentEntityID { get; set; }
 
+        [NotMapped]
         public List<PersonPhone> Phones { get; set; } = new List<PersonPhone>();
     }
 }

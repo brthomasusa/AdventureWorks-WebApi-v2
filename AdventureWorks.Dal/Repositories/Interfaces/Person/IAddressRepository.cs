@@ -6,14 +6,14 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 {
     public interface IAddressRepository : IRepositoryBase<AddressDomainObj>
     {
-        PagedList<AddressDomainObj> GetAddresses(AddressParameters addressParameters);
+        PagedList<AddressDomainObj> GetAddresses(int entityID, AddressParameters addressParameters);
 
         AddressDomainObj GetAddressByID(int addressID);
 
-        void CreateAddress(AddressDomainObj address);
+        void CreateAddress(AddressDomainObj addressDomainObj);
 
-        void UpdateAddress(AddressDomainObj address);
+        void UpdateAddress(AddressDomainObj addressDomainObj);
 
-        void DeleteAddress(AddressDomainObj address);
+        void DeleteAddress(AddressDomainObj addressDomainObj);
     }
 }

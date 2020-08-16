@@ -158,8 +158,7 @@ namespace AdventureWorks.Dal.EfCode
               FROM Person.Address a
               INNER JOIN Person.StateProvince st ON a.StateProvinceID = st.StateProvinceID
               INNER JOIN Person.BusinessEntityAddress bea ON a.AddressID = bea.AddressID
-              INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID
-              WHERE bea.BusinessEntityID IN (SELECT BusinessEntityID FROM Purchasing.Vendor)"
+              INNER JOIN Person.AddressType t ON bea.AddressTypeID = t.AddressTypeID"
             ).AsQueryable());
 
             modelBuilder.Query<AddressDomainObj>(query => query.Ignore(e => e.RowGuid));
