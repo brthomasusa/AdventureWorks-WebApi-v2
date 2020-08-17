@@ -71,6 +71,14 @@ namespace AdventureWorks.Dal.Repositories.Base
                     {
                         throw new AdventureWorksUniqueIndexException("Error: There is an existing entity with this address!", ex);
                     }
+                    else if (sqlException.Message.Contains("AK_Employee_LoginID", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee login!", ex);
+                    }
+                    else if (sqlException.Message.Contains("AK_Employee_NationalIDNumber", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee national ID number!", ex);
+                    }
                 }
 
                 throw new AdventureWorksException("An error occurred while updating the database", ex);

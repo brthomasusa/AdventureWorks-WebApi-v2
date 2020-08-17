@@ -1,6 +1,5 @@
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
-using AdventureWorks.Models.Base;
 using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
@@ -11,10 +10,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         EmployeeDomainObj GetEmployeeByID(int businessEntityID);
 
-        void CreateEmployee(EmployeeDomainObj employee);
+        void CreateEmployee(EmployeeDomainObj employeeDomainObj);
 
-        void UpdateEmployee(EmployeeDomainObj employee);
+        void UpdateEmployee(EmployeeDomainObj employeeDomainObj);
 
-        void DeleteEmployee(EmployeeDomainObj employee);
+        void DeleteEmployee(EmployeeDomainObj employeeDomainObj);
     }
 }
