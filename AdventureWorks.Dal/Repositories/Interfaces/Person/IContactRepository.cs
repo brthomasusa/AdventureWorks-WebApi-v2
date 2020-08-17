@@ -5,14 +5,14 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 {
     public interface IContactRepository
     {
-        PagedList<ContactDomainObj> GetContacts(ContactParameters contactParameters);
+        PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters);
 
         ContactDomainObj GetContactByID(int contactID);
 
-        void CreateContact(ContactDomainObj contact);
+        void CreateContact(ContactDomainObj contactDomainObj);
 
-        void UpdateContact(ContactDomainObj contact);
+        void UpdateContact(ContactDomainObj contactDomainObj);
 
-        void DeleteContact(ContactDomainObj contact);
+        void DeleteContact(ContactDomainObj contactDomainObj);
     }
 }
