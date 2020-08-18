@@ -6,7 +6,6 @@ using AdventureWorks.Models.Base;
 
 namespace AdventureWorks.Models.Person
 {
-    [Table("Address", Schema = "Person")]
     public class Address : AddressBase
     {
         [JsonIgnore]

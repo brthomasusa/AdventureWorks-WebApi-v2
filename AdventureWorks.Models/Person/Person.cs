@@ -7,7 +7,6 @@ using AdventureWorks.Models.HumanResources;
 
 namespace AdventureWorks.Models.Person
 {
-    [Table("Person", Schema = "Person")]
     public class Person : PersonBase
     {
         [JsonIgnore]
@@ -24,6 +23,6 @@ namespace AdventureWorks.Models.Person
         public virtual PersonPWord PasswordObj { get; set; }
 
         [InverseProperty(nameof(Employee.PersonNavigation))]
-        public virtual Employee EmployeeObj { get; set; }  
+        public virtual Employee EmployeeObj { get; set; }
     }
 }
