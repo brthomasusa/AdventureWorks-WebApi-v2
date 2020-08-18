@@ -1,5 +1,6 @@
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
+using AdventureWorks.Dal.Repositories.Interfaces.Person;
 
 namespace AdventureWorks.Dal.Repositories.Base
 {
@@ -8,5 +9,11 @@ namespace AdventureWorks.Dal.Repositories.Base
         IVendorRepository Vendor { get; }
 
         IEmployeeRepository Employee { get; }
+
+        IDepartmentHistoryRepository DepartmentHistory { get; }
+
+        IPayHistoryRepository PayHistory { get; }
+
+        IPersonPhoneRepository Telephone { get; }
     }
 }
