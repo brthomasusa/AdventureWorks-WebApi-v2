@@ -1,5 +1,4 @@
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
