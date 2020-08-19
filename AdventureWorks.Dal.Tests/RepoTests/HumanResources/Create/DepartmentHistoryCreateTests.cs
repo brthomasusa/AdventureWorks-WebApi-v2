@@ -2,8 +2,8 @@ using System;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
-using AdventureWorks.Dal.Tests.RepoTests.Base;
 using AdventureWorks.Models.HumanResources;
+using AdventureWorks.Dal.Tests.RepoTests.Base;
 using Xunit;
 
 namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create

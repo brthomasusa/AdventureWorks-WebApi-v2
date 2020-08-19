@@ -76,7 +76,6 @@ namespace AdventureWorks.Service.Extensions
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddScoped<IRepositoryCollection, RepositoryCollection>();
-            services.AddScoped<IVendorRepo, VendorRepo>();
         }
     }
 }
