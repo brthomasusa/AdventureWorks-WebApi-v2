@@ -8,7 +8,7 @@ namespace AdventureWorks.Models.Extensions
         {
             destination.BusinessEntityID = source.BusinessEntityID;
             destination.PhoneNumber = source.PhoneNumber;
-            destination.PhoneNumberTypeID = destination.PhoneNumberTypeID;
+            destination.PhoneNumberTypeID = source.PhoneNumberTypeID;
         }
     }
 }
