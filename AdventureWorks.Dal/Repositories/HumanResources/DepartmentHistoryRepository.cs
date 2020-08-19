@@ -1,5 +1,4 @@
 using System;
-using System.Data.SqlClient;
 using System.Linq;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
