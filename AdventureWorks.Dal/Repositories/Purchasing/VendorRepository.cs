@@ -7,12 +7,14 @@ using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.Purchasing
 {
     public class VendorRepository : RepositoryBase<VendorDomainObj>, IVendorRepository
     {
-        public VendorRepository(AdventureWorksContext context) : base(context) { }
+        public VendorRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters)
         {

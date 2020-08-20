@@ -15,7 +15,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
 
         public PhoneDeleteTests()
         {
-            _phoneRepo = new PersonPhoneRepository(ctx);
+            _phoneRepo = new PersonPhoneRepository(ctx, logger);
         }
 
         [Fact]

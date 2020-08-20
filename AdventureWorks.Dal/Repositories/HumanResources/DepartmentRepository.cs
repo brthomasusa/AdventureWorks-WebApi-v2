@@ -13,18 +13,14 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
     {
-        private ILoggerManager _logger;
         private readonly string className = "AdventureWorks.Dal.Repositories.HumanResources.DepartmentRepository";
 
         public DepartmentRepository(AdventureWorksContext context, ILoggerManager logger)
-         : base(context)
-        {
-            _logger = logger;
-        }
+         : base(context, logger) { }
 
         public PagedList<Department> GetDepartments(DepartmentParameters deptParameters)
         {
-            _logger.LogInfo($"{className} - GetDepartments()");
+            RepoLogger.LogInfo($"{className} - GetDepartments()");
             return PagedList<Department>.ToPagedList(
                 FindAll(),
                 deptParameters.PageNumber,
@@ -33,7 +29,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public Department GetDepartmentByID(int departmentID)
         {
-            _logger.LogInfo($"{className} - GetDepartment({departmentID})");
+            RepoLogger.LogInfo($"{className} - GetDepartment({departmentID})");
             return FindByCondition(dept => dept.DepartmentID == departmentID)
                 .FirstOrDefault();
         }

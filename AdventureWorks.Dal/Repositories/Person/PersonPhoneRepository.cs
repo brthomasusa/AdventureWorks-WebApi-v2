@@ -7,12 +7,14 @@ using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.Person
 {
     public class PersonPhoneRepository : RepositoryBase<PersonPhone>, IPersonPhoneRepository
     {
-        public PersonPhoneRepository(AdventureWorksContext context) : base(context) { }
+        public PersonPhoneRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<PersonPhone> GetPhones(int entityID, PersonPhoneParameters phoneParameters)
         {

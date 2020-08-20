@@ -6,12 +6,14 @@ using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.Person
 {
     public class ContactRepository : RepositoryBase<ContactDomainObj>, IContactRepository
     {
-        public ContactRepository(AdventureWorksContext context) : base(context) { }
+        public ContactRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters)
         {

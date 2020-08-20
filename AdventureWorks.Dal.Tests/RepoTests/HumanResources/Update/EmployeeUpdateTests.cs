@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
 
         public EmployeeUpdateTests()
         {
-            _employeeRepo = new EmployeeRepository(ctx);
+            _employeeRepo = new EmployeeRepository(ctx, logger);
         }
 
         [Fact]

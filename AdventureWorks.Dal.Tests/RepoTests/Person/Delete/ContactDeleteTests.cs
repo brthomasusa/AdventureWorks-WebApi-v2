@@ -12,7 +12,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
 
         public ContactDeleteTests()
         {
-            _contactRepo = new ContactRepository(ctx);
+            _contactRepo = new ContactRepository(ctx, logger);
         }
 
         [Fact]

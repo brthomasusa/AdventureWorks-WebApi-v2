@@ -18,7 +18,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
 
         public VendorUpdateTests()
         {
-            _vendorRepo = new VendorRepository(ctx);
+            _vendorRepo = new VendorRepository(ctx, logger);
         }
 
         [Fact]

@@ -15,7 +15,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
 
         public DepartmentHistoryCreateTests()
         {
-            _deptHistoryRepo = new DepartmentHistoryRepository(ctx);
+            _deptHistoryRepo = new DepartmentHistoryRepository(ctx, logger);
         }
 
         [Fact]

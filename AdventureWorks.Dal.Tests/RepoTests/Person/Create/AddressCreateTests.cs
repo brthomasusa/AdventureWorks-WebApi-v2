@@ -15,7 +15,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
         public AddressCreateTests()
         {
-            _addressRepo = new AddressRepository(ctx);
+            _addressRepo = new AddressRepository(ctx, logger);
         }
 
         [Fact]

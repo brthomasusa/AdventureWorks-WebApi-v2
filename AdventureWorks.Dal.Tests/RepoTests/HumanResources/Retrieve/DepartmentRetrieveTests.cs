@@ -4,8 +4,6 @@ using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
 using AdventureWorks.Models.HumanResources;
 using Xunit;
-using LoggerService;
-using LoggingLevel = NLog.LogLevel;
 
 namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
 {
@@ -16,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
 
         public DepartmentRetrieveTests()
         {
-            _deptRepo = new DepartmentRepository(ctx, new MockLoggerManager());
+            _deptRepo = new DepartmentRepository(ctx, logger);
         }
 
         [Fact]

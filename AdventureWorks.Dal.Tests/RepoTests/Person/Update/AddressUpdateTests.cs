@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
         public AddressUpdateTests()
         {
-            _addressRepo = new AddressRepository(ctx);
+            _addressRepo = new AddressRepository(ctx, logger);
         }
 
         [Fact]

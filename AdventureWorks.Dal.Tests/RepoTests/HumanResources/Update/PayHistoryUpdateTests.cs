@@ -13,7 +13,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
 
         public PayHistoryUpdateTests()
         {
-            _payHistoryRepo = new PayHistoryRepository(ctx);
+            _payHistoryRepo = new PayHistoryRepository(ctx, logger);
         }
 
         [Fact]

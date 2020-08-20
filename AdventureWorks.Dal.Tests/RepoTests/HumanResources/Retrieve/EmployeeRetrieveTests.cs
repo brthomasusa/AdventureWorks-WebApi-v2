@@ -13,7 +13,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
 
         public EmployeeRetrieveTests()
         {
-            _employeeRepo = new EmployeeRepository(ctx);
+            _employeeRepo = new EmployeeRepository(ctx, logger);
         }
 
         [Fact]

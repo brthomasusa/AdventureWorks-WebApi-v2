@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
 
         public PhoneRetrieveTests()
         {
-            _phoneRepo = new PersonPhoneRepository(ctx);
+            _phoneRepo = new PersonPhoneRepository(ctx, logger);
         }
 
         [Theory]

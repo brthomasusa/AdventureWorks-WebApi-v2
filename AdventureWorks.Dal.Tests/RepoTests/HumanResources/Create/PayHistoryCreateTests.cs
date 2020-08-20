@@ -16,7 +16,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
 
         public PayHistoryCreateTests()
         {
-            _payHistoryRepo = new PayHistoryRepository(ctx);
+            _payHistoryRepo = new PayHistoryRepository(ctx, logger);
         }
 
         [Fact]

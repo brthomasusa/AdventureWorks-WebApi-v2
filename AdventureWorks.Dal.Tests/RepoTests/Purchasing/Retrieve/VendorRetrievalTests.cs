@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
 
         public VendorRetrievalTests()
         {
-            _vendorRepo = new VendorRepository(ctx);
+            _vendorRepo = new VendorRepository(ctx, logger);
         }
 
         [Fact]

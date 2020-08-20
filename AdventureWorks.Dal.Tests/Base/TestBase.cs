@@ -3,15 +3,18 @@ using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using AdventureWorks.Dal.EfCode;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Tests.Base
 {
     public class TestBase : IDisposable
     {
         protected AdventureWorksContext ctx;
+        protected ILoggerManager logger;
 
         public TestBase()
         {
+            logger = new MockLoggerManager();
             ResetContext();
         }
 
@@ -33,7 +36,6 @@ namespace AdventureWorks.Dal.Tests.Base
                 using (var trans = ctx.Database.BeginTransaction())
                 {
                     actionToExecute();
-                    // trans.Commit();
                     trans.Rollback();
                 }
             });

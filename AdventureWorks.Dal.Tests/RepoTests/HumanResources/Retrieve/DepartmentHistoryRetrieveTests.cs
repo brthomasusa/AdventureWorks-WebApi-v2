@@ -13,7 +13,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
 
         public DepartmentHistoryRetrieveTests()
         {
-            _deptHistoryRepo = new DepartmentHistoryRepository(ctx);
+            _deptHistoryRepo = new DepartmentHistoryRepository(ctx, logger);
         }
 
         [Theory]

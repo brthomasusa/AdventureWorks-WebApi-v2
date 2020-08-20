@@ -13,7 +13,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
 
         public DepartmentHistoryDeleteTests()
         {
-            _deptHistoryRepo = new DepartmentHistoryRepository(ctx);
+            _deptHistoryRepo = new DepartmentHistoryRepository(ctx, logger);
         }
 
         [Fact]

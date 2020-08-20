@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
         public ContactCreateTests()
         {
-            _contactRepo = new ContactRepository(ctx);
+            _contactRepo = new ContactRepository(ctx, logger);
         }
 
         [Fact]

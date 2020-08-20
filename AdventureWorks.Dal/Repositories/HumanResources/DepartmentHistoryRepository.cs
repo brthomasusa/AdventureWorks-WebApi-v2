@@ -7,12 +7,14 @@ using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class DepartmentHistoryRepository : RepositoryBase<EmployeeDepartmentHistory>, IDepartmentHistoryRepository
     {
-        public DepartmentHistoryRepository(AdventureWorksContext context) : base(context) { }
+        public DepartmentHistoryRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<EmployeeDepartmentHistory> GetDepartmentHistories(int employeeID, DepartmentHistoryParameters deptHistoryParameters)
         {
@@ -45,6 +47,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             {
                 if (ex.Message.Contains("{'BusinessEntityID', 'DepartmentID', 'ShiftID', 'StartDate'}", StringComparison.OrdinalIgnoreCase))
                 {
+                    RepoLogger.LogError($"Duplicate employee department history: {ex.Message}");
                     throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee department history record!", ex);
                 }
             }

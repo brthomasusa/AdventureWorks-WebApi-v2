@@ -7,12 +7,14 @@ using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class EmployeeRepository : RepositoryBase<EmployeeDomainObj>, IEmployeeRepository
     {
-        public EmployeeRepository(AdventureWorksContext context) : base(context) { }
+        public EmployeeRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters)
         {

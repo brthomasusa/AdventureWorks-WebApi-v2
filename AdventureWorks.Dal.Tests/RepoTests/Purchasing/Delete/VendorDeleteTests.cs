@@ -18,7 +18,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Delete
 
         public VendorDeleteTests()
         {
-            _vendorRepo = new VendorRepository(ctx);
+            _vendorRepo = new VendorRepository(ctx, logger);
         }
 
         [Fact]

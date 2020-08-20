@@ -6,12 +6,14 @@ using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.Person;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.Person
 {
     public class AddressRepository : RepositoryBase<AddressDomainObj>, IAddressRepository
     {
-        public AddressRepository(AdventureWorksContext context) : base(context) { }
+        public AddressRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<AddressDomainObj> GetAddresses(int entityID, AddressParameters addressParameters)
         {

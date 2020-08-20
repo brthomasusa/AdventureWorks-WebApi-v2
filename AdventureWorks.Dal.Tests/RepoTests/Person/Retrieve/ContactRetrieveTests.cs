@@ -14,7 +14,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
 
         public ContactRetrieveTests()
         {
-            _contactRepo = new ContactRepository(ctx);
+            _contactRepo = new ContactRepository(ctx, logger);
         }
 
         [Theory]

@@ -12,7 +12,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
 
         public EmployeeDeleteTests()
         {
-            _employeeRepo = new EmployeeRepository(ctx);
+            _employeeRepo = new EmployeeRepository(ctx, logger);
         }
 
         [Fact]

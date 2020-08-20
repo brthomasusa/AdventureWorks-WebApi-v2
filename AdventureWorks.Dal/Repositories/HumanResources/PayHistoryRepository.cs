@@ -7,12 +7,14 @@ using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Models.Extensions;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Helpers;
+using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class PayHistoryRepository : RepositoryBase<EmployeePayHistory>, IPayHistoryRepository
     {
-        public PayHistoryRepository(AdventureWorksContext context) : base(context) { }
+        public PayHistoryRepository(AdventureWorksContext context, ILoggerManager logger)
+         : base(context, logger) { }
 
         public PagedList<EmployeePayHistory> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters)
         {
@@ -44,6 +46,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             {
                 if (ex.Message.Contains("{'BusinessEntityID', 'RateChangeDate'}", StringComparison.OrdinalIgnoreCase))
                 {
+                    RepoLogger.LogError($"Duplicate employee pay history: {ex.Message}");
                     throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee pay history record!", ex);
                 }
             }
