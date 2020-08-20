@@ -14,7 +14,12 @@ namespace AdventureWorks.Service.Controllers
     [ApiController]
     public class VendorsController : ControllerBase
     {
+        private ILoggerManager _logger;
 
+        public VendorsController(ILoggerManager logger)
+        {
+            _logger = logger;
+        }
 
     }
 }

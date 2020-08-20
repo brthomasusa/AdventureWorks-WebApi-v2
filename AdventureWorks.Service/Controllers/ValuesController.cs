@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using LoggerService;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -10,10 +11,19 @@ namespace AdventureWorks.Service.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private ILoggerManager _logger;
+
+        public ValuesController(ILoggerManager logger)
+        {
+            _logger = logger;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            _logger.LogInfo("Hello from ValueController");
+
             return new string[] { "value1", "value2" };
         }
 

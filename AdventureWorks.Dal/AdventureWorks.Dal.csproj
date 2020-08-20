@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AdventureWorks.Models\AdventureWorks.Models.csproj" />
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

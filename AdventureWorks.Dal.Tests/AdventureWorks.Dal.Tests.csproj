@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdventureWorks.Dal\AdventureWorks.Dal.csproj" />
     <ProjectReference Include="..\AdventureWorks.Models\AdventureWorks.Models.csproj" />
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj" />
   </ItemGroup>
 
 </Project>

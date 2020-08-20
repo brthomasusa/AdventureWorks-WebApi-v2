@@ -11,6 +11,7 @@ namespace AdventureWorks.Dal.Repositories.Base
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
+
         protected AdventureWorksContext DbContext { get; }
 
         public RepositoryBase(AdventureWorksContext context)
