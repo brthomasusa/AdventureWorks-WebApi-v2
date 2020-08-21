@@ -5,7 +5,6 @@ using AdventureWorks.Models.Base;
 
 namespace AdventureWorks.Models.Base.Person
 {
-    [Table("PersonPhone", Schema = "Person")]
     public class PersonPhoneBase : EntityBase
     {
         public int BusinessEntityID { get; set; }

@@ -5,7 +5,6 @@ using AdventureWorks.Models.Validation;
 
 namespace AdventureWorks.Models.Base
 {
-    [Table("Person", Schema = "Person")]
     public class PersonBase : EntityBase
     {
         [Required, Display(Name = "ID")]

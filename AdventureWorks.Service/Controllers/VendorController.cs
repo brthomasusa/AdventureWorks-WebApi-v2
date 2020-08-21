@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
-using AdventureWorks.Models.Person;
+using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.Purchasing;
-using AdventureWorks.Models.ViewModel;
-using PersonClass = AdventureWorks.Models.Person.Person;
+using AdventureWorks.Models.DomainModels;
 using LoggerService;
 
 namespace AdventureWorks.Service.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class VendorsController : ControllerBase
     {
         private ILoggerManager _logger;
+        private IRepositoryCollection _repository;
 
-        public VendorsController(ILoggerManager logger)
+        public VendorsController(ILoggerManager logger, IRepositoryCollection repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
     }

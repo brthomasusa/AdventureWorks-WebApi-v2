@@ -4,7 +4,6 @@ using Microsoft.SqlServer.Types;
 
 namespace AdventureWorks.Models.Base
 {
-    [Table("Address", Schema = "Person")]
     public class AddressBase : EntityBase
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

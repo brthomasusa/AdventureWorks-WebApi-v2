@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using AdventureWorks.Models.Base;
 using AdventureWorks.Models.HumanResources;
 
+
 namespace AdventureWorks.Models.DomainModels
 {
     public class EmployeeDomainObj : PersonBase

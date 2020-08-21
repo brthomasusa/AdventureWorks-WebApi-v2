@@ -7,6 +7,7 @@ using AdventureWorks.Models.HumanResources;
 
 namespace AdventureWorks.Models.Person
 {
+    [Table("Person", Schema = "Person")]
     public class Person : PersonBase
     {
         [JsonIgnore]
