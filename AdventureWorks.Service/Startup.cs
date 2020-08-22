@@ -53,11 +53,11 @@ namespace AdventureWorks.Service
             {
                 app.UseDeveloperExceptionPage();
 
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                    var context = serviceScope.ServiceProvider.GetRequiredService<AdventureWorksContext>();
-                    SampleDataInitialization.InitializeData(context);
-                }
+                // using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                // {
+                //     var context = serviceScope.ServiceProvider.GetRequiredService<AdventureWorksContext>();
+                //     SampleDataInitialization.InitializeData(context);
+                // }
             }
 
             app.UseSwagger();
