@@ -5,7 +5,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 {
-    public interface IPersonPhoneRepository : IRepositoryBase<PersonPhone>
+    public interface IPersonPhoneRepository
     {
         PagedList<PersonPhone> GetPhones(int entityID, PersonPhoneParameters phoneParameters);
 

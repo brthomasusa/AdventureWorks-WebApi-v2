@@ -5,7 +5,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
-    public interface IDepartmentRepository : IRepositoryBase<Department>
+    public interface IDepartmentRepository
     {
         PagedList<Department> GetDepartments(DepartmentParameters deptParameters);
 

@@ -4,7 +4,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 {
-    public interface IAddressRepository : IRepositoryBase<AddressDomainObj>
+    public interface IAddressRepository
     {
         PagedList<AddressDomainObj> GetAddresses(int entityID, AddressParameters addressParameters);
 

@@ -5,7 +5,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
-    public interface IPayHistoryRepository : IRepositoryBase<EmployeePayHistory>
+    public interface IPayHistoryRepository
     {
         PagedList<EmployeePayHistory> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters);
 

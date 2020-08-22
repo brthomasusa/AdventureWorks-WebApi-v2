@@ -4,7 +4,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
-    public interface IDepartmentHistoryRepository : IRepositoryBase<EmployeeDepartmentHistory>
+    public interface IDepartmentHistoryRepository
     {
         PagedList<EmployeeDepartmentHistory> GetDepartmentHistories(int employeeID, DepartmentHistoryParameters deptHistoryParameters);
 

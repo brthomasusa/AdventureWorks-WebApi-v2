@@ -4,7 +4,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
-    public interface IEmployeeRepository : IRepositoryBase<EmployeeDomainObj>
+    public interface IEmployeeRepository
     {
         PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters);
 

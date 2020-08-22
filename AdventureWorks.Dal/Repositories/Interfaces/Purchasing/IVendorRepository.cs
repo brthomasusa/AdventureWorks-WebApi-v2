@@ -4,7 +4,7 @@ using AdventureWorks.Models.Helpers;
 
 namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 {
-    public interface IVendorRepository : IRepositoryBase<VendorDomainObj>
+    public interface IVendorRepository
     {
         PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters);
 
