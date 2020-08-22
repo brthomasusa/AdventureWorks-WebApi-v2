@@ -11,10 +11,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         Department GetDepartmentByID(int departmentID);
 
-        void CreatePayHistory(Department department);
+        void CreateDepartment(Department department);
 
-        void UpdatePayHistory(Department department);
+        void UpdateDepartment(Department department);
 
-        void DeletePayHistory(Department department);
+        void DeleteDepartment(Department department);
     }
 }

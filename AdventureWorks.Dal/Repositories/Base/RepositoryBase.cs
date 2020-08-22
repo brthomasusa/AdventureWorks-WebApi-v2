@@ -55,8 +55,8 @@ namespace AdventureWorks.Dal.Repositories.Base
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                var msg = "Error: The vendor you are trying to update does not exist. Try refreshing your screen.";
-                RepoLogger.LogError($"Vendor concurrency: {ex.Message}");
+                var msg = "Error: The record that you are trying to update or delete does not exist. Try refreshing your screen.";
+                RepoLogger.LogError($"Record does not exist: {ex.Message}");
                 throw new AdventureWorksConcurrencyExeception(msg, ex);
             }
             catch (RetryLimitExceededException ex)
@@ -70,27 +70,27 @@ namespace AdventureWorks.Dal.Repositories.Base
                 {
                     if (sqlException.Message.Contains("AK_Vendor_AccountNumber", StringComparison.OrdinalIgnoreCase))
                     {
-                        RepoLogger.LogError($"Duplicate vendor account number: {ex.Message}");
+                        RepoLogger.LogError($"Duplicate vendor account number: {ex.InnerException.Message}");
                         throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate vendor account number!", ex);
                     }
                     else if (sqlException.Message.Contains("IX_Address_AddressLine1_AddressLine2_City_StateProvinceID_PostalCode", StringComparison.OrdinalIgnoreCase))
                     {
-                        RepoLogger.LogError($"Duplicate entity address: {ex.Message}");
+                        RepoLogger.LogError($"Duplicate entity address: {ex.InnerException.Message}");
                         throw new AdventureWorksUniqueIndexException("Error: There is an existing entity with this address!", ex);
                     }
                     else if (sqlException.Message.Contains("AK_Employee_LoginID", StringComparison.OrdinalIgnoreCase))
                     {
-                        RepoLogger.LogError($"Duplicate employee login: {ex.Message}");
+                        RepoLogger.LogError($"Duplicate employee login: {ex.InnerException.Message}");
                         throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee login!", ex);
                     }
                     else if (sqlException.Message.Contains("AK_Employee_NationalIDNumber", StringComparison.OrdinalIgnoreCase))
                     {
-                        RepoLogger.LogError($"Duplicate national ID number: {ex.Message}");
+                        RepoLogger.LogError($"Duplicate national ID number: {ex.InnerException.Message}");
                         throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate employee national ID number!", ex);
                     }
                     else if (sqlException.Message.Contains("AK_Department_Name", StringComparison.OrdinalIgnoreCase))
                     {
-                        RepoLogger.LogError($"Duplicate HR department: {ex.Message}");
+                        RepoLogger.LogError($"Duplicate HR department: {ex.InnerException.Message}");
                         throw new AdventureWorksUniqueIndexException("Error: This operation would result in a duplicate HR department!", ex);
                     }
                 }

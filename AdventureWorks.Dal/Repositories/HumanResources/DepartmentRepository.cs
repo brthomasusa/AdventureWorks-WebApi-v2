@@ -1,7 +1,6 @@
-using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
-using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Models.Extensions;
@@ -13,14 +12,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
     {
-        private readonly string className = "AdventureWorks.Dal.Repositories.HumanResources.DepartmentRepository";
-
         public DepartmentRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
         public PagedList<Department> GetDepartments(DepartmentParameters deptParameters)
         {
-            RepoLogger.LogInfo($"{className} - GetDepartments()");
             return PagedList<Department>.ToPagedList(
                 FindAll(),
                 deptParameters.PageNumber,
@@ -29,24 +25,40 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public Department GetDepartmentByID(int departmentID)
         {
-            RepoLogger.LogInfo($"{className} - GetDepartment({departmentID})");
-            return FindByCondition(dept => dept.DepartmentID == departmentID)
+            return DbContext.Department
+                .Where(dept => dept.DepartmentID == departmentID)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 
-        public void CreatePayHistory(Department department)
+        public void CreateDepartment(Department department)
         {
-
+            var dept = new Department { };
+            dept.Map(department);
+            Create(dept);
+            Save();
+            department.DepartmentID = dept.DepartmentID;
         }
 
-        public void UpdatePayHistory(Department department)
+        public void UpdateDepartment(Department department)
         {
+            var dept = DbContext.Department
+                .Where(dept => dept.DepartmentID == department.DepartmentID)
+                .FirstOrDefault();
 
+            dept.Map(department);
+            Update(dept);
+            Save();
         }
 
-        public void DeletePayHistory(Department department)
+        public void DeleteDepartment(Department department)
         {
+            var dept = DbContext.Department
+                .Where(dept => dept.DepartmentID == department.DepartmentID)
+                .FirstOrDefault();
 
+            Delete(dept);
+            Save();
         }
     }
 }
