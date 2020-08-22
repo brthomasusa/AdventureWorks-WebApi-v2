@@ -38,7 +38,7 @@ namespace AdventureWorks.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.ConfigureLoggerService();
             services.ConfigureMvcCore(_env);
             services.ConfigureCors();
             services.ConfigureSqlServerContext(Configuration.GetConnectionString("AdventureWorks_Testing"));

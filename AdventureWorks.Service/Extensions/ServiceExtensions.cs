@@ -10,8 +10,6 @@ using Newtonsoft.Json.Serialization;
 
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Repositories.Base;
-using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
-using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Service.Filters;
 using LoggerService;
 
@@ -21,7 +19,7 @@ namespace AdventureWorks.Service.Extensions
     {
         public static void ConfigureMvcCore(this IServiceCollection services, IHostingEnvironment env)
         {
-            services.AddMvcCore(config => config.Filters.Add(new AdventureWorksExceptionFilter(env)))
+            services.AddMvcCore(config => config.Filters.Add(new AdventureWorksExceptionFilter(new LoggerManager(), env)))
                 .AddJsonFormatters(j =>
                 {
                     j.ContractResolver = new DefaultContractResolver();
@@ -40,6 +38,11 @@ namespace AdventureWorks.Service.Extensions
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
+        }
+
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
         public static void ConfigureSqlServerContext(this IServiceCollection services, string connStr)

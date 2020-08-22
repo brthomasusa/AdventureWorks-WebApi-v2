@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AdventureWorks.Dal.Tests/AdventureWorks.Dal.Tests.csproj",
+                "${workspaceFolder}/AdventureWorks.Service/AdventureWorks.Service.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/AdventureWorks.Dal.Tests/AdventureWorks.Dal.Tests.csproj",
+                "${workspaceFolder}/AdventureWorks.Service/AdventureWorks.Service.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

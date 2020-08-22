@@ -7,7 +7,7 @@ using LoggerService;
 
 namespace AdventureWorks.Service.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/vendors")]
     [ApiController]
     public class VendorsController : ControllerBase
     {
@@ -18,6 +18,13 @@ namespace AdventureWorks.Service.Controllers
         {
             _logger = logger;
             _repository = repository;
+        }
+
+        [HttpGet]
+        public IActionResult GetAllVendors()
+        {
+            var vendors = _repository.Vendor.GetVendors(new VendorParameters { PageNumber = 1, PageSize = 10 });
+            return Ok(vendors);
         }
 
     }
