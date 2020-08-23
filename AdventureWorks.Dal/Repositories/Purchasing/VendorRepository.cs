@@ -30,6 +30,18 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
                 .FirstOrDefault();
         }
 
+        public VendorDomainObj GetVendorWithDetails(int businessEntityID)
+        {
+            var vendor = DbContext.VendorDomainObj.Where(vendor => vendor.BusinessEntityID == businessEntityID)
+                .AsQueryable()
+                .FirstOrDefault();
+
+            vendor.Addresses.AddRange(DbContext.AddressDomainObj.Where(a => a.ParentEntityID == vendor.BusinessEntityID).ToList());
+            vendor.Contacts.AddRange(DbContext.ContactDomainObj.Where(c => c.ParentEntityID == vendor.BusinessEntityID).ToList());
+
+            return vendor;
+        }
+
         public void CreateVendor(VendorDomainObj vendorDomainObj)
         {
             ExecuteInATransaction(DoWork);

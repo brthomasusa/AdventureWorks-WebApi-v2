@@ -7,9 +7,9 @@ namespace AdventureWorks.Models.DomainModels
     public class VendorDomainObj : VendorBase
     {
         [NotMapped]
-        public IList<AddressDomainObj> Addresses { get; set; } = new List<AddressDomainObj>();
+        public List<AddressDomainObj> Addresses { get; set; } = new List<AddressDomainObj>();
 
         [NotMapped]
-        public IList<ContactDomainObj> Contacts { get; set; } = new List<ContactDomainObj>();
+        public List<ContactDomainObj> Contacts { get; set; } = new List<ContactDomainObj>();
     }
 }

@@ -27,5 +27,19 @@ namespace AdventureWorks.Service.Controllers
             return Ok(vendors);
         }
 
+        [HttpGet("{id}", Name = "VendorById")]
+        public IActionResult GetVendorByID(int id)
+        {
+            var vendor = _repository.Vendor.GetVendorByID(id);
+            return Ok(vendor);
+        }
+
+        [HttpGet("{id}/details")]
+        public IActionResult GetVendorByIdWithDetails(int id)
+        {
+            var vendor = _repository.Vendor.GetVendorWithDetails(id);
+            return Ok(vendor);
+        }
+
     }
 }

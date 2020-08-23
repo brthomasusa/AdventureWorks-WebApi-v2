@@ -34,5 +34,46 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             Assert.Contains(vendors, v => v.AccountNumber == "DFWBIRE0001");
             Assert.Contains(vendors, v => v.AccountNumber == "AUSTRALI0001");
         }
+
+        [Theory]
+        [InlineData(2, "Cycles-R-Us")]
+        [InlineData(3, "Desoto Bike Mart")]
+        [InlineData(4, "DFW Bike Resellers")]
+        [InlineData(5, "Light Speed")]
+        [InlineData(6, "Trikes")]
+        [InlineData(7, "Australia Bike Retailer")]
+        public async Task ShouldGetOneVendorByID(int vendorID, string vendorName)
+        {
+            ResetDatabase();
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{vendorID}");
+            Assert.True(httpResponse.IsSuccessStatusCode);
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var vendor = JsonConvert.DeserializeObject<VendorDomainObj>(jsonResponse);
+            Assert.Equal(vendorName, vendor.Name);
+        }
+
+        [Theory]
+        [InlineData(2, 1, 0)]
+        [InlineData(3, 2, 1)]
+        [InlineData(4, 0, 1)]
+        [InlineData(5, 1, 1)]
+        [InlineData(6, 1, 1)]
+        [InlineData(7, 1, 3)]
+        public async Task GetEachVendorDomainObjByIdWithDetails(int vendorID, int numberOfAddresses, int numberOfContacts)
+        {
+            ResetDatabase();
+
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{vendorID}/details");
+            Assert.True(httpResponse.IsSuccessStatusCode);
+
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var vendor = JsonConvert.DeserializeObject<VendorDomainObj>(jsonResponse);
+
+            var addressCount = vendor.Addresses.Count;
+            var contactCount = vendor.Contacts.Count;
+
+            Assert.Equal(numberOfAddresses, addressCount);
+            Assert.Equal(numberOfContacts, contactCount);
+        }
     }
 }

@@ -10,6 +10,8 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 
         VendorDomainObj GetVendorByID(int businessEntityID);
 
+        VendorDomainObj GetVendorWithDetails(int businessEntityID);
+
         void CreateVendor(VendorDomainObj vendor);
 
         void UpdateVendor(VendorDomainObj vendor);

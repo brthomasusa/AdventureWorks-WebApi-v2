@@ -38,5 +38,22 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
             var vendor = _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal(acctNumber, vendor.AccountNumber);
         }
+
+        [Theory]
+        [InlineData(2, 1, 0)]
+        [InlineData(3, 2, 1)]
+        [InlineData(4, 0, 1)]
+        [InlineData(5, 1, 1)]
+        [InlineData(6, 1, 1)]
+        [InlineData(7, 1, 3)]
+        public void GetEachVendorDomainObjByIdWithDetails(int vendorID, int numberOfAddresses, int numberOfContacts)
+        {
+            var vendor = _vendorRepo.GetVendorWithDetails(vendorID);
+            var addressCount = vendor.Addresses.Count;
+            var contactCount = vendor.Contacts.Count;
+
+            Assert.Equal(addressCount, numberOfAddresses);
+            Assert.Equal(contactCount, numberOfContacts);
+        }
     }
 }
