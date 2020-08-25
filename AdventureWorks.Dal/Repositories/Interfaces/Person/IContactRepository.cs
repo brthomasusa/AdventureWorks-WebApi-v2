@@ -9,6 +9,8 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 
         ContactDomainObj GetContactByID(int contactID);
 
+        ContactDomainObj GetContactByIDWithDetails(int contactID);
+
         void CreateContact(ContactDomainObj contactDomainObj);
 
         void UpdateContact(ContactDomainObj contactDomainObj);

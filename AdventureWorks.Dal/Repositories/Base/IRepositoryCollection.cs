@@ -15,5 +15,11 @@ namespace AdventureWorks.Dal.Repositories.Base
         IPayHistoryRepository PayHistory { get; }
 
         IPersonPhoneRepository Telephone { get; }
+
+        IDepartmentRepository Department { get; }
+
+        IAddressRepository Address { get; }
+
+        IContactRepository Contact { get; }
     }
 }

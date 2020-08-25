@@ -33,6 +33,17 @@ namespace AdventureWorks.Dal.Repositories.Person
                 .FirstOrDefault();
         }
 
+        public ContactDomainObj GetContactByIDWithDetails(int contactID)
+        {
+            var contact = DbContext.ContactDomainObj
+                .Where(contact => contact.BusinessEntityID == contactID)
+                .AsQueryable()
+                .FirstOrDefault();
+
+            contact.Phones.AddRange(DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactID).ToList());
+            return contact;
+        }
+
         public void CreateContact(ContactDomainObj contactDomainObj)
         {
             ExecuteInATransaction(DoWork);

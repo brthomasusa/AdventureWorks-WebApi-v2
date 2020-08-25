@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
-using AdventureWorks.Models.Purchasing;
 using AdventureWorks.Models.DomainModels;
 using LoggerService;
 
@@ -11,6 +9,8 @@ namespace AdventureWorks.Service.Controllers
     [ApiController]
     public class VendorsController : ControllerBase
     {
+        private const string CLASSNAME = "VendorsController";
+
         private ILoggerManager _logger;
         private IRepositoryCollection _repository;
 
@@ -18,6 +18,7 @@ namespace AdventureWorks.Service.Controllers
         {
             _logger = logger;
             _repository = repository;
+            _logger.LogInfo($"{CLASSNAME}.VendorsController");
         }
 
         [HttpGet]
