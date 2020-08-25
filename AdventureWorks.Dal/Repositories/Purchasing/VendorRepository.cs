@@ -1,5 +1,6 @@
 using System.Linq;
 using AdventureWorks.Dal.EfCode;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Models.DomainModels;
@@ -63,6 +64,13 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
         public void UpdateVendor(VendorDomainObj vendorDomainObj)
         {
             var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+
+            if (vendor == null)
+            {
+                string msg = $"Error: Update failed; unable to locate a vendor in the database with ID: {vendorDomainObj.BusinessEntityID}!";
+                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+            }
+
             vendor.Map(vendorDomainObj);
             DbContext.Vendor.Update(vendor);
             Save();
@@ -73,6 +81,13 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             // There is a tsql trigger that prevents deletion of vendors!
             vendorDomainObj.IsActive = false;
             var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+
+            if (vendor == null)
+            {
+                string msg = $"Error: Failed to change vendor status to in-active. Unable to locate a vendor in the database with ID '{vendorDomainObj.BusinessEntityID}'.";
+                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+            }
+
             vendor.Map(vendorDomainObj);
             DbContext.Vendor.Update(vendor);
             Save();

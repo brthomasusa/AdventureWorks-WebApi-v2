@@ -1,14 +1,12 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using AdventureWorks.Models.CustomTypes;
-using AdventureWorks.Models.Base;
-
 using Newtonsoft.Json;
 
 namespace AdventureWorks.Models.Base.Purchasing
 {
     public class VendorBase : EntityBase
     {
+        [Required]
         public int BusinessEntityID { get; set; }
 
         [Required, Display(Name = "Account Number")]
@@ -20,7 +18,7 @@ namespace AdventureWorks.Models.Base.Purchasing
         public string Name { get; set; }
 
         [Required]
-        [Range(1, 5, ErrorMessage = "Valid values are intergers 1 through 5.")]
+        [Range(1, 5, ErrorMessage = "Valid credit ratings are intergers 1 through 5 inclusive.")]
         public CreditRating CreditRating { get; set; }
 
         [Required, Display(Name = "Preferred Vendor")]

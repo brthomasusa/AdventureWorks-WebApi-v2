@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.Validation;
 
@@ -10,7 +9,7 @@ namespace AdventureWorks.Models.Base
         [Required, Display(Name = "ID")]
         public int BusinessEntityID { get; set; }
 
-        [Required, PersonType, MinLength(2), MaxLength(2)]
+        [Required, PersonType]
         public virtual string PersonType { get; set; }
 
         [Required]

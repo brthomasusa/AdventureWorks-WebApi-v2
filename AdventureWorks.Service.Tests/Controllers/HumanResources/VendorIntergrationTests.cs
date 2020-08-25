@@ -1,9 +1,13 @@
+using System;
+using System.Text;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Xunit;
+using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Service.Tests.Base;
 
@@ -22,7 +26,7 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
         }
 
         [Fact]
-        public async Task ShouldGetAllVendors()
+        public async Task ShouldGetAllVendorsDomainObjs()
         {
             ResetDatabase();
             var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}");
@@ -42,7 +46,7 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
         [InlineData(5, "Light Speed")]
         [InlineData(6, "Trikes")]
         [InlineData(7, "Australia Bike Retailer")]
-        public async Task ShouldGetOneVendorByID(int vendorID, string vendorName)
+        public async Task ShouldGetOneVendorDomainObjByID(int vendorID, string vendorName)
         {
             ResetDatabase();
             var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{vendorID}");
@@ -74,6 +78,120 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
 
             Assert.Equal(numberOfAddresses, addressCount);
             Assert.Equal(numberOfContacts, contactCount);
+        }
+
+        [Fact]
+        public async Task ShouldCreateOneVendorFromVendorDomainObj()
+        {
+            ResetDatabase();
+
+            var vendor = new VendorDomainObj
+            {
+                AccountNumber = "TESTVEN0001",
+                Name = "Test Vendor",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(vendor);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/", content);
+
+            Assert.True(response.IsSuccessStatusCode);
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<VendorDomainObj>(jsonResponse);
+
+            Assert.Equal(vendor.AccountNumber, result.AccountNumber);
+        }
+
+        [Fact]
+        public async Task ShouldUpdateOneVendorFromVendorDomainObj()
+        {
+            ResetDatabase();
+
+            var vendor = new VendorDomainObj
+            {
+                BusinessEntityID = 3,
+                AccountNumber = "DESOTOB0001",
+                Name = "Desoto Bicycle Exchange",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(vendor);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/", content);
+
+            Assert.True(response.IsSuccessStatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateVendorBecauseOfBadVendorID()
+        {
+            ResetDatabase();
+
+            var vendor = new VendorDomainObj
+            {
+                BusinessEntityID = 33,
+                AccountNumber = "DESOTOB0001",
+                Name = "Desoto Bicycle Exchange",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(vendor);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldDeleteOneVendorFromVendorDomainObj()
+        {
+            ResetDatabase();
+
+            var vendor = new VendorDomainObj
+            {
+                BusinessEntityID = 3,
+                AccountNumber = "DESOTOB0001",
+                Name = "Desoto Bicycle Exchange",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(vendor);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", vendor);
+
+            Assert.True(response.IsSuccessStatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToDeleteVendorBecauseOfBadVendorID()
+        {
+            ResetDatabase();
+
+            var vendor = new VendorDomainObj
+            {
+                BusinessEntityID = 3321,
+                AccountNumber = "DESOTOB0001",
+                Name = "Desoto Bicycle Exchange",
+                CreditRating = CreditRating.Superior,
+                PreferredVendor = true,
+                IsActive = true
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(vendor);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", vendor);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }

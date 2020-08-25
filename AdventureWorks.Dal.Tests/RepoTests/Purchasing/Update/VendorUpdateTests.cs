@@ -36,6 +36,22 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
         }
 
         [Fact]
+        public void ShouldRaiseExceptionBecauseOfInvalidVendorID()
+        {
+            int vendorID = 5;
+            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            vendorDomainObj.BusinessEntityID = 500;
+
+            Action testCode = () =>
+            {
+                _vendorRepo.UpdateVendor(vendorDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidObjectKeyFieldException>(testCode);
+            Assert.Equal("Error: Update failed; unable to locate a vendor in the database with ID: 500!", exception.Message);
+        }
+
+        [Fact]
         public void ShouldRaiseExceptionDuplicateVendorAccountNumberWhileUpdating()
         {
             int vendorID = 5;

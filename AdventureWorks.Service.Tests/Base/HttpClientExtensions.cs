@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Tests.Base
-{    public static class HttpClientExtensions
+{
+    public static class HttpClientExtensions
     {
+        private static HttpContent Serialize(object data) => new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
         public static Task<HttpResponseMessage> DeleteAsJsonAsync<T>(this HttpClient httpClient, string requestUri, T data)
             => httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, requestUri) { Content = Serialize(data) });
 
@@ -20,7 +23,5 @@ namespace AdventureWorks.Service.Tests.Base
 
         public static Task<HttpResponseMessage> DeleteAsJsonAsync<T>(this HttpClient httpClient, Uri requestUri, T data, CancellationToken cancellationToken)
             => httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, requestUri) { Content = Serialize(data) }, cancellationToken);
-
-        private static HttpContent Serialize(object data) => new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
     }
 }
