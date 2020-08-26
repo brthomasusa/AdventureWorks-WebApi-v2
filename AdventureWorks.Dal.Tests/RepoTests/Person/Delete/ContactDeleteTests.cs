@@ -18,7 +18,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
         [Fact]
         public void ShouldDeleteOneVendorContactUsingContactDomainObj()
         {
-            var contactID = 8;
+            var contactID = 9;
             var contact = _contactRepo.GetContactByID(contactID);
 
             Assert.NotNull(contact);

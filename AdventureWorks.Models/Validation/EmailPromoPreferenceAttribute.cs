@@ -13,7 +13,6 @@ namespace AdventureWorks.Models.Validation
         protected override ValidationResult IsValid(object promoPrefCode, ValidationContext validationContext)
         {
             var inputValue = (int)promoPrefCode;
-            var contact = (Person.Person)validationContext.ObjectInstance;
 
             if (_validEmailPromoCodes.Contains(inputValue))
             {

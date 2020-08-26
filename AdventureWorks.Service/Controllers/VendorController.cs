@@ -18,7 +18,6 @@ namespace AdventureWorks.Service.Controllers
         {
             _logger = logger;
             _repository = repository;
-            _logger.LogInfo($"{CLASSNAME}.VendorsController");
         }
 
         [HttpGet]

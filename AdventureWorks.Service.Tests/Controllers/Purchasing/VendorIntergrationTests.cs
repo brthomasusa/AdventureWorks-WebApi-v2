@@ -10,8 +10,9 @@ using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Service.Tests.Base;
 
-namespace AdventureWorks.Service.Tests.Controllers.HumanResources
+namespace AdventureWorks.Service.Tests.Controllers.Purchasing
 {
+    [Collection("AdventureWorks.Service")]
     public class VendorIntergrationTests : BaseTest, IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;

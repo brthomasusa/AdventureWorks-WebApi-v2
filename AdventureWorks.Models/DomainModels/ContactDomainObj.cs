@@ -6,7 +6,7 @@ using AdventureWorks.Models.Person;
 
 namespace AdventureWorks.Models.DomainModels
 {
-    public class ContactDomainObj : PersonBase
+    public class ContactDomainObj : PersonBase, IValidatableObject
     {
         [DataType(DataType.EmailAddress), Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
@@ -23,5 +23,13 @@ namespace AdventureWorks.Models.DomainModels
 
         [NotMapped]
         public List<PersonPhone> Phones { get; set; } = new List<PersonPhone>();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (PersonType != "VC")
+            {
+                yield return new ValidationResult("PersonType should be VC (Vendor Contact).");
+            }
+        }
     }
 }

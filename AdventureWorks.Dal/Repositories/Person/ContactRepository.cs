@@ -1,5 +1,7 @@
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Models.DomainModels;
@@ -12,6 +14,8 @@ namespace AdventureWorks.Dal.Repositories.Person
 {
     public class ContactRepository : RepositoryBase<ContactDomainObj>, IContactRepository
     {
+        private const string CLASSNAME = "ContactRepository";
+
         public ContactRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
@@ -86,21 +90,66 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public void UpdateContact(ContactDomainObj contactDomainObj)
         {
-            var contact = DbContext.Person.Find(contactDomainObj.BusinessEntityID);
-            contact.Map(contactDomainObj);
-            contact.EmailAddressObj.PersonEmailAddress = contactDomainObj.EmailAddress;
-            contact.PasswordObj.PasswordHash = contactDomainObj.EmailPasswordHash;
-            contact.PasswordObj.PasswordSalt = contactDomainObj.EmailPasswordSalt;
-            DbContext.Person.Update(contact);
-            Save();
+            var contact = DbContext.Person
+                .Where(c => c.BusinessEntityID == contactDomainObj.BusinessEntityID)
+                .Include(c => c.EmailAddressObj)
+                .Include(c => c.PasswordObj)
+                .FirstOrDefault();
+
+            if (contact != null)
+            {
+                contact.Map(contactDomainObj);
+                contact.EmailAddressObj.PersonEmailAddress = contactDomainObj.EmailAddress;
+                contact.PasswordObj.PasswordHash = contactDomainObj.EmailPasswordHash;
+                contact.PasswordObj.PasswordSalt = contactDomainObj.EmailPasswordSalt;
+                DbContext.Person.Update(contact);
+                Save();
+            }
+            else
+            {
+                string msg = $"Error: Update failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
+                RepoLogger.LogError(CLASSNAME + ".UpdateContact " + msg);
+                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+            }
+
         }
 
         public void DeleteContact(ContactDomainObj contactDomainObj)
         {
+            var checkExistence = GetContactByID(contactDomainObj.BusinessEntityID);
+
+            if (checkExistence == null)
+            {
+                string msg = $"Error: Delete failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
+                RepoLogger.LogError(CLASSNAME + ".DeleteContact " + msg);
+                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+            }
+
             ExecuteInATransaction(DoWork);
 
             void DoWork()
             {
+                var pword = DbContext.Password.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
+                if (pword != null)
+                {
+                    DbContext.Password.Remove(pword);
+                    Save();
+                }
+
+                var email = DbContext.EmailAddress.Where(e => e.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
+                if (email != null)
+                {
+                    DbContext.EmailAddress.Remove(email);
+                    Save();
+                }
+
+                var phones = DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).ToList();
+                if (phones != null)
+                {
+                    DbContext.PersonPhone.RemoveRange(phones);
+                    Save();
+                }
+
                 var bec = DbContext.BusinessEntityContact
                     .Find(contactDomainObj.ParentEntityID, contactDomainObj.BusinessEntityID, contactDomainObj.ContactTypeID);
 

@@ -9,7 +9,7 @@ namespace AdventureWorks.Models.Base
         [Required, Display(Name = "ID")]
         public int BusinessEntityID { get; set; }
 
-        [Required, PersonType]
+        [Required]
         public virtual string PersonType { get; set; }
 
         [Required]

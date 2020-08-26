@@ -12,7 +12,6 @@ namespace AdventureWorks.Models.Validation
         protected override ValidationResult IsValid(object personType, ValidationContext validationContext)
         {
             var inputValue = personType as string;
-            var contact = (Person.Person)validationContext.ObjectInstance;
 
             if (Array.Exists(_validTypes, element => element == inputValue))
             {

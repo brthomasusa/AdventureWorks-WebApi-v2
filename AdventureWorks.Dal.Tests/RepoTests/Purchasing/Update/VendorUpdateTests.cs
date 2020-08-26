@@ -48,7 +48,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
             };
 
             var exception = Assert.Throws<AdventureWorksInvalidObjectKeyFieldException>(testCode);
-            Assert.Equal("Error: Update failed; unable to locate a vendor in the database with ID: 500!", exception.Message);
+            Assert.Equal("Error: Update failed; unable to locate a vendor in the database with ID '500'.", exception.Message);
         }
 
         [Fact]

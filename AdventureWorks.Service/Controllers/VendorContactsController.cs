@@ -24,7 +24,7 @@ namespace AdventureWorks.Service.Controllers
         public IActionResult GetContactsForVendor(int vendorId)
             => Ok(_repository.Contact.GetContacts(vendorId, new ContactParameters { PageNumber = 1, PageSize = 10 }));
 
-        [HttpGet("contact/{contactID}")]
+        [HttpGet("contact/{contactID}", Name = "GetVendorContactByID")]
         public IActionResult GetVendorContactByID(int contactID)
             => Ok(_repository.Contact.GetContactByID(contactID));
 
@@ -33,6 +33,24 @@ namespace AdventureWorks.Service.Controllers
             => Ok(_repository.Contact.GetContactByIDWithDetails(contactID));
 
         [HttpPost("contact")]
+        public IActionResult CreateVendorContact([FromBody] ContactDomainObj contact)
+        {
+            _repository.Contact.CreateContact(contact);
+            return CreatedAtRoute(nameof(GetVendorContactByID), new { contactID = contact.BusinessEntityID }, contact);
+        }
 
+        [HttpPut("contact")]
+        public IActionResult UpdateVendorContact([FromBody] ContactDomainObj contact)
+        {
+            _repository.Contact.UpdateContact(contact);
+            return NoContent();
+        }
+
+        [HttpDelete("contact")]
+        public IActionResult DeleteVendorContact([FromBody] ContactDomainObj contact)
+        {
+            _repository.Contact.DeleteContact(contact);
+            return NoContent();
+        }
     }
 }
