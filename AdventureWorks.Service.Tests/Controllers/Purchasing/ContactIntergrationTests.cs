@@ -154,6 +154,87 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
         }
 
         [Fact]
+        public async Task ShouldFailToCreateOneVendorContactDueToInvalidContactTypeID()
+        {
+            ResetDatabase();
+
+            var contact = new ContactDomainObj
+            {
+                BusinessEntityID = 8,
+                EmailAddress = "testuser@adventure-works.com",
+                EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                EmailPasswordSalt = "d2tgUmM=",
+                ContactTypeID = 77,
+                ParentEntityID = 3,
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Test",
+                MiddleName = "T",
+                LastName = "User",
+                EmailPromotion = EmailPromoPreference.NoPromotions
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToCreateOneVendorContactDueToInvalidParentEntityID()
+        {
+            ResetDatabase();
+
+            var contact = new ContactDomainObj
+            {
+                BusinessEntityID = 8,
+                EmailAddress = "testuser@adventure-works.com",
+                EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                EmailPasswordSalt = "d2tgUmM=",
+                ContactTypeID = 17,
+                ParentEntityID = 33,
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Test",
+                MiddleName = "T",
+                LastName = "User",
+                EmailPromotion = EmailPromoPreference.NoPromotions
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [Fact]
         public async Task ShouldUpdateOneVendorContactFromContactDomainObj()
         {
             ResetDatabase();
@@ -211,6 +292,66 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateOneVendorContactDueToInvalidContactTypeID()
+        {
+            ResetDatabase();
+
+            var contact = new ContactDomainObj
+            {
+                BusinessEntityID = 8,
+                EmailAddress = "testuser@adventure-works.com",
+                EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                EmailPasswordSalt = "d2tgUmM=",
+                ContactTypeID = 77,
+                ParentEntityID = 3,
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Test",
+                MiddleName = "T",
+                LastName = "User",
+                EmailPromotion = EmailPromoPreference.NoPromotions
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateOneVendorContactDueToInvalidParentEntityID()
+        {
+            ResetDatabase();
+
+            var contact = new ContactDomainObj
+            {
+                BusinessEntityID = 8,
+                EmailAddress = "testuser@adventure-works.com",
+                EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
+                EmailPasswordSalt = "d2tgUmM=",
+                ContactTypeID = 17,
+                ParentEntityID = 33,
+                PersonType = "VC",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Test",
+                MiddleName = "T",
+                LastName = "User",
+                EmailPromotion = EmailPromoPreference.NoPromotions
+            };
+
+            string jsonVendor = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
