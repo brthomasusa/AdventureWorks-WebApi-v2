@@ -64,5 +64,70 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
             Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
         }
+
+        [Fact]
+        public void ShouldRaiseExceptionAddressDomainObjWithInvalidParentEntityID()
+        {
+            var vendorID = 4333;
+            var addressDomainObj = new AddressDomainObj
+            {
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 9,
+                PostalCode = "12345",
+                AddressTypeID = 3,
+                ParentEntityID = vendorID
+            };
+
+            Action testCode = () =>
+            {
+                _addressRepo.CreateAddress(addressDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            Assert.Equal("Error: Unable to determine the entity that this address belongs to.", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionAddressDomainObjWithInvalidAddressType()
+        {
+            var vendorID = 4;
+            var addressDomainObj = new AddressDomainObj
+            {
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 9,
+                PostalCode = "12345",
+                AddressTypeID = 987,
+                ParentEntityID = vendorID
+            };
+
+            Action testCode = () =>
+            {
+                _addressRepo.CreateAddress(addressDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidAddressTypeException>(testCode);
+            Assert.Equal("Error: Invalid address type detected.", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionWhileCreatingAddressWithInvalidStateID()
+        {
+            var addressID = 6;
+            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+
+            addressdomainObj.StateProvinceID = 632;
+
+            Action testCode = () =>
+            {
+                _addressRepo.CreateAddress(addressdomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidStateProvinceIdException>(testCode);
+            Assert.Equal("Error: Invalid state/province ID detected.", exception.Message);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace AdventureWorks.Dal.Repositories.Person
         private const string CLASSNAME = "ContactRepository";
 
         public ContactRepository(AdventureWorksContext context, ILoggerManager logger)
-         : base(context, logger) { RepoLogger.LogInfo($"{CLASSNAME}.ContactRepository"); }
+         : base(context, logger) { }
 
         public PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters)
         {
