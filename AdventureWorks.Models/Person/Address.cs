@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.SqlServer.Types;
 using Newtonsoft.Json;
 using AdventureWorks.Models.Base;
 

@@ -47,7 +47,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Delete
                 _vendorRepo.DeleteVendor(vendorDomainObj);
             };
 
-            var exception = Assert.Throws<AdventureWorksInvalidObjectKeyFieldException>(testCode);
+            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
             Assert.Equal("Error: Failed to change vendor status to in-active. Unable to locate a vendor in the database with ID '500'.", exception.Message);
         }
     }

@@ -41,9 +41,27 @@ namespace AdventureWorks.Service.Filters
                     actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
                     _logger.LogError($"{error} : {message}");
                     break;
-                case AdventureWorksInvalidObjectKeyFieldException une:
+                case AdventureWorksInvalidEntityIdException une:
+                    // Return 400
+                    error = "Can't find entity; invalid primary key value given.";
+                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    _logger.LogError($"{error} : {message}");
+                    break;
+                case AdventureWorksInvalidContactTypeException une:
+                    // Return 400
+                    error = "Invalid ContactTypeID.";
+                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    _logger.LogError($"{error} : {message}");
+                    break;
+                case AdventureWorksInvalidAddressTypeException une:
+                    // Return 400
+                    error = "Invalid AddressTypeID.";
+                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    _logger.LogError($"{error} : {message}");
+                    break;
+                case AdventureWorksNullEntityObjectException une:
                     // Return 404
-                    error = "Can't find entity; bad primary key value given!";
+                    error = "Can't find entity; invalid primary key value given!";
                     actionResult = new NotFoundObjectResult(new { error = error, message = message, StackTrace = stackTrace });
                     _logger.LogError($"{error} : {message}");
                     break;

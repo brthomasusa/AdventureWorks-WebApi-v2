@@ -17,7 +17,7 @@ namespace AdventureWorks.Dal.Repositories.Person
         private const string CLASSNAME = "ContactRepository";
 
         public ContactRepository(AdventureWorksContext context, ILoggerManager logger)
-         : base(context, logger) { }
+         : base(context, logger) { RepoLogger.LogInfo($"{CLASSNAME}.ContactRepository"); }
 
         public PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters)
         {
@@ -50,6 +50,8 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public void CreateContact(ContactDomainObj contactDomainObj)
         {
+            DoDatabaseValidation(contactDomainObj);
+
             ExecuteInATransaction(DoWork);
 
             void DoWork()
@@ -90,6 +92,8 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public void UpdateContact(ContactDomainObj contactDomainObj)
         {
+            DoDatabaseValidation(contactDomainObj);
+
             var contact = DbContext.Person
                 .Where(c => c.BusinessEntityID == contactDomainObj.BusinessEntityID)
                 .Include(c => c.EmailAddressObj)
@@ -109,7 +113,7 @@ namespace AdventureWorks.Dal.Repositories.Person
             {
                 string msg = $"Error: Update failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".UpdateContact " + msg);
-                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
             }
 
         }
@@ -122,7 +126,7 @@ namespace AdventureWorks.Dal.Repositories.Person
             {
                 string msg = $"Error: Delete failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".DeleteContact " + msg);
-                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
             }
 
             ExecuteInATransaction(DoWork);
@@ -167,6 +171,52 @@ namespace AdventureWorks.Dal.Repositories.Person
                 DbContext.BusinessEntity.Remove(bizEntity);
                 Save();
             }
+        }
+
+        private void DoDatabaseValidation(ContactDomainObj contactDomainObj)
+        {
+            if (!IsValidContactTypeID(contactDomainObj.ContactTypeID))
+            {
+                var msg = "Error: Invalid contact type detected.";
+                RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
+                throw new AdventureWorksInvalidContactTypeException(msg);
+            }
+
+            if (!IsValidParentEntityID(contactDomainObj.ParentEntityID, contactDomainObj.PersonType))
+            {
+                var msg = string.Empty;
+
+                if (contactDomainObj.PersonType == "VC")
+                {
+                    msg = "Error: Unable to determine the vendor that this contact is to be assigned to.";
+                }
+
+                RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
+                throw new AdventureWorksInvalidEntityIdException(msg);
+            }
+        }
+
+        private bool IsValidContactTypeID(int contactTypeID)
+        {
+            return DbContext.ContactType.Where(ct => ct.ContactTypeID == contactTypeID).Any();
+        }
+
+        private bool IsValidParentEntityID(int entityID, string personType)
+        {
+            bool retVal = false;
+
+            switch (personType)
+            {
+                case "VC":
+                    retVal = DbContext.Vendor.Where(v => v.BusinessEntityID == entityID).Any();
+                    break;
+                case "SC":
+                    break;
+                default:
+                    break;
+            }
+
+            return retVal;
         }
     }
 }

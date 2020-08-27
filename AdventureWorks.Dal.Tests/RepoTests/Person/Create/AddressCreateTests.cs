@@ -58,7 +58,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
             Action testCode = () =>
             {
-                _addressRepo.CreateAddress(addressDomainObj); ;
+                _addressRepo.CreateAddress(addressDomainObj);
             };
 
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);

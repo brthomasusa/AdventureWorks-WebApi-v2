@@ -71,7 +71,7 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             {
                 string msg = $"Error: Update failed; unable to locate a vendor in the database with ID '{vendorDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".UpdateVendor " + msg);
-                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
             }
 
             vendor.Map(vendorDomainObj);
@@ -89,7 +89,7 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             {
                 string msg = $"Error: Failed to change vendor status to in-active. Unable to locate a vendor in the database with ID '{vendorDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".DeleteVendor " + msg);
-                throw new AdventureWorksInvalidObjectKeyFieldException(msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
             }
 
             vendor.Map(vendorDomainObj);

@@ -1,3 +1,5 @@
+using System;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -34,6 +36,38 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             Assert.Equal("Wayne", result.MiddleName);
             Assert.Equal("Jr.", result.Suffix);
             Assert.Equal("j.w.dough@adventure-works.com", result.EmailAddress);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionContactWithInvalidParentEntityID()
+        {
+            var contactID = 8;
+            var contact = _contactRepo.GetContactByID(contactID);
+            contact.ParentEntityID = 567;
+
+            Action testCode = () =>
+            {
+                _contactRepo.UpdateContact(contact);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            Assert.Equal("Error: Unable to determine the vendor that this contact is to be assigned to.", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionContactWithInvalidContactType()
+        {
+            var contactID = 8;
+            var contact = _contactRepo.GetContactByID(contactID);
+            contact.ContactTypeID = 171;
+
+            Action testCode = () =>
+            {
+                _contactRepo.UpdateContact(contact);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidContactTypeException>(testCode);
+            Assert.Equal("Error: Invalid contact type detected.", exception.Message);
         }
     }
 }

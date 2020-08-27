@@ -18,7 +18,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
             var eeID = 18;
 
             var employeeObj = ctx.Person
-                .AsNoTracking()
                 .Where(person => person.BusinessEntityID == eeID)
                 .Include(person => person.EmployeeObj)
                     .ThenInclude(employee => employee.DepartmentHistories)
@@ -54,7 +53,6 @@ namespace AdventureWorks.Dal.Tests.CrudTests.HumanResources
             SampleDataInitialization.InitializeData(ctx);
 
             var employeeObj = ctx.Person
-                .AsNoTracking()
                 .Where(person => person.PersonType == "EM" && person.EmployeeObj.LoginID == "adventure-works\\freddyk")
                 .Single<AdventureWorks.Models.Person.Person>();
 
