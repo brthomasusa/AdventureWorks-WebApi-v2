@@ -111,8 +111,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.True(response.IsSuccessStatusCode);
@@ -145,8 +145,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -175,8 +175,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -205,8 +205,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -256,8 +256,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.True(response.IsSuccessStatusCode);
@@ -286,8 +286,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -316,8 +316,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -346,8 +346,8 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
-            HttpContent content = new StringContent(jsonVendor, Encoding.UTF8, "application/json");
+            string jsonContact = JsonConvert.SerializeObject(contact);
+            HttpContent content = new StringContent(jsonContact, Encoding.UTF8, "application/json");
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
@@ -376,7 +376,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
+            string jsonContact = JsonConvert.SerializeObject(contact);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/contact", contact);
 
             Assert.True(response.IsSuccessStatusCode);
@@ -405,7 +405,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPromotion = EmailPromoPreference.NoPromotions
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(contact);
+            string jsonContact = JsonConvert.SerializeObject(contact);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/contact", contact);
 
             Assert.False(response.IsSuccessStatusCode);

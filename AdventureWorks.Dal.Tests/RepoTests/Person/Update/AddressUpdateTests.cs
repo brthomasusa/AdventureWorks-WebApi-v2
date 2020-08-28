@@ -1,4 +1,5 @@
 using System;
+using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -32,6 +33,19 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
+        public void ShouldUpdateVendorAddressAndRelatedBusinessEntityContact()
+        {
+            var addressID = 6;
+            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            addressdomainObj.AddressTypeID = 7;
+
+            _addressRepo.UpdateAddress(addressdomainObj);
+
+            var result = _addressRepo.GetAddressByID(addressID);
+            Assert.Equal(7, result.AddressTypeID);
+        }
+
+        [Fact]
         public void ShouldRaiseExceptionForDuplicateEntityAddress()
         {
             var addressID = 6;
@@ -51,6 +65,22 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
             Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionWhileUpdatingAddressWithInvalidAddressID()
+        {
+            var addressID = 6;
+            var addressDomainObj = _addressRepo.GetAddressByID(addressID);
+            addressDomainObj.AddressID = 99;
+
+            Action testCode = () =>
+            {
+                _addressRepo.UpdateAddress(addressDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            Assert.Equal("Error: Update failed; unable to locate an address in the database with ID '99'.", exception.Message);
         }
 
         [Fact]

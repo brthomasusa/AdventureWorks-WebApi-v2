@@ -33,5 +33,21 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
 
             Assert.Equal(count - 1, vendorAddressDomainObjs.Count);
         }
+
+        [Fact]
+        public void ShouldRaiseExceptionWhileDeletingAddressWithInvalidAddressID()
+        {
+            var addressID = 6;
+            var addressDomainObj = _addressRepo.GetAddressByID(addressID);
+            addressDomainObj.AddressID = 99;
+
+            Action testCode = () =>
+            {
+                _addressRepo.DeleteAddress(addressDomainObj);
+            };
+
+            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            Assert.Equal("Error: Update failed; unable to locate an address in the database with ID '99'.", exception.Message);
+        }
     }
 }

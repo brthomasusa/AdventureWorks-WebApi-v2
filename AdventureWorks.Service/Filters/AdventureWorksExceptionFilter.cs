@@ -68,7 +68,7 @@ namespace AdventureWorks.Service.Filters
                 case AdventureWorksInvalidStateProvinceIdException une:
                     // Return 400
                     error = "Invalid state or province code.";
-                    actionResult = new NotFoundObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
                     _logger.LogError($"{error} : {message}");
                     break;
                 case AdventureWorksException awe:

@@ -56,16 +56,55 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public void UpdateAddress(AddressDomainObj addressDomainObj)
         {
+            if (DbContext.Address.Find(addressDomainObj.AddressID) == null)
+            {
+                string msg = $"Error: Update failed; unable to locate an address in the database with ID '{addressDomainObj.AddressID}'.";
+                RepoLogger.LogError(CLASSNAME + ".UpdateAddress " + msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
+            }
+
             DoDatabaseValidation(addressDomainObj);
 
-            var address = DbContext.Address.Find(addressDomainObj.AddressID);
-            address.Map(addressDomainObj);
-            DbContext.Address.Update(address);
-            Save();
+            ExecuteInATransaction(DoWork);
+
+            void DoWork()
+            {
+                var address = DbContext.Address
+                    .Where(a => a.AddressID == addressDomainObj.AddressID)
+                    .Include(a => a.BusinessEntityAddressObj)
+                    .FirstOrDefault();
+
+                if (addressDomainObj.AddressTypeID != address.BusinessEntityAddressObj.AddressTypeID)
+                {
+                    // AddressTypeID is part of the primary key; it can't be edited. Delete
+                    // BusinessEntity record and insert new one with the updated AddressTypeID
+                    DbContext.BusinessEntityAddress.Remove(address.BusinessEntityAddressObj);
+                    DbContext.BusinessEntityAddress.Add(
+                        new BusinessEntityAddress
+                        {
+                            BusinessEntityID = addressDomainObj.ParentEntityID,
+                            AddressID = addressDomainObj.AddressID,
+                            AddressTypeID = addressDomainObj.AddressTypeID
+                        }
+                    );
+                }
+
+                address.Map(addressDomainObj);
+                DbContext.Address.Update(address);
+
+                Save();
+            }
         }
 
         public void DeleteAddress(AddressDomainObj addressDomainObj)
         {
+            if (DbContext.Address.Find(addressDomainObj.AddressID) == null)
+            {
+                string msg = $"Error: Update failed; unable to locate an address in the database with ID '{addressDomainObj.AddressID}'.";
+                RepoLogger.LogError(CLASSNAME + ".DeleteAddress " + msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
+            }
+
             ExecuteInATransaction(DoWork);
 
             void DoWork()
