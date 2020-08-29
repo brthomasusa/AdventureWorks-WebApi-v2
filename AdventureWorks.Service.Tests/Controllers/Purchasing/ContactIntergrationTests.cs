@@ -124,7 +124,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
         }
 
         [Fact]
-        public async Task ShouldFailToCreateOneVendorDueToBadPersonType()
+        public async Task ShouldFailToCreateOneVendorDueToInvalidPersonType()
         {
             ResetDatabase();
 

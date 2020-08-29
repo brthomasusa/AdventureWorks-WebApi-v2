@@ -62,8 +62,6 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = 42
             };
 
-
-
             Action testCode = () =>
             {
                 _contactRepo.CreateContact(contact);
@@ -90,8 +88,6 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ContactTypeID = 171,
                 ParentEntityID = 2
             };
-
-
 
             Action testCode = () =>
             {

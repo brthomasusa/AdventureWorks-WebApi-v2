@@ -31,7 +31,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
             _phoneRepo.CreatePhone(phone);
 
             var result = _phoneRepo.GetPhoneByID(phone.BusinessEntityID, phone.PhoneNumber, phone.PhoneNumberTypeID);
-            Assert.NotNull(result);
+            Assert.Equal(phone.BusinessEntityID, result.BusinessEntityID);
+            Assert.Equal(phone.PhoneNumber, result.PhoneNumber);
+            Assert.Equal(phone.PhoneNumberTypeID, result.PhoneNumberTypeID);
         }
 
         [Fact]
@@ -50,7 +52,45 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
             };
 
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
-            Assert.Equal("Error: This operation would result in a duplicate phone record!", exception.Message);
+            Assert.Equal("Error: This operation would result in a duplicate phone record.", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionInvalidBusinessEntityID()
+        {
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 99,
+                PhoneNumber = "816-555-0142",
+                PhoneNumberTypeID = 3
+            };
+
+            Action testCode = () =>
+            {
+                _phoneRepo.CreatePhone(phone);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            Assert.Equal("Error: Unable to determine what person this phone number should be associated with.", exception.Message);
+        }
+
+        [Fact]
+        public void ShouldRaiseExceptionInvalidPhoneNumberTypeID()
+        {
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 9,
+                PhoneNumber = "816-555-0142",
+                PhoneNumberTypeID = 73
+            };
+
+            Action testCode = () =>
+            {
+                _phoneRepo.CreatePhone(phone);
+            };
+
+            var exception = Assert.Throws<AdventureWorksInvalidPhoneTypeException>(testCode);
+            Assert.Equal("Error: The PhoneNumberTypeID '73' is not valid.", exception.Message);
         }
     }
 }

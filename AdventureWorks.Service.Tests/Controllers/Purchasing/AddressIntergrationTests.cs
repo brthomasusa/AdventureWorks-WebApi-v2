@@ -191,9 +191,148 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
+        [Fact]
+        public async Task ShouldFailToUpdateAddressDueToInvalidAddressID()
+        {
+            ResetDatabase();
 
+            var address = new AddressDomainObj
+            {
+                AddressID = -1,
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 9,
+                PostalCode = "12345",
+                AddressTypeID = 3,
+                ParentEntityID = 7
+            };
 
+            string jsonAddress = JsonConvert.SerializeObject(address);
+            HttpContent content = new StringContent(jsonAddress, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/address", content);
 
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
 
+        [Fact]
+        public async Task ShouldFailToUpdateAddressDueToInvalidAddressTypeID()
+        {
+            ResetDatabase();
+
+            var address = new AddressDomainObj
+            {
+                AddressID = 1,
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 9,
+                PostalCode = "12345",
+                AddressTypeID = 63,
+                ParentEntityID = 7
+            };
+
+            string jsonAddress = JsonConvert.SerializeObject(address);
+            HttpContent content = new StringContent(jsonAddress, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/address", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateAddressDueToInvalidParentEntityID()
+        {
+            ResetDatabase();
+
+            var address = new AddressDomainObj
+            {
+                AddressID = 1,
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 9,
+                PostalCode = "12345",
+                AddressTypeID = 3,
+                ParentEntityID = 77
+            };
+
+            string jsonAddress = JsonConvert.SerializeObject(address);
+            HttpContent content = new StringContent(jsonAddress, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/address", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateAddressDueToInvalidStateProvinceID()
+        {
+            ResetDatabase();
+
+            var address = new AddressDomainObj
+            {
+                AddressID = 1,
+                AddressLine1 = "123 Made-Up-Street Rd",
+                AddressLine2 = "Ste 1,000,000",
+                City = "Anywhere",
+                StateProvinceID = 999,
+                PostalCode = "12345",
+                AddressTypeID = 3,
+                ParentEntityID = 7
+            };
+
+            string jsonAddress = JsonConvert.SerializeObject(address);
+            HttpContent content = new StringContent(jsonAddress, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/address", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldDeleteAddressFromAddressDomainObj()
+        {
+            ResetDatabase();
+
+            var address = new AddressDomainObj
+            {
+                AddressID = 1,
+                AddressLine1 = "28 San Marino Ct",
+                City = "Bellingham",
+                StateProvinceID = 79,
+                PostalCode = "98225",
+                AddressTypeID = 3,
+                ParentEntityID = 7
+            };
+
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/address", address);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToDeleteAddressWithInvalidAddressID()
+        {
+            ResetDatabase();
+
+            var address = new AddressDomainObj
+            {
+                AddressID = -1,
+                AddressLine1 = "28 San Marino Ct",
+                City = "Bellingham",
+                StateProvinceID = 79,
+                PostalCode = "98225",
+                AddressTypeID = 3,
+                ParentEntityID = 7
+            };
+
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/address", address);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
     }
 }

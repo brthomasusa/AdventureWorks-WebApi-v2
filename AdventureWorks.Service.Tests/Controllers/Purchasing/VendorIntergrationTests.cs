@@ -166,7 +166,6 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 IsActive = true
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(vendor);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", vendor);
 
             Assert.True(response.IsSuccessStatusCode);
@@ -187,7 +186,6 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 IsActive = true
             };
 
-            string jsonVendor = JsonConvert.SerializeObject(vendor);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", vendor);
 
             Assert.False(response.IsSuccessStatusCode);
