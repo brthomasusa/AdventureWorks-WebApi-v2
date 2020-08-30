@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Xunit;
 using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.DomainModels;
+using AdventureWorks.Models.Person;
 using AdventureWorks.Service.Tests.Base;
 
 namespace AdventureWorks.Service.Tests.Controllers.Purchasing
@@ -79,7 +80,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
         {
             ResetDatabase();
 
-            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/contact/{contactID}/details");
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/contact/{contactID}/phones");
             Assert.True(httpResponse.IsSuccessStatusCode);
 
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
@@ -87,6 +88,22 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var count = contact.Phones.Count;
 
             Assert.Equal(numberOfPhones, count);
+        }
+
+        [Theory]
+        [InlineData(9, "816-555-0142", 3)]
+        [InlineData(10, "214-555-0100", 1)]
+        [InlineData(10, "469-987-1001", 3)]
+        [InlineData(11, "114-555-0100", 3)]
+        [InlineData(12, "315-555-0100", 3)]
+        [InlineData(13, "273-555-0100", 1)]
+        [InlineData(19, "459-555-0100", 1)]
+        public async Task ShouldGetEachVendorContactPhoneRecord(int entityID, string phoneNumber, int phoneTypeID)
+        {
+            ResetDatabase();
+
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/contact/phone/{entityID}/{phoneNumber}/{phoneTypeID}");
+            Assert.True(httpResponse.IsSuccessStatusCode);
         }
 
         [Fact]
@@ -213,7 +230,29 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Fact]
+        public async Task ShouldCreateOneVendorContactPhoneRecord()
+        {
+            ResetDatabase();
 
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 9,
+                PhoneNumber = "816-555-1100",
+                PhoneNumberTypeID = 1
+            };
+
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            HttpContent content = new StringContent(jsonPhone, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact/phone", content);
+
+            Assert.True(response.IsSuccessStatusCode);
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<PersonPhone>(jsonResponse);
+
+            Assert.Equal(phone.PhoneNumber, result.PhoneNumber);
+        }
 
 
 

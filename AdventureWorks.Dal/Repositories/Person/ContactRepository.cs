@@ -37,7 +37,7 @@ namespace AdventureWorks.Dal.Repositories.Person
                 .FirstOrDefault();
         }
 
-        public ContactDomainObj GetContactByIDWithDetails(int contactID)
+        public ContactDomainObj GetContactByIDWithPhones(int contactID)
         {
             var contact = DbContext.ContactDomainObj
                 .Where(contact => contact.BusinessEntityID == contactID)

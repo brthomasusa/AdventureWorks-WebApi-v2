@@ -9,7 +9,7 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 
         ContactDomainObj GetContactByID(int contactID);
 
-        ContactDomainObj GetContactByIDWithDetails(int contactID);
+        ContactDomainObj GetContactByIDWithPhones(int contactID);
 
         void CreateContact(ContactDomainObj contactDomainObj);
 
