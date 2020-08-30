@@ -39,7 +39,7 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("contact/{contactID}/phones")]
-        public IActionResult GetVendorContactPhonesByIDWithPhones(int contactID)
+        public IActionResult GetVendorContactByIDWithPhones(int contactID)
             => Ok(_repository.Contact.GetContactByIDWithPhones(contactID));
 
         [HttpGet("contact/phone/{entityID}/{phoneNumber}/{phoneTypeID}", Name = "GetVendorContactPhone")]

@@ -139,7 +139,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/address", content);
 
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -263,7 +263,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/address", content);
 
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]

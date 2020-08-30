@@ -92,7 +92,6 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
-
         [Theory]
         [InlineData(8, 0)]
         [InlineData(9, 1)]
@@ -264,7 +263,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -308,7 +307,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact/phone", content);
 
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]

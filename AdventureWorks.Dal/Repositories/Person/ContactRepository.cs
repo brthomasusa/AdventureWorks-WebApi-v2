@@ -50,11 +50,10 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public ContactDomainObj GetContactByIDWithPhones(int contactID)
         {
-            if (DbContext.Person.Where(p => p.BusinessEntityID == contactID).Any())
+            if (DbContext.ContactDomainObj.Where(p => p.BusinessEntityID == contactID).Any())
             {
                 var contact = DbContext.ContactDomainObj
                     .Where(contact => contact.BusinessEntityID == contactID)
-                    .Include(contact => contact.Phones)
                     .AsQueryable()
                     .FirstOrDefault();
 
