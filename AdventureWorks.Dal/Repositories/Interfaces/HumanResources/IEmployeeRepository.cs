@@ -10,6 +10,8 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         EmployeeDomainObj GetEmployeeByID(int businessEntityID);
 
+        EmployeeDomainObj GetEmployeeByIDWithDetails(int businessEntityID);
+
         void CreateEmployee(EmployeeDomainObj employeeDomainObj);
 
         void UpdateEmployee(EmployeeDomainObj employeeDomainObj);

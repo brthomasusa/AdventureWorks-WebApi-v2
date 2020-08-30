@@ -1,5 +1,6 @@
 using System.Linq;
 using AdventureWorks.Dal.EfCode;
+using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Models.DomainModels;
@@ -29,6 +30,31 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 .Where(employee => employee.BusinessEntityID == businessEntityID)
                 .AsQueryable()
                 .FirstOrDefault();
+        }
+
+        public EmployeeDomainObj GetEmployeeByIDWithDetails(int businessEntityID)
+        {
+            var employee = DbContext.EmployeeDomainObj
+                .Where(employee => employee.BusinessEntityID == businessEntityID)
+                .AsQueryable()
+                .FirstOrDefault();
+
+            if (employee != null)
+            {
+                employee.DepartmentHistories.AddRange(
+                    DbContext.EmployeeDepartmentHistory.Where(dh => dh.BusinessEntityID == businessEntityID).ToList()
+                );
+
+                employee.PayHistories.AddRange(
+                    DbContext.EmployeePayHistory.Where(ph => ph.BusinessEntityID == businessEntityID).ToList()
+                );
+
+                employee.Addresses.AddRange(
+                    DbContext.AddressDomainObj.Where(a => a.ParentEntityID == businessEntityID).ToList()
+                );
+            }
+
+            return employee;
         }
 
         public void CreateEmployee(EmployeeDomainObj employeeDomainObj)
