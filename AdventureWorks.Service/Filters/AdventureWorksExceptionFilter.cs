@@ -42,9 +42,9 @@ namespace AdventureWorks.Service.Filters
                     _logger.LogError($"{error} : {message}");
                     break;
                 case AdventureWorksInvalidEntityIdException une:
-                    // Return 400
+                    // Return 404
                     error = "Can't find entity; invalid primary key value given.";
-                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    actionResult = new NotFoundObjectResult(new { error = error, message = message, StackTrace = stackTrace });
                     _logger.LogError($"{error} : {message}");
                     break;
                 case AdventureWorksInvalidContactTypeException une:

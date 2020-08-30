@@ -47,6 +47,18 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(numberOfContacts, count);
         }
 
+        [Fact]
+        public async Task ShouldReturnNotFoundWithInvalidBusinessEntityID()
+        {
+            ResetDatabase();
+
+            var entityID = 200;
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{entityID}/contact");
+
+            Assert.False(httpResponse.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
         [Theory]
         [InlineData(8, "j.dough@adventure-works.com")]
         [InlineData(9, "jo3@adventure-works.com")]
@@ -68,6 +80,19 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(emailAddress, contact.EmailAddress);
         }
 
+        [Fact]
+        public async Task ShouldReturnNotFoundWithInvalidContactID()
+        {
+            ResetDatabase();
+
+            var contactID = -1;
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/contact/{contactID}");
+
+            Assert.False(httpResponse.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+
         [Theory]
         [InlineData(8, 0)]
         [InlineData(9, 1)]
@@ -88,6 +113,18 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var count = contact.Phones.Count;
 
             Assert.Equal(numberOfPhones, count);
+        }
+
+        [Fact]
+        public async Task ShouldFailToGetEachVendorContactWithPhoneRecords()
+        {
+            ResetDatabase();
+
+            var contactID = -1;
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/contact/{contactID}/phones");
+
+            Assert.False(httpResponse.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         [Theory]
@@ -431,7 +468,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/contact", content);
 
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]

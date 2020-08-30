@@ -25,9 +25,18 @@ namespace AdventureWorks.Service.Controllers
         public IActionResult GetContactsForVendor(int vendorId)
             => Ok(_repository.Contact.GetContacts(vendorId, new ContactParameters { PageNumber = 1, PageSize = 10 }));
 
+
         [HttpGet("contact/{contactID}", Name = "GetVendorContactByID")]
         public IActionResult GetVendorContactByID(int contactID)
-            => Ok(_repository.Contact.GetContactByID(contactID));
+        {
+            var contact = _repository.Contact.GetContactByID(contactID);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(contact);
+        }
 
         [HttpGet("contact/{contactID}/phones")]
         public IActionResult GetVendorContactPhonesByIDWithPhones(int contactID)

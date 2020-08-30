@@ -21,12 +21,23 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters)
         {
-            return PagedList<ContactDomainObj>.ToPagedList(
-                DbContext.ContactDomainObj
-                    .Where(contact => contact.ParentEntityID == entityID)
-                    .AsQueryable(),
-                contactParameters.PageNumber,
-                contactParameters.PageSize);
+            if (DbContext.BusinessEntity.Where(v => v.BusinessEntityID == entityID).Any())
+            {
+                return PagedList<ContactDomainObj>.ToPagedList(
+                    DbContext.ContactDomainObj
+                        .Where(contact => contact.ParentEntityID == entityID)
+                        .AsQueryable(),
+                    contactParameters.PageNumber,
+                    contactParameters.PageSize);
+            }
+            else
+            {
+                var msg = "Error: Invalid BusinessEntityID detected.";
+                RepoLogger.LogError(CLASSNAME + ".GetContacts " + msg);
+                throw new AdventureWorksInvalidEntityIdException(msg);
+            }
+
+
         }
 
         public ContactDomainObj GetContactByID(int contactID)
@@ -39,13 +50,23 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public ContactDomainObj GetContactByIDWithPhones(int contactID)
         {
-            var contact = DbContext.ContactDomainObj
-                .Where(contact => contact.BusinessEntityID == contactID)
-                .AsQueryable()
-                .FirstOrDefault();
+            if (DbContext.Person.Where(p => p.BusinessEntityID == contactID).Any())
+            {
+                var contact = DbContext.ContactDomainObj
+                    .Where(contact => contact.BusinessEntityID == contactID)
+                    .Include(contact => contact.Phones)
+                    .AsQueryable()
+                    .FirstOrDefault();
 
-            contact.Phones.AddRange(DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactID).ToList());
-            return contact;
+                contact.Phones.AddRange(DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactID).ToList());
+                return contact;
+            }
+            else
+            {
+                var msg = "Error: Invalid ContactID detected.";
+                RepoLogger.LogError(CLASSNAME + ".GetContactByIDWithPhones " + msg);
+                throw new AdventureWorksInvalidEntityIdException(msg);
+            }
         }
 
         public void CreateContact(ContactDomainObj contactDomainObj)
