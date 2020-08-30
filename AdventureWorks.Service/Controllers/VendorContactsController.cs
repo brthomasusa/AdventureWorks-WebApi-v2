@@ -48,6 +48,7 @@ namespace AdventureWorks.Service.Controllers
         public IActionResult CreateVendorContactPhone([FromBody] PersonPhone phone)
         {
             _repository.Telephone.CreatePhone(phone);
+
             return CreatedAtRoute(nameof(GetVendorContactPhone),
                 new { entityID = phone.BusinessEntityID, phoneNumber = phone.PhoneNumber, phoneTypeID = phone.PhoneNumberTypeID }
                 , phone);

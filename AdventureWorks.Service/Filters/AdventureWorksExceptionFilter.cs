@@ -71,6 +71,12 @@ namespace AdventureWorks.Service.Filters
                     actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
                     _logger.LogError($"{error} : {message}");
                     break;
+                case AdventureWorksInvalidPhoneTypeException une:
+                    // Return 400
+                    error = "Invalid phone type ID.";
+                    actionResult = new BadRequestObjectResult(new { error = error, message = message, StackTrace = stackTrace });
+                    _logger.LogError($"{error} : {message}");
+                    break;
                 case AdventureWorksException awe:
                     // Return 400
                     error = "AdventureWorksException";

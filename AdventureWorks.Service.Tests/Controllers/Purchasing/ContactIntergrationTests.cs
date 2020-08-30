@@ -118,7 +118,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
                 EmailPasswordSalt = "d2tgUmM=",
                 ContactTypeID = 17,
-                ParentEntityID = 8,
+                ParentEntityID = 3,
                 PersonType = "VC",
                 IsEasternNameStyle = false,
                 Title = "Ms.",
@@ -152,7 +152,7 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
                 EmailPasswordHash = "8pJsGA+VNldlqxGoEloyXnMv3mSCpZXltUf11tCeVts=",
                 EmailPasswordSalt = "d2tgUmM=",
                 ContactTypeID = 17,
-                ParentEntityID = 8,
+                ParentEntityID = 3,
                 PersonType = "EM",
                 IsEasternNameStyle = false,
                 Title = "Ms.",
@@ -254,24 +254,65 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
             Assert.Equal(phone.PhoneNumber, result.PhoneNumber);
         }
 
+        [Fact]
+        public async Task ShouldFailToCreateOneVendorContactPhoneInvalidEntityID()
+        {
+            ResetDatabase();
 
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 99,
+                PhoneNumber = "816-555-1100",
+                PhoneNumberTypeID = 1
+            };
 
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            HttpContent content = new StringContent(jsonPhone, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact/phone", content);
 
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
 
+        [Fact]
+        public async Task ShouldFailToCreateOneVendorContactPhoneInvalidPhoneNumberTypeID()
+        {
+            ResetDatabase();
 
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 9,
+                PhoneNumber = "816-555-1100",
+                PhoneNumberTypeID = -1
+            };
 
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            HttpContent content = new StringContent(jsonPhone, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact/phone", content);
 
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
 
+        [Fact]
+        public async Task ShouldFailToCreateOneVendorContactPhoneDuplicatePhoneRecord()
+        {
+            ResetDatabase();
 
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 9,
+                PhoneNumber = "816-555-0142",
+                PhoneNumberTypeID = 3
+            };
 
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            HttpContent content = new StringContent(jsonPhone, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/contact/phone", content);
 
-
-
-
-
-
-
-
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
 
         [Fact]
         public async Task ShouldUpdateOneVendorContactFromContactDomainObj()
@@ -446,6 +487,44 @@ namespace AdventureWorks.Service.Tests.Controllers.Purchasing
 
             string jsonContact = JsonConvert.SerializeObject(contact);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/contact", contact);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldDeleteOneVendorContactPhoneRecord()
+        {
+            ResetDatabase();
+
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 13,
+                PhoneNumber = "273-555-0100",
+                PhoneNumberTypeID = 1
+            };
+
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/contact/phone", phone);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToDeleteOneVendorContactPhoneInvalidSearchCriteria()
+        {
+            ResetDatabase();
+
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 133,
+                PhoneNumber = "273-555-0100",
+                PhoneNumberTypeID = 1
+            };
+
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/contact/phone", phone);
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
