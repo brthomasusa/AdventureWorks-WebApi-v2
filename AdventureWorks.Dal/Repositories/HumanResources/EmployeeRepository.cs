@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -14,6 +15,8 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 {
     public class EmployeeRepository : RepositoryBase<EmployeeDomainObj>, IEmployeeRepository
     {
+        private const string CLASSNAME = "EmployeeRepository";
+
         public EmployeeRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
@@ -96,7 +99,20 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public void UpdateEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            var person = DbContext.Person.Find(employeeDomainObj.BusinessEntityID);
+            var person = DbContext.Person
+                .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)
+                .Include(p => p.EmployeeObj)
+                .Include(p => p.EmailAddressObj)
+                .Include(p => p.PasswordObj)
+                .FirstOrDefault();
+
+            if (person == null)
+            {
+                string msg = $"Error: Update failed; unable to locate an employee in the database with ID '{employeeDomainObj.BusinessEntityID}'.";
+                RepoLogger.LogError(CLASSNAME + ".UpdateEmployee " + msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
+            }
+
             person.Map(employeeDomainObj);
             person.EmployeeObj.Map(employeeDomainObj);
             person.EmailAddressObj.PersonEmailAddress = employeeDomainObj.EmailAddress;
@@ -109,7 +125,18 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public void DeleteEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            var person = DbContext.Person.Find(employeeDomainObj.BusinessEntityID);
+            var person = DbContext.Person
+                .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)
+                .Include(p => p.EmployeeObj)
+                .FirstOrDefault();
+
+            if (person == null)
+            {
+                string msg = $"Error: Update failed; unable to locate an employee in the database with ID '{employeeDomainObj.BusinessEntityID}'.";
+                RepoLogger.LogError(CLASSNAME + ".DeleteEmployee " + msg);
+                throw new AdventureWorksNullEntityObjectException(msg);
+            }
+
             person.EmployeeObj.IsActive = false;
 
             DbContext.Person.Update(person);

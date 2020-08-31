@@ -153,5 +153,171 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             Assert.Equal(employeeDomainObj.EmailAddress, result.EmailAddress);
         }
 
+        [Fact]
+        public async Task ShouldUpdateAnEmployeeDomainObject()
+        {
+            ResetDatabase();
+
+            var employeeDomainObj = new EmployeeDomainObj
+            {
+                BusinessEntityID = 18,
+                PersonType = "EM",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Jane",
+                MiddleName = "Janice",
+                LastName = "Doe",
+                EmailPromotion = EmailPromoPreference.NoPromotions,
+                EmailAddress = "jane.doe@adventure-works.com",
+                PasswordHash = "pbFwXWE99vobT6g+vPWFy93NtUU/orrIWafF01hccfM=",
+                PasswordSalt = "bE3XiWw=",
+                NationalIDNumber = "123456123",
+                LoginID = "adventure-works\\jane1",
+                JobTitle = "Design Engineer",
+                BirthDate = new DateTime(1989, 6, 5),
+                MaritalStatus = "S",
+                Gender = "F",
+                HireDate = new DateTime(2019, 10, 5),
+                IsSalaried = false,
+                VacationHours = 10,
+                SickLeaveHours = 10,
+                IsActive = true
+            };
+
+            string jsonEmployee = JsonConvert.SerializeObject(employeeDomainObj);
+            HttpContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}", content);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            var result = await _client.GetAsync($"{serviceAddress}{rootAddress}/{employeeDomainObj.BusinessEntityID}");
+            var jsonResponse = await result.Content.ReadAsStringAsync();
+            var employee = JsonConvert.DeserializeObject<EmployeeDomainObj>(jsonResponse);
+
+            Assert.Equal(employeeDomainObj.NationalIDNumber, employee.NationalIDNumber);
+        }
+
+        [Fact]
+        public async Task ShouldFailToUpdateAnEmployeeDomainObjectWithInvalidID()
+        {
+            ResetDatabase();
+
+            var employeeDomainObj = new EmployeeDomainObj
+            {
+                BusinessEntityID = -8,
+                PersonType = "EM",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Jane",
+                MiddleName = "Janice",
+                LastName = "Doe",
+                EmailPromotion = EmailPromoPreference.NoPromotions,
+                EmailAddress = "jane.doe@adventure-works.com",
+                PasswordHash = "pbFwXWE99vobT6g+vPWFy93NtUU/orrIWafF01hccfM=",
+                PasswordSalt = "bE3XiWw=",
+                NationalIDNumber = "123456123",
+                LoginID = "adventure-works\\jane1",
+                JobTitle = "Design Engineer",
+                BirthDate = new DateTime(1989, 6, 5),
+                MaritalStatus = "S",
+                Gender = "F",
+                HireDate = new DateTime(2019, 10, 5),
+                IsSalaried = false,
+                VacationHours = 10,
+                SickLeaveHours = 10,
+                IsActive = true
+            };
+
+            string jsonEmployee = JsonConvert.SerializeObject(employeeDomainObj);
+            HttpContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task ShouldChangeEmployeeIsActiveFlagToFalse()
+        {
+            ResetDatabase();
+
+            var employeeDomainObj = new EmployeeDomainObj
+            {
+                BusinessEntityID = 18,
+                PersonType = "EM",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Jane",
+                MiddleName = "Janice",
+                LastName = "Doe",
+                EmailPromotion = EmailPromoPreference.NoPromotions,
+                EmailAddress = "jane.doe@adventure-works.com",
+                PasswordHash = "pbFwXWE99vobT6g+vPWFy93NtUU/orrIWafF01hccfM=",
+                PasswordSalt = "bE3XiWw=",
+                NationalIDNumber = "123456123",
+                LoginID = "adventure-works\\jane1",
+                JobTitle = "Design Engineer",
+                BirthDate = new DateTime(1989, 6, 5),
+                MaritalStatus = "S",
+                Gender = "F",
+                HireDate = new DateTime(2019, 10, 5),
+                IsSalaried = false,
+                VacationHours = 10,
+                SickLeaveHours = 10,
+                IsActive = true
+            };
+
+            string jsonContact = JsonConvert.SerializeObject(employeeDomainObj);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", employeeDomainObj);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            var result = await _client.GetAsync($"{serviceAddress}{rootAddress}/{employeeDomainObj.BusinessEntityID}");
+            var jsonResponse = await result.Content.ReadAsStringAsync();
+            var employee = JsonConvert.DeserializeObject<EmployeeDomainObj>(jsonResponse);
+
+            Assert.False(employee.IsActive);
+        }
+
+        [Fact]
+        public async Task ShouldFailToChangeEmployeeIsActiveFlagToFalse()
+        {
+            ResetDatabase();
+
+            var employeeDomainObj = new EmployeeDomainObj
+            {
+                BusinessEntityID = -1,
+                PersonType = "EM",
+                IsEasternNameStyle = false,
+                Title = "Ms.",
+                FirstName = "Jane",
+                MiddleName = "Janice",
+                LastName = "Doe",
+                EmailPromotion = EmailPromoPreference.NoPromotions,
+                EmailAddress = "jane.doe@adventure-works.com",
+                PasswordHash = "pbFwXWE99vobT6g+vPWFy93NtUU/orrIWafF01hccfM=",
+                PasswordSalt = "bE3XiWw=",
+                NationalIDNumber = "123456123",
+                LoginID = "adventure-works\\jane1",
+                JobTitle = "Design Engineer",
+                BirthDate = new DateTime(1989, 6, 5),
+                MaritalStatus = "S",
+                Gender = "F",
+                HireDate = new DateTime(2019, 10, 5),
+                IsSalaried = false,
+                VacationHours = 10,
+                SickLeaveHours = 10,
+                IsActive = true
+            };
+
+            string jsonContact = JsonConvert.SerializeObject(employeeDomainObj);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", employeeDomainObj);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
     }
 }

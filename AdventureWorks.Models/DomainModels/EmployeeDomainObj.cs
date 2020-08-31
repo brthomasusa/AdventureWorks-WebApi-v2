@@ -4,13 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using AdventureWorks.Models.Base;
 using AdventureWorks.Models.HumanResources;
-
+using AdventureWorks.Models.Validation;
 
 namespace AdventureWorks.Models.DomainModels
 {
-    public class EmployeeDomainObj : PersonBase
+    public class EmployeeDomainObj : PersonBase, IValidatableObject
     {
-        [DataType(DataType.EmailAddress), Display(Name = "Email Address")]
+        private readonly DateTime EARLIEST_HIREDATE = new DateTime(1996, 7, 1);
+        private readonly DateTime EARLIEST_BIRTHDATE = new DateTime(1930, 1, 1);
+
+        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
         [Required, DataType(DataType.Password), Display(Name = "Password")]
@@ -31,11 +34,11 @@ namespace AdventureWorks.Models.DomainModels
         [Display(Name = "Job Title")]
         public string JobTitle { get; set; }
 
-        [Required, DataType(DataType.Text), StringLength(1, ErrorMessage = "M = married and S = single.")]
+        [Required, MaritalStatus, MinLength(1), MaxLength(1)]
         [Display(Name = "Marital Status")]
         public string MaritalStatus { get; set; }
 
-        [Required, DataType(DataType.Text), StringLength(1, ErrorMessage = "F = female and M = male.")]
+        [Required, Gender, MinLength(1), MaxLength(1)]
         public string Gender { get; set; }
 
         [Required, DataType(DataType.DateTime), Display(Name = "Hire Date")]
@@ -64,5 +67,28 @@ namespace AdventureWorks.Models.DomainModels
 
         [NotMapped]
         public List<AddressDomainObj> Addresses { get; set; } = new List<AddressDomainObj>();
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+
+            if (PersonType != "EM")
+            {
+                yield return new ValidationResult("PersonType should be EM (Employee).", new[] { nameof(PersonType) });
+            }
+
+            var maxHireDate = (DateTime.Now).AddDays(1);
+
+            if (HireDate < EARLIEST_HIREDATE || HireDate > maxHireDate)
+            {
+                yield return new ValidationResult("Hire date cannot be before 1996-07-01 or after tomorrow.", new[] { nameof(HireDate) });
+            }
+
+            var maxBirthDate = (DateTime.Now).AddYears(-18);
+            if (BirthDate < EARLIEST_BIRTHDATE || BirthDate > maxBirthDate)
+            {
+                yield return new ValidationResult("Employee must be at least 18 and born on, or after, 1930-01-01.", new[] { nameof(BirthDate) });
+            }
+        }
     }
 }

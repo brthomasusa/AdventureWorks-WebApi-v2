@@ -54,5 +54,19 @@ namespace AdventureWorks.Service.Controllers
             _repository.Employee.CreateEmployee(employee);
             return CreatedAtRoute(nameof(GetEmployeeByID), new { employeeID = employee.BusinessEntityID }, employee);
         }
+
+        [HttpPut]
+        public IActionResult UpdateEmployee([FromBody] EmployeeDomainObj employee)
+        {
+            _repository.Employee.UpdateEmployee(employee);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteEmployee([FromBody] EmployeeDomainObj employee)
+        {
+            _repository.Employee.DeleteEmployee(employee);
+            return NoContent();
+        }
     }
 }
