@@ -70,21 +70,19 @@ namespace AdventureWorks.Models.DomainModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var results = new List<ValidationResult>();
+            var maxHireDate = (DateTime.Now).AddDays(1);
+            var maxBirthDate = (DateTime.Now).AddYears(-18);
 
             if (PersonType != "EM")
             {
                 yield return new ValidationResult("PersonType should be EM (Employee).", new[] { nameof(PersonType) });
             }
 
-            var maxHireDate = (DateTime.Now).AddDays(1);
-
             if (HireDate < EARLIEST_HIREDATE || HireDate > maxHireDate)
             {
                 yield return new ValidationResult("Hire date cannot be before 1996-07-01 or after tomorrow.", new[] { nameof(HireDate) });
             }
 
-            var maxBirthDate = (DateTime.Now).AddYears(-18);
             if (BirthDate < EARLIEST_BIRTHDATE || BirthDate > maxBirthDate)
             {
                 yield return new ValidationResult("Employee must be at least 18 and born on, or after, 1930-01-01.", new[] { nameof(BirthDate) });

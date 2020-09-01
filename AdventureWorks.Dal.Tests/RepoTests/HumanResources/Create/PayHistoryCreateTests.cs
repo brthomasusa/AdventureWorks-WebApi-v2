@@ -53,7 +53,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
             };
 
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
-            Assert.Equal("Error: This operation would result in a duplicate employee pay history record!", exception.Message);
+            Assert.Equal("Error: This operation would result in a duplicate employee pay history record.", exception.Message);
         }
     }
 }
