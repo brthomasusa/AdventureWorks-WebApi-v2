@@ -37,6 +37,7 @@ namespace AdventureWorks.Service.Controllers.HumanResources
             return Ok(payhistory);
         }
 
+
         [HttpPost("payhistory")]
         public IActionResult CreatePayHistory([FromBody] EmployeePayHistory payHistory)
         {
@@ -44,12 +45,14 @@ namespace AdventureWorks.Service.Controllers.HumanResources
             return CreatedAtRoute(nameof(GetPayHistoryByID), new { employeeID = payHistory.BusinessEntityID, rateChangeDate = payHistory.RateChangeDate }, payHistory);
         }
 
+
         [HttpPut("payhistory")]
         public IActionResult UpdatePayHistory([FromBody] EmployeePayHistory payHistory)
         {
             _repository.PayHistory.UpdatePayHistory(payHistory);
             return NoContent();
         }
+
 
         [HttpDelete("payhistory")]
         public IActionResult DeletePayHistory([FromBody] EmployeePayHistory payHistory)

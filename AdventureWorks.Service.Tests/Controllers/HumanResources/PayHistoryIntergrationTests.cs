@@ -94,6 +94,48 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
         }
 
         [Fact]
+        public async Task ShouldFailToCreateEmployeePayHistoryWithInvalidEmployeeID()
+        {
+            ResetDatabase();
+
+            var payHistory = new EmployeePayHistory
+            {
+                BusinessEntityID = 1336,
+                RateChangeDate = new DateTime(2020, 8, 18),
+                Rate = 150.00M,
+                PayFrequency = PayFrequency.Biweekly
+            };
+
+            string jsonPayHistory = JsonConvert.SerializeObject(payHistory);
+            HttpContent content = new StringContent(jsonPayHistory, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/payhistory", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToCreateEmployeePayHistoryWithDuplicatePrimaryKey()
+        {
+            ResetDatabase();
+
+            var payHistory = new EmployeePayHistory
+            {
+                BusinessEntityID = 14,
+                RateChangeDate = new DateTime(2008, 12, 29),
+                Rate = 150.00M,
+                PayFrequency = PayFrequency.Biweekly
+            };
+
+            string jsonPayHistory = JsonConvert.SerializeObject(payHistory);
+            HttpContent content = new StringContent(jsonPayHistory, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/payhistory", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
         public async Task ShouldUpdateOneEmployeePayHistoryRecord()
         {
             ResetDatabase();
@@ -111,11 +153,76 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/payhistory", content);
 
             Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var test = await _client
+                .GetAsync($"{serviceAddress}{rootAddress}/payhistory/{payHistory.BusinessEntityID}/{payHistory.RateChangeDate.ToString("yyyy-MM-dd")}");
+            var jsonResponse = await test.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<EmployeePayHistory>(jsonResponse);
 
             Assert.Equal(payHistory.Rate, result.Rate);
         }
+
+        [Fact]
+        public async Task ShouldFailToUpdatePayHistoryDueToBadEmployeeIDOrRateChangeDate()
+        {
+            ResetDatabase();
+
+            var payHistory = new EmployeePayHistory
+            {
+                BusinessEntityID = 177,
+                RateChangeDate = new DateTime(2008, 1, 6),
+                Rate = 50.00M,
+                PayFrequency = PayFrequency.Biweekly
+            };
+
+            string jsonPayHistory = JsonConvert.SerializeObject(payHistory);
+            HttpContent content = new StringContent(jsonPayHistory, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync($"{serviceAddress}{rootAddress}/payhistory", content);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldDeletOneEmployeePayHistoryRecord()
+        {
+            ResetDatabase();
+
+            var payHistory = new EmployeePayHistory
+            {
+                BusinessEntityID = 17,
+                RateChangeDate = new DateTime(2008, 1, 6),
+                Rate = 50.00M,
+                PayFrequency = PayFrequency.Biweekly
+            };
+
+            string jsonContact = JsonConvert.SerializeObject(payHistory);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/payhistory", payHistory);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldFailToDeletePayHistoryDueToBadEmployeeIDOrRateChangeDate()
+        {
+            ResetDatabase();
+
+            var payHistory = new EmployeePayHistory
+            {
+                BusinessEntityID = 177,
+                RateChangeDate = new DateTime(2008, 1, 6),
+                Rate = 50.00M,
+                PayFrequency = PayFrequency.Biweekly
+            };
+
+            string jsonContact = JsonConvert.SerializeObject(payHistory);
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/payhistory", payHistory);
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
     }
 }
