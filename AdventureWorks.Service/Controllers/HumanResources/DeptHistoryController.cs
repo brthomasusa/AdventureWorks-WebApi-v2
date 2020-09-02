@@ -27,7 +27,7 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         // [HttpGet("depthistory/{employeeID}/{rateChangeDate}", Name = "GetDeptHistoryByID")]
         // public IActionResult GetDeptHistoryByID(int employeeID, DateTime rateChangeDate)
         // {
-        //     // var depthistory = _repository.PayHistory
+        //     // var depthistory = _repository.Pay
         // }
 
 

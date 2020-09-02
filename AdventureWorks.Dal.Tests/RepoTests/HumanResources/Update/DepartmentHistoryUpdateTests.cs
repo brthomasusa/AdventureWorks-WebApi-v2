@@ -22,14 +22,15 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             int employeeID = 1;
             short deptID = 10;
             byte shiftID = 3;
-            var deptHistory = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID);
+            DateTime startDate = new DateTime(2009, 1, 14);
+            var deptHistory = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
 
             var endDate = new DateTime(2019, 1, 1);
             deptHistory.EndDate = endDate;
 
             _deptHistoryRepo.UpdateDepartmentHistory(deptHistory);
 
-            var result = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID);
+            var result = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
             Assert.Equal(endDate, result.EndDate);
         }
     }

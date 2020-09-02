@@ -50,15 +50,13 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 RepoLogger.LogError(CLASSNAME + ".GetPayHistoryByID " + msg);
                 throw new AdventureWorksInvalidEntityIdException(msg);
             }
-
         }
 
         public void CreatePayHistory(EmployeePayHistory payHistory)
         {
             if (IsValidEmployeeID(payHistory.BusinessEntityID))
             {
-                if (!DbContext.EmployeePayHistory.Where(ph => ph.BusinessEntityID == payHistory.BusinessEntityID &&
-                                                              ph.RateChangeDate == payHistory.RateChangeDate).Any())
+                if (!IsExistingPayHistory(payHistory))
                 {
                     var history = new EmployeePayHistory { };
                     history.Map(payHistory);
@@ -119,7 +117,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         private bool IsValidEmployeeID(int employeeID)
         {
-            return DbContext.EmployeePayHistory.Where(ph => ph.BusinessEntityID == employeeID).Any();
+            return DbContext.Employee.Where(ph => ph.BusinessEntityID == employeeID).Any();
         }
 
         private bool IsExistingPayHistory(EmployeePayHistory payHistory)

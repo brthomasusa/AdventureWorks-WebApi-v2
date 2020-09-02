@@ -31,7 +31,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
 
             _deptHistoryRepo.CreateDepartmentHistory(deptHistory);
 
-            var result = _deptHistoryRepo.GetDepartmentHistoryByID(deptHistory.BusinessEntityID, deptHistory.DepartmentID, deptHistory.ShiftID);
+            var result = _deptHistoryRepo.GetDepartmentHistoryByID(deptHistory.BusinessEntityID, deptHistory.DepartmentID, deptHistory.ShiftID, deptHistory.StartDate);
             Assert.Equal(result.StartDate, new DateTime(2020, 8, 18));
         }
 
@@ -53,7 +53,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
             };
 
             var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
-            Assert.Equal("Error: This operation would result in a duplicate employee department history record!", exception.Message);
+            Assert.Equal("Error: This operation would result in a duplicate employee department history record.", exception.Message);
         }
     }
 }

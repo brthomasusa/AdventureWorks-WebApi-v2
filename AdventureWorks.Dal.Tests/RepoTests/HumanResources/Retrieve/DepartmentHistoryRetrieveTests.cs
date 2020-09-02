@@ -1,3 +1,4 @@
+using System;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -31,15 +32,15 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         }
 
         [Theory]
-        [InlineData(1, 10, 3)]
-        [InlineData(15, 16, 3)]
-        [InlineData(16, 10, 3)]
-        [InlineData(17, 10, 3)]
-        [InlineData(18, 14, 3)]
-        [InlineData(18, 15, 3)]
-        public void ShouldRetrieveEachDeptHistoryRecord(int employeeID, short deptID, byte shiftID)
+        [InlineData(1, 10, 3, "2009-01-14")]
+        [InlineData(15, 16, 3, "2008-12-29")]
+        [InlineData(16, 10, 3, "2008-01-24")]
+        [InlineData(17, 10, 3, "2008-01-06")]
+        [InlineData(18, 14, 3, "2008-01-31")]
+        [InlineData(18, 15, 3, "2010-11-03")]
+        public void ShouldRetrieveEachDeptHistoryRecord(int employeeID, short deptID, byte shiftID, string startDate)
         {
-            var deptHistory = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID);
+            var deptHistory = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, DateTime.Parse(startDate));
             Assert.NotNull(deptHistory);
         }
     }

@@ -47,6 +47,16 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             Assert.Equal(numberOfRecords, count);
         }
 
+        [Fact]
+        public async Task ShouldFailToGetAllPayHistoryRecordsForEachEmployee()
+        {
+            var employeeID = -1;
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{employeeID}/payhistory");
+
+            Assert.False(httpResponse.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
         [Theory]
         [InlineData(1, "2009-01-14", 125.5000)]
         [InlineData(14, "2008-12-29", 40.8654)]
