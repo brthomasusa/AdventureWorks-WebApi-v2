@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace AdventureWorks.Models.Validation
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class DateLessThanAttribute : ValidationAttribute
+    public class DateLessThanAttribute : ValidationAttribute, IClientModelValidator
     {
         private readonly string _comparisonProperty;
 
@@ -33,6 +34,13 @@ namespace AdventureWorks.Models.Validation
             }
 
             return ValidationResult.Success;
+        }
+
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            var error = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            context.Attributes.Add("data-val", "true");
+            context.Attributes.Add("data-val-error", error);
         }
     }
 }

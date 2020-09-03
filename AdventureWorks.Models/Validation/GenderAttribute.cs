@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace AdventureWorks.Models.Validation
 {
-    public class GenderAttribute : ValidationAttribute
+    public class GenderAttribute : ValidationAttribute, IClientModelValidator
     {
         private readonly string[] validGenderCodes = { "F", "M" };
 
@@ -20,6 +21,13 @@ namespace AdventureWorks.Models.Validation
             {
                 return new ValidationResult("Valid gender codes are 'F' for female and 'M' for male.");
             }
+        }
+
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            var error = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            context.Attributes.Add("data-val", "true");
+            context.Attributes.Add("data-val-error", error);
         }
     }
 }
