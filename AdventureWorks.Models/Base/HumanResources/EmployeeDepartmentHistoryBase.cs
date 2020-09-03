@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using AdventureWorks.Models.Validation;
 
 namespace AdventureWorks.Models.Base.HumanResources
 {
@@ -14,6 +15,7 @@ namespace AdventureWorks.Models.Base.HumanResources
 
         public DateTime StartDate { get; set; }
 
+        [DateGreaterThan("StartDate", ErrorMessage = "End date must be greater than start date.")]
         public DateTime? EndDate { get; set; }
     }
 }

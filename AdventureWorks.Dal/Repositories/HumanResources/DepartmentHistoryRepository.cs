@@ -111,7 +111,8 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             var deptHistory = DbContext.EmployeeDepartmentHistory.Where(hist =>
                    hist.BusinessEntityID == departmentHistory.BusinessEntityID &&
                    hist.DepartmentID == departmentHistory.DepartmentID &&
-                   hist.ShiftID == departmentHistory.ShiftID)
+                   hist.ShiftID == departmentHistory.ShiftID &&
+                   hist.StartDate == departmentHistory.StartDate)
                 .FirstOrDefault();
 
             if (deptHistory == null)
