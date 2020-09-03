@@ -3,6 +3,7 @@ using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Person;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -22,8 +23,24 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{vendorId}/contact")]
-        public IActionResult GetContactsForVendor(int vendorId)
-            => Ok(_repository.Contact.GetContacts(vendorId, new ContactParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetContactsForVendor(int vendorId, [FromQuery] ContactParameters contactParameters)
+        {
+            var contacts = _repository.Contact.GetContacts(vendorId, contactParameters);
+
+            var metadata = new
+            {
+                contacts.TotalCount,
+                contacts.PageSize,
+                contacts.CurrentPage,
+                contacts.TotalPages,
+                contacts.HasNext,
+                contacts.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(contacts);
+        }
 
 
         [HttpGet("contact/{contactID}", Name = "GetVendorContactByID")]

@@ -22,7 +22,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public PagedList<Department> GetDepartments(DepartmentParameters deptParameters)
         {
             return PagedList<Department>.ToPagedList(
-                FindAll(),
+                FindAll().OrderBy(dept => dept.Name),
                 deptParameters.PageNumber,
                 deptParameters.PageSize);
         }

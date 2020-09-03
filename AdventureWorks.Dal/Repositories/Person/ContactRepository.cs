@@ -26,7 +26,10 @@ namespace AdventureWorks.Dal.Repositories.Person
                 return PagedList<ContactDomainObj>.ToPagedList(
                     DbContext.ContactDomainObj
                         .Where(contact => contact.ParentEntityID == entityID)
-                        .AsQueryable(),
+                        .AsQueryable()
+                        .OrderBy(p => p.LastName)
+                        .ThenBy(p => p.FirstName)
+                        .ThenBy(p => p.MiddleName),
                     contactParameters.PageNumber,
                     contactParameters.PageSize);
             }

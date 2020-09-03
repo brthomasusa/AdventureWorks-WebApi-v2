@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -21,8 +22,25 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{vendorId}/addresses")]
-        public IActionResult GetAddressesForVendor(int vendorId)
-            => Ok(_repository.Address.GetAddresses(vendorId, new AddressParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetAddressesForVendor(int vendorId, [FromQuery] AddressParameters addressParameters)
+        {
+            var addresses = _repository.Address.GetAddresses(vendorId, addressParameters);
+
+            var metadata = new
+            {
+                addresses.TotalCount,
+                addresses.PageSize,
+                addresses.CurrentPage,
+                addresses.TotalPages,
+                addresses.HasNext,
+                addresses.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(addresses);
+        }
+
 
         [HttpGet("address/{addressID}", Name = "GetVendorAddressByID")]
         public IActionResult GetVendorContactByID(int addressID)

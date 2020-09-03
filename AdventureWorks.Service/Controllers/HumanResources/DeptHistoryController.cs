@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers.HumanResources
 {
@@ -21,9 +22,24 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet("{employeeID}/depthistory")]
-        public IActionResult GetDeptHistories(int employeeID)
-            => Ok(_repository.DepartmentHistory.GetDepartmentHistories(employeeID, new DepartmentHistoryParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetDeptHistories(int employeeID, [FromQuery] DepartmentHistoryParameters deptHistoryParameters)
+        {
+            var deptHistories = _repository.DepartmentHistory.GetDepartmentHistories(employeeID, deptHistoryParameters);
 
+            var metadata = new
+            {
+                deptHistories.TotalCount,
+                deptHistories.PageSize,
+                deptHistories.CurrentPage,
+                deptHistories.TotalPages,
+                deptHistories.HasNext,
+                deptHistories.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(deptHistories);
+        }
 
         [HttpGet("depthistory/{employeeID}/{deptID}/{shiftID}/{startDate}", Name = "GetDeptHistoryByID")]
         public IActionResult GetDeptHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate)

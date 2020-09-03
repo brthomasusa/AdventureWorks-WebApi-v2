@@ -21,7 +21,8 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         public PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters)
         {
-            return PagedList<VendorDomainObj>.ToPagedList(DbContext.VendorDomainObj.AsQueryable(),
+            return PagedList<VendorDomainObj>.ToPagedList(
+                DbContext.VendorDomainObj.AsQueryable().OrderBy(v => v.Name),
                 vendorParameters.PageNumber,
                 vendorParameters.PageSize);
         }

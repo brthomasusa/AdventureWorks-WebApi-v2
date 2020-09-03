@@ -22,7 +22,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters)
         {
-            return PagedList<EmployeeDomainObj>.ToPagedList(DbContext.EmployeeDomainObj.AsQueryable(),
+            return PagedList<EmployeeDomainObj>.ToPagedList(
+                DbContext.EmployeeDomainObj.AsQueryable()
+                    .OrderBy(ee => ee.LastName)
+                    .ThenBy(ee => ee.FirstName)
+                    .ThenBy(ee => ee.MiddleName),
                 employeeParameters.PageNumber,
                 employeeParameters.PageSize);
         }

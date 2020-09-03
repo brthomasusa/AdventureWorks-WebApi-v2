@@ -24,7 +24,10 @@ namespace AdventureWorks.Dal.Repositories.Person
             return PagedList<AddressDomainObj>.ToPagedList(
                 DbContext.AddressDomainObj
                     .Where(address => address.ParentEntityID == entityID)
-                    .AsQueryable(),
+                    .AsQueryable()
+                        .OrderBy(a => a.StateProvinceID)
+                        .ThenBy(a => a.City)
+                        .ThenBy(a => a.AddressLine1),
                 addressParameters.PageNumber,
                 addressParameters.PageSize);
         }

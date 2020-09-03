@@ -26,7 +26,22 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
         }
 
         [Fact]
-        public async Task ShouldGetAllDepartments()
+        public async Task ShouldGetAllDepartmentsFilteredByQueryString()
+        {
+            ResetDatabase();
+
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}?pageNumber=1&pageSize=2");
+            Assert.True(httpResponse.IsSuccessStatusCode);
+
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var departments = JsonConvert.DeserializeObject<IList<Department>>(jsonResponse);
+            var count = departments.Count;
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        public async Task ShouldGetAllDepartmentsWithoutQueryString()
         {
             ResetDatabase();
 
@@ -37,7 +52,7 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             var departments = JsonConvert.DeserializeObject<IList<Department>>(jsonResponse);
             var count = departments.Count;
 
-            Assert.Equal(16, count);
+            Assert.Equal(10, count);
         }
 
         [Fact]

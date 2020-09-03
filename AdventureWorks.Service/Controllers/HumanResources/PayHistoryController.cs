@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers.HumanResources
 {
@@ -20,8 +21,24 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet("{employeeID}/payhistory")]
-        public IActionResult GetPayHistories(int employeeID)
-            => Ok(_repository.PayHistory.GetPayHistories(employeeID, new PayHistoryParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetPayHistories(int employeeID, [FromQuery] PayHistoryParameters payHistoryParameters)
+        {
+            var payHistories = _repository.PayHistory.GetPayHistories(employeeID, payHistoryParameters);
+
+            var metadata = new
+            {
+                payHistories.TotalCount,
+                payHistories.PageSize,
+                payHistories.CurrentPage,
+                payHistories.TotalPages,
+                payHistories.HasNext,
+                payHistories.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(payHistories);
+        }
 
 
         [HttpGet("payhistory/{employeeID}/{rateChangeDate}", Name = "GetPayHistoryByID")]

@@ -23,7 +23,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             if (IsValidEmployeeID(employeeID))
             {
                 return PagedList<EmployeeDepartmentHistory>.ToPagedList(
-                    FindByCondition(hist => hist.BusinessEntityID == employeeID),
+                    FindByCondition(hist => hist.BusinessEntityID == employeeID).OrderBy(hist => hist.StartDate),
                     deptHistoryParameters.PageNumber,
                     deptHistoryParameters.PageSize);
             }

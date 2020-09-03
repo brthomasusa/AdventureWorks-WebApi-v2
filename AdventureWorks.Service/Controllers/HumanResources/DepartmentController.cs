@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers.HumanResources
 {
@@ -20,8 +21,25 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet]
-        public IActionResult GetDepartments()
-            => Ok(_repository.Department.GetDepartments(new DepartmentParameters { PageNumber = 1, PageSize = 16 }));
+        public IActionResult GetDepartments([FromQuery] DepartmentParameters deptParameters)
+        {
+            var departments = _repository.Department.GetDepartments(deptParameters);
+
+            var metadata = new
+            {
+                departments.TotalCount,
+                departments.PageSize,
+                departments.CurrentPage,
+                departments.TotalPages,
+                departments.HasNext,
+                departments.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(departments);
+        }
+
 
 
         [HttpGet("{departmentID}", Name = "GetDepartmentByID")]

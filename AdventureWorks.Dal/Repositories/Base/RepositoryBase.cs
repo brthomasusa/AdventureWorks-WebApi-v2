@@ -117,6 +117,5 @@ namespace AdventureWorks.Dal.Repositories.Base
                 }
             });
         }
-
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -21,8 +22,24 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVendors()
-            => Ok(_repository.Vendor.GetVendors(new VendorParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetAllVendors([FromQuery] VendorParameters vendorParameters)
+        {
+            var vendors = _repository.Vendor.GetVendors(vendorParameters);
+
+            var metadata = new
+            {
+                vendors.TotalCount,
+                vendors.PageSize,
+                vendors.CurrentPage,
+                vendors.TotalPages,
+                vendors.HasNext,
+                vendors.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(vendors);
+        }
 
         [HttpGet("{id}", Name = "VendorById")]
         public IActionResult GetVendorByID(int id)

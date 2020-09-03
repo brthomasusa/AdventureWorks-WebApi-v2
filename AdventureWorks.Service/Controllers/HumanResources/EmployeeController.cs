@@ -3,6 +3,7 @@ using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Person;
 using LoggerService;
+using Newtonsoft.Json;
 
 namespace AdventureWorks.Service.Controllers
 {
@@ -20,8 +21,24 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllEmployees()
-            => Ok(_repository.Employee.GetEmployees(new EmployeeParameters { PageNumber = 1, PageSize = 10 }));
+        public IActionResult GetAllEmployees([FromQuery] EmployeeParameters employeeParameters)
+        {
+            var employees = _repository.Employee.GetEmployees(employeeParameters);
+
+            var metadata = new
+            {
+                employees.TotalCount,
+                employees.PageSize,
+                employees.CurrentPage,
+                employees.TotalPages,
+                employees.HasNext,
+                employees.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(employees);
+        }
 
 
         [HttpGet("{employeeID}", Name = "GetEmployeeByID")]

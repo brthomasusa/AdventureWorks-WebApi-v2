@@ -47,6 +47,7 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             Assert.Equal(numberOfRecords, count);
         }
 
+
         [Fact]
         public async Task ShouldFailToGetAllPayHistoryRecordsForEachEmployee()
         {

@@ -23,7 +23,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             if (IsValidEmployeeID(employeeID))
             {
                 return PagedList<EmployeePayHistory>.ToPagedList(
-                    FindByCondition(hist => hist.BusinessEntityID == employeeID),
+                    FindByCondition(hist => hist.BusinessEntityID == employeeID).OrderBy(ph => ph.RateChangeDate),
                     payHistoryParameters.PageNumber,
                     payHistoryParameters.PageSize);
             }
@@ -117,7 +117,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         private bool IsValidEmployeeID(int employeeID)
         {
-            return DbContext.Employee.Where(ph => ph.BusinessEntityID == employeeID).Any();
+            return DbContext.Employee.Where(ee => ee.BusinessEntityID == employeeID).Any();
         }
 
         private bool IsExistingPayHistory(EmployeePayHistory payHistory)
