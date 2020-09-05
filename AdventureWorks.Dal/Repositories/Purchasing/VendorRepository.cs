@@ -39,8 +39,12 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
                 filterCriteria = ee => ee.IsActive == true || ee.IsActive == false;
             }
 
+            var vendorList = DbContext.VendorDomainObj.Where(filterCriteria).AsQueryable();
+
+            SearchByName(ref vendorList, vendorParameters.Name);
+
             return PagedList<VendorDomainObj>.ToPagedList(
-                DbContext.VendorDomainObj.Where(filterCriteria).AsQueryable().OrderBy(v => v.Name),
+                vendorList.OrderBy(v => v.Name),
                 vendorParameters.PageNumber,
                 vendorParameters.PageSize);
         }
@@ -114,6 +118,16 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             vendor.Map(vendorDomainObj);
             DbContext.Vendor.Update(vendor);
             Save();
+        }
+
+        private void SearchByName(ref IQueryable<VendorDomainObj> vendors, string vendorName)
+        {
+            if (!vendors.Any() || string.IsNullOrWhiteSpace(vendorName))
+            {
+                return;
+            }
+
+            vendors = vendors.Where(v => v.Name.ToLower().Contains(vendorName.Trim().ToLower()));
         }
     }
 }

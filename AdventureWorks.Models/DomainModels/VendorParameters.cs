@@ -7,6 +7,8 @@ namespace AdventureWorks.Models.DomainModels
     {
         private string[] _activeStatuses = { "Active", "Inactive", "All" };
 
+        public string Name { get; set; }
+
         public string VendorStatus { get; set; } = "All";
 
         public bool IsValidVendorStatus

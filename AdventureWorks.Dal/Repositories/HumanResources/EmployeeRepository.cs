@@ -40,15 +40,14 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 filterCriteria = ee => ee.IsActive == true || ee.IsActive == false;
             }
 
+            var employeeList = DbContext.EmployeeDomainObj.Where(filterCriteria).AsQueryable();
+
+            SearchByName(ref employeeList, employeeParameters.FirstName, employeeParameters.LastName);
+
             return PagedList<EmployeeDomainObj>.ToPagedList(
-                DbContext.EmployeeDomainObj
-                    .Where(filterCriteria)
-                    .AsQueryable()
-                    .OrderBy(ee => ee.LastName)
-                    .ThenBy(ee => ee.FirstName)
-                    .ThenBy(ee => ee.MiddleName),
-                    employeeParameters.PageNumber,
-                    employeeParameters.PageSize
+                employeeList.OrderBy(ee => ee.LastName).ThenBy(ee => ee.FirstName).ThenBy(ee => ee.MiddleName),
+                employeeParameters.PageNumber,
+                employeeParameters.PageSize
             );
         }
 
@@ -166,6 +165,28 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
             DbContext.Person.Update(person);
             Save();
+        }
+
+        private void SearchByName(ref IQueryable<EmployeeDomainObj> employees, string firstName, string lastName)
+        {
+            if (!employees.Any() || (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)))
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+            {
+                employees = employees.Where(e => e.FirstName.ToLower().Contains(firstName.Trim().ToLower()) &&
+                                                e.LastName.ToLower().Contains(lastName.Trim().ToLower()));
+            }
+            else if (!string.IsNullOrWhiteSpace(firstName))
+            {
+                employees = employees.Where(e => e.FirstName.ToLower().Contains(firstName.Trim().ToLower()));
+            }
+            else
+            {
+                employees = employees.Where(e => e.LastName.ToLower().Contains(lastName.Trim().ToLower()));
+            }
         }
     }
 }
