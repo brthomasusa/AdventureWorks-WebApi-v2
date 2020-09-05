@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
@@ -22,13 +24,32 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters)
         {
+            Expression<Func<EmployeeDomainObj, bool>> filterCriteria;
+            var employeeStatus = employeeParameters.EmployeeStatus.ToUpper();
+
+            if (employeeStatus == "ACTIVE")
+            {
+                filterCriteria = ee => ee.IsActive == true;
+            }
+            else if (employeeStatus == "INACTIVE")
+            {
+                filterCriteria = ee => ee.IsActive == false;
+            }
+            else
+            {
+                filterCriteria = ee => ee.IsActive == true || ee.IsActive == false;
+            }
+
             return PagedList<EmployeeDomainObj>.ToPagedList(
-                DbContext.EmployeeDomainObj.AsQueryable()
+                DbContext.EmployeeDomainObj
+                    .Where(filterCriteria)
+                    .AsQueryable()
                     .OrderBy(ee => ee.LastName)
                     .ThenBy(ee => ee.FirstName)
                     .ThenBy(ee => ee.MiddleName),
-                employeeParameters.PageNumber,
-                employeeParameters.PageSize);
+                    employeeParameters.PageNumber,
+                    employeeParameters.PageSize
+            );
         }
 
         public EmployeeDomainObj GetEmployeeByID(int businessEntityID)

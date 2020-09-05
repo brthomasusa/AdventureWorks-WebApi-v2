@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -21,8 +23,24 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         public PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters)
         {
+            Expression<Func<VendorDomainObj, bool>> filterCriteria;
+            var vendorStatus = vendorParameters.VendorStatus.ToUpper();
+
+            if (vendorStatus == "ACTIVE")
+            {
+                filterCriteria = ee => ee.IsActive == true;
+            }
+            else if (vendorStatus == "INACTIVE")
+            {
+                filterCriteria = ee => ee.IsActive == false;
+            }
+            else
+            {
+                filterCriteria = ee => ee.IsActive == true || ee.IsActive == false;
+            }
+
             return PagedList<VendorDomainObj>.ToPagedList(
-                DbContext.VendorDomainObj.AsQueryable().OrderBy(v => v.Name),
+                DbContext.VendorDomainObj.Where(filterCriteria).AsQueryable().OrderBy(v => v.Name),
                 vendorParameters.PageNumber,
                 vendorParameters.PageSize);
         }
