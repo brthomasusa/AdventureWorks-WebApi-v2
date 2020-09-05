@@ -23,6 +23,11 @@ namespace AdventureWorks.Service.Controllers
         [HttpGet]
         public IActionResult GetAllEmployees([FromQuery] EmployeeParameters employeeParameters)
         {
+            if (employeeParameters.EmployeeStatus != null && !employeeParameters.IsValidEmployeeStatus)
+            {
+                return BadRequest(new { message = "Valid employee status codes are 'Active', 'Inactive', and 'All'." });
+            }
+
             var employees = _repository.Employee.GetEmployees(employeeParameters);
 
             var metadata = new

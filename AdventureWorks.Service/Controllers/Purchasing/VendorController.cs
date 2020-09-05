@@ -24,6 +24,11 @@ namespace AdventureWorks.Service.Controllers
         [HttpGet]
         public IActionResult GetAllVendors([FromQuery] VendorParameters vendorParameters)
         {
+            if (vendorParameters.VendorStatus != null && !vendorParameters.IsValidVendorStatus)
+            {
+                return BadRequest(new { message = "Valid vendor status codes are 'Active', 'Inactive', and 'All'." });
+            }
+
             var vendors = _repository.Vendor.GetVendors(vendorParameters);
 
             var metadata = new
