@@ -80,5 +80,10 @@ namespace AdventureWorks.Service.Extensions
             services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddScoped<IRepositoryCollection, RepositoryCollection>();
         }
+
+        public static void ConfigureHATEOAS(this IServiceCollection services)
+        {
+
+        }
     }
 }
