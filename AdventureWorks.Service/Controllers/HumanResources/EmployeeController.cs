@@ -45,7 +45,6 @@ namespace AdventureWorks.Service.Controllers
             return Ok(employees);
         }
 
-
         [HttpGet("{employeeID}", Name = "GetEmployeeByID")]
         public IActionResult GetEmployeeByID(int employeeID)
         {
@@ -70,11 +69,59 @@ namespace AdventureWorks.Service.Controllers
             return Ok(employee);
         }
 
+        [HttpGet("{employeeID}/phones")]
+        public IActionResult GetEmployeePhones(int employeeID, [FromQuery] PersonPhoneParameters phoneParameters)
+        {
+            var phones = _repository.Telephone.GetPhones(employeeID, phoneParameters);
+
+            var metadata = new
+            {
+                phones.TotalCount,
+                phones.PageSize,
+                phones.CurrentPage,
+                phones.TotalPages,
+                phones.HasNext,
+                phones.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(phones);
+        }
+
+
+        [HttpGet("{employeeID}/phones/{phoneNumber}/{phoneNumberTypeID}", Name = "GetEmployeePhoneByID")]
+        public IActionResult GetEmployeePhoneByID(int employeeID, string phoneNumber, int phoneNumberTypeID)
+        {
+            var phone = _repository.Telephone.GetPhoneByID(employeeID, phoneNumber, phoneNumberTypeID);
+
+            if (phone == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(phone);
+        }
+
         [HttpPost]
         public IActionResult CreateEmployee([FromBody] EmployeeDomainObj employee)
         {
             _repository.Employee.CreateEmployee(employee);
             return CreatedAtRoute(nameof(GetEmployeeByID), new { employeeID = employee.BusinessEntityID }, employee);
+        }
+
+        [HttpPost("phones")]
+        public IActionResult CreateEmployeePhone([FromBody] PersonPhone phone)
+        {
+            _repository.Telephone.CreatePhone(phone);
+            return CreatedAtRoute(nameof(GetEmployeePhoneByID),
+                new
+                {
+                    employeeID = phone.BusinessEntityID,
+                    phoneNumber = phone.PhoneNumber,
+                    PhoneNumberTypeID = phone.PhoneNumberTypeID
+                },
+                phone);
         }
 
         [HttpPut]
@@ -88,6 +135,13 @@ namespace AdventureWorks.Service.Controllers
         public IActionResult DeleteEmployee([FromBody] EmployeeDomainObj employee)
         {
             _repository.Employee.DeleteEmployee(employee);
+            return NoContent();
+        }
+
+        [HttpDelete("phones")]
+        public IActionResult DeleteEmployeePhone([FromBody] PersonPhone phone)
+        {
+            _repository.Telephone.DeletePhone(phone);
             return NoContent();
         }
     }

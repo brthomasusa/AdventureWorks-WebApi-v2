@@ -21,7 +21,7 @@ namespace AdventureWorks.Dal.Repositories.Person
         public PagedList<PersonPhone> GetPhones(int entityID, PersonPhoneParameters phoneParameters)
         {
             return PagedList<PersonPhone>.ToPagedList(
-                FindByCondition(hist => hist.BusinessEntityID == entityID),
+                FindByCondition(ph => ph.BusinessEntityID == entityID),
                 phoneParameters.PageNumber,
                 phoneParameters.PageSize);
         }
