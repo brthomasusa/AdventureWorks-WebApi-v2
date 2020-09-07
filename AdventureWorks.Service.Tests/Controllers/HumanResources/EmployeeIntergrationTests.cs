@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Xunit;
 using AdventureWorks.Models.CustomTypes;
 using AdventureWorks.Models.DomainModels;
+using AdventureWorks.Models.Person;
 using AdventureWorks.Service.Tests.Base;
 
 namespace AdventureWorks.Service.Tests.Controllers.HumanResources
@@ -111,6 +112,38 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
+        [Theory]
+        [InlineData(1, 3)]
+        [InlineData(14, 0)]
+        [InlineData(15, 1)]
+        [InlineData(16, 1)]
+        [InlineData(17, 1)]
+        [InlineData(18, 1)]
+        public async Task ShouldGetAllPhoneRecordsForEachEmployee(int employeeID, int numberOfPhones)
+        {
+            ResetDatabase();
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{employeeID}/phones");
+            Assert.True(httpResponse.IsSuccessStatusCode);
+
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var phones = JsonConvert.DeserializeObject<IList<PersonPhone>>(jsonResponse);
+            var count = phones.Count;
+
+            Assert.Equal(numberOfPhones, count);
+        }
+
+        [Theory]
+        [InlineData(1, "697-123-4567", 3)]
+        [InlineData(1, "697-123-8901", 2)]
+        [InlineData(1, "697-555-0142", 1)]
+        [InlineData(16, "122-555-0189", 3)]
+        public async Task ShouldGetEachEmployeePhoneRecord(int employeeID, string phoneNumber, int phoneNumberTypeID)
+        {
+            ResetDatabase();
+            var httpResponse = await _client.GetAsync($"{serviceAddress}{rootAddress}/{employeeID}/phones/{phoneNumber}/{phoneNumberTypeID}");
+            Assert.True(httpResponse.IsSuccessStatusCode);
+        }
+
         [Fact]
         public async Task ShouldCreateEmployeeFromEmployeeDomainObject()
         {
@@ -151,6 +184,25 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
             var result = JsonConvert.DeserializeObject<EmployeeDomainObj>(jsonResponse);
 
             Assert.Equal(employeeDomainObj.EmailAddress, result.EmailAddress);
+        }
+
+        [Fact]
+        public async Task ShouldCreateAnEmployeePhoneRecord()
+        {
+            ResetDatabase();
+
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 14,
+                PhoneNumber = "987-654-3210",
+                PhoneNumberTypeID = 1
+            };
+
+            string jsonPhone = JsonConvert.SerializeObject(phone);
+            HttpContent content = new StringContent(jsonPhone, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync($"{serviceAddress}{rootAddress}/phones", content);
+
+            Assert.True(response.IsSuccessStatusCode);
         }
 
         [Fact]
@@ -313,11 +365,28 @@ namespace AdventureWorks.Service.Tests.Controllers.HumanResources
                 IsActive = true
             };
 
-            string jsonContact = JsonConvert.SerializeObject(employeeDomainObj);
             var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}", employeeDomainObj);
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ShouldDeleteAnEmployeePhoneRecord()
+        {
+            ResetDatabase();
+
+            var phone = new PersonPhone
+            {
+                BusinessEntityID = 1,
+                PhoneNumber = "697-555-0142",
+                PhoneNumberTypeID = 1
+            };
+
+            var response = await _client.DeleteAsJsonAsync($"{serviceAddress}{rootAddress}/phones", phone);
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
     }
 }

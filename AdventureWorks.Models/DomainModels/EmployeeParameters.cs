@@ -7,6 +7,10 @@ namespace AdventureWorks.Models.DomainModels
     {
         private string[] _activeStatuses = { "Active", "Inactive", "All" };
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
         public string EmployeeStatus { get; set; } = "All";
 
         public bool IsValidEmployeeStatus
