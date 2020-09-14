@@ -55,7 +55,6 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         {
             return DbContext.EmployeeDomainObj
                 .Where(employee => employee.BusinessEntityID == businessEntityID)
-                .AsQueryable()
                 .FirstOrDefault();
         }
 
