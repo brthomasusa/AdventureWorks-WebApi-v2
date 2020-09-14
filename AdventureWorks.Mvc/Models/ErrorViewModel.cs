@@ -1,6 +1,4 @@
-using System;
-
-namespace AdventureWorks.Mvc.Models
+﻿namespace AdventureWorks.Mvc.Models
 {
     public class ErrorViewModel
     {

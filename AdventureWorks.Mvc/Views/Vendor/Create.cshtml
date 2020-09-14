@@ -1,0 +1,24 @@
+﻿@model VendorDomainObj
+@{
+    ViewData["Title"] = "Create Vendor";
+}
+
+<div class="row-m">
+    <div class="col-md-12">
+
+        @using (Html.BeginForm())
+        {
+            <fieldset>
+                <legend>Create Vendor</legend>
+                <ul class="list-unstyled">
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.AccountNumber)
+                        @Html.TextBoxFor(v => v.AccountNumber)
+                    </li>
+                </ul>
+            </fieldset>
+        }
+    </div>
+</div>
+    
+

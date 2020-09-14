@@ -1,0 +1,135 @@
+﻿h1, h2, h3, h4, h5, h6, .nav, .navbar {
+    font-family: 'Josefin Sans', 'Poiret One', cursive;
+}
+
+body {
+    font-family: 'Roboto', 'Lato', cursive;
+}
+
+.bg-adworks-dark {
+    background-color: #504747;
+    color: white;
+}
+
+.bg-adworks-light {
+    background-color: white;
+    color: #504747;
+}
+
+.adworks-banner {
+    margin: auto;
+    padding: 20px 0;
+    text-align: center;
+    font-family: 'Josefin Sans', cursive;
+    font-size: larger;
+}
+
+.svg-images {
+    width: 1170px;
+    height: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bg-adworks-dark .nav-tabs a {
+    color: white;
+}
+
+/* navbar styling white text on dark grey background */
+.navbar-adworks {
+    background-color: #504747;
+    border-color: black;
+    border-radius: 0;
+    margin-bottom: 0px;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+    font-family: 'Poiret One', cursive;
+}
+
+.navbar-adworks {
+    color: white;
+    font-weight: bold;
+}
+
+    .navbar-adworks .nav-item > .nav-link {
+        color: white;
+    }
+
+        .navbar-adworks .nav-item > .nav-link:hover {
+            background-color: #504747;
+            color: gray;
+        }
+
+    .navbar-adworks .nav-pills > li.active > a {
+        background-color: #504747;
+        color: gray;
+    }
+
+    .navbar-adworks .dropdown-menu {
+        background-color: #504747;
+        border-color: black;
+    }
+
+        .navbar-adworks .dropdown-menu > a {
+            color: white;
+            background-color: #504747;
+        }
+
+            .navbar-adworks .dropdown-menu > a:hover {
+                color: gray;
+                background-color: #504747;
+            }
+
+            .navbar-adworks .dropdown-menu > a:focus {
+                color: gray;
+                background-color: #504747;
+            }
+
+        .navbar-adworks .dropdown-menu > .active > a:focus {
+            color: gray;
+            background-color: #504747;
+        }
+
+    .navbar-adworks > .navbar-toggler {
+        color: white;
+    }
+
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+    background-color: grey;
+}
+
+.nav-pills .nav-link.active, .nav-pills .nav-link.active:focus, .nav-pills .nav-link.active:hover,
+.nav-pills .nav-item.open .nav-link,
+.nav-pills .nav-item.open .nav-link:focus,
+.nav-pills .nav-item.open .nav-link:hover {
+    background-color: grey;
+}
+
+footer p {
+    display: inline;
+    margin-left: 10px;
+}
+
+footer a {
+    color: inherit;
+}
+
+.alert-adworks {
+    margin-top: 4em;
+    margin-left: 4em;
+    width: 90%;
+    z-index: 3000;
+}
+
+.navbar-adworks > .navbar-toggler {
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.navbar-adworks .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+}

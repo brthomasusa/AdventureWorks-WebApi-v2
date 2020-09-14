@@ -1,0 +1,72 @@
+﻿@model PagedList<VendorDomainObj>
+
+@{
+    ViewData["Title"] = "Vendor List";
+}
+
+<div class="row-m">
+    <div class="col-md-12 table-responsive-md">
+        <h2>Vendor List</h2>
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>        
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Account Number</th>
+                    <th>Name</th>
+                    <th>Credit Rating</th>
+                    <th>Preferred Vendor?</th>
+                    <th>Active?</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreditRating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreferredVendor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.BusinessEntityID">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.BusinessEntityID">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.BusinessEntityID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row-m">
+    <div class="row-cols-md-6">
+        <cs-pager cs-paging-pagesize="@Model.PageSize"
+                  cs-paging-pagenumber="@Model.CurrentPage"
+                  cs-paging-totalitems="@Model.TotalCount"
+                  cs-pagenumber-param="pageNumber"
+                  cs-pager-li-current-class="page-item active"
+                  cs-pager-li-other-class="page-item"
+                  cs-pager-li-non-active-class="page-item disabled"
+                  cs-pager-link-current-class="page-link"
+                  cs-pager-link-other-class="page-link"
+                  cs-previous-page-html="<a class='page-link' href='#' title='Previous page'><i class='glyphicon glyphicon-backward'></i></a>"
+                  cs-next-page-html="<a class='page-link' href='#' title='Next page'><i class='glyphicon glyphicon-forward'></i></a>"
+                  asp-controller="Vendor"
+                  asp-action="List"
+                  asp-route-pagesize="@Model.PageSize"></cs-pager>
+    </div>
+</div>
+
