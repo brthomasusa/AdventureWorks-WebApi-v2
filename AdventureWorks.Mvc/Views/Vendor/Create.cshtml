@@ -5,43 +5,79 @@
 
 <div class="row-m">
     <div class="col-md-12">
-
-        @using (Html.BeginForm())
-        {
-            <fieldset>
-                <legend>Create Vendor</legend>
-                <ul class="list-unstyled">
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.AccountNumber)
-                        @Html.TextBoxFor(v => v.AccountNumber)
-                    </li>
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.Name)
-                        @Html.TextBoxFor(v => v.Name)
-                    </li>  
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.CreditRating)
-                        @Html.DropDownList("CreditRatingLookup")
-                    </li> 
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.PreferredVendor)
-                        @Html.CheckBoxFor(v => v.PreferredVendor)
-                    </li>  
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.IsActive)
-                        @Html.CheckBoxFor(v => v.IsActive)
-                    </li>
-                    <li class="form-group">
-                        @Html.LabelFor(v => v.PurchasingWebServiceURL)
-                        @Html.TextBoxFor(v => v.PurchasingWebServiceURL)
-                    </li>                                                                                                
-                </ul>
+        <form asp-controller="Vendor" asp-action="Create">
+            <div class="form-horizontal">
+                <h4>Vendor</h4>
                 <hr />
-                <button class="btn btn-primary" type="submit">Save</button>
-                <a asp-action="List">Cancel</a>
-            </fieldset>
-        }
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="AccountNumber" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="AccountNumber" class="form-control" />
+                        <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CreditRating" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="CreditRating" 
+                                asp-items="ViewBag.CreditRatingLookup">
+                        </select>
+                        <span asp-validation-for="CreditRating" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PreferredVendor" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input type="checkbox" asp-for="PreferredVendor" class="form-control" />
+                        <span asp-validation-for="PreferredVendor" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="IsActive" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input type="checkbox" asp-for="IsActive" class="form-control" />
+                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PurchasingWebServiceURL" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="PurchasingWebServiceURL" class="form-control" />
+                        <span asp-validation-for="PurchasingWebServiceURL" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <div>
+            <a asp-action="List">Back to List</a>
+        </div>        
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
     
 
