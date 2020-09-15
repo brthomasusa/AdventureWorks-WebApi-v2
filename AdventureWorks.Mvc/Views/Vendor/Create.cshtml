@@ -15,7 +15,30 @@
                         @Html.LabelFor(v => v.AccountNumber)
                         @Html.TextBoxFor(v => v.AccountNumber)
                     </li>
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.Name)
+                        @Html.TextBoxFor(v => v.Name)
+                    </li>  
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.CreditRating)
+                        @Html.DropDownList("CreditRatingLookup")
+                    </li> 
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.PreferredVendor)
+                        @Html.CheckBoxFor(v => v.PreferredVendor)
+                    </li>  
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.IsActive)
+                        @Html.CheckBoxFor(v => v.IsActive)
+                    </li>
+                    <li class="form-group">
+                        @Html.LabelFor(v => v.PurchasingWebServiceURL)
+                        @Html.TextBoxFor(v => v.PurchasingWebServiceURL)
+                    </li>                                                                                                
                 </ul>
+                <hr />
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a asp-action="List">Cancel</a>
             </fieldset>
         }
     </div>

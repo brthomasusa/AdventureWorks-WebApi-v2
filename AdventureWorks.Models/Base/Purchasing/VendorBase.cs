@@ -7,7 +7,7 @@ namespace AdventureWorks.Models.Base.Purchasing
     public class VendorBase : EntityBase
     {
         [Required]
-        public int BusinessEntityID { get; set; }
+        public int BusinessEntityID { get; set; } = -1;
 
         [Required, Display(Name = "Account Number")]
         [StringLength(15, ErrorMessage = "Account number length can't be more than 15 characters.")]
@@ -27,7 +27,7 @@ namespace AdventureWorks.Models.Base.Purchasing
         [Required, Display(Name = "Active")]
         public bool IsActive { get; set; } = true;
 
-        [DataType(DataType.Url)]
+        [DataType(DataType.Url), Display(Name = "Purchasing Web Service URL")]
         public string PurchasingWebServiceURL { get; set; }
     }
 }

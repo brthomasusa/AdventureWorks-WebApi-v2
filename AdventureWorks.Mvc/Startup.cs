@@ -31,7 +31,7 @@ namespace AdventureWorks.Mvc
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddDbContextPool<AdventureWorksContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionStrings:AdventureWorks_Development"])
+                options.UseSqlServer(Configuration["ConnectionStrings:AdventureWorks_Testing"])
             );
             services.AddCloudscribePagination();
             services.AddTransient<IRepositoryCollection, RepositoryCollection>();
