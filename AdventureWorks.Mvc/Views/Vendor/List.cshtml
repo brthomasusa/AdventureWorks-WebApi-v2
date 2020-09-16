@@ -8,7 +8,7 @@
     <div class="col-md-12 table-responsive-md">
         <h2>Vendor List</h2>
         <p>
-            <a asp-action="Create">Create New</a>
+            <a href="/Vendor/Create" class="btn-sm btn-primary" role="button">Create New</a>
         </p>        
         <table class="table table-bordered table-striped table-hover">
             <thead class="thead-light">
@@ -41,9 +41,9 @@
                             @Html.DisplayFor(modelItem => item.IsActive)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.BusinessEntityID">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.BusinessEntityID">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.BusinessEntityID">Delete</a>
+                            <a href="/Vendor/Edit/@item.BusinessEntityID" class="btn-sm btn-outline-primary" role="button">Edit</a> &nbsp;                            
+                            <a href="/Vendor/Details/@item.BusinessEntityID" class="btn-sm btn-outline-info" role="button">Details</a> &nbsp;
+                            <a href="/Vendor/Delete/@item.BusinessEntityID" class="btn-sm btn-outline-danger" role="button">Delete</a>
                         </td>
                     </tr>
                 }

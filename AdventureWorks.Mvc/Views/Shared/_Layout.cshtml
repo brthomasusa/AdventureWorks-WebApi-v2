@@ -16,7 +16,7 @@
     <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 </head>
-<body data-spy="scroll" data-target=".navbar">
+<body data-spy="scroll" data-target=".navbar" class="bg-white">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-adworks mb-3">
         <div class="container-fluid">            
             <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">AdventureWorks ERP</a>
@@ -65,7 +65,7 @@
 
     <partial name="_CookieConsentPartial" />
 
-    <div class="container bg-light">
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>

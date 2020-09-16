@@ -3,7 +3,7 @@
     ViewData["Title"] = "Edit Vendor";
 }
 
-<div class="row-m">
+<div class="row-m bg-light">
     <form asp-action="Edit" method="POST" asp-antiforgery="true">
         <h4> Edit Vendor</h4>
         <hr />
@@ -65,7 +65,9 @@
     </form>
    
     <div>
-        <a class="h5" asp-action="List">Back to List</a>
+        <a href="/Vendor/List" class="btn-sm btn-primary" role="button">Back to List</a> &nbsp;
+        <a href="#" class="btn-sm btn-primary" role="button">Contacts</a> &nbsp;
+        <a href="#" class="btn-sm btn-primary" role="button">Addresses</a>
     </div> 
 </div>
 

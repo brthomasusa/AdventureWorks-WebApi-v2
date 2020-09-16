@@ -4,9 +4,8 @@
     ViewData["Title"] = "Vendor Details";
 }
 
-<h2>Vendor Details</h2>
-
-<div>
+<div class="row-m bg-light">
+    <h4>Vendor Details</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>ID</dt>
@@ -45,7 +44,9 @@
         </dd>        
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.BusinessEntityID">Edit</a> |
-    <a asp-action="List">Back to List</a>
+<div>    
+    <a href="/Vendor/List" class="btn-sm btn-primary" role="button">Back to List</a> &nbsp;
+    <a href="/Vendor/Edit/@Model.BusinessEntityID" class="btn-sm btn-primary" role="button">Edit</a> &nbsp;
+    <a href="#" class="btn-sm btn-primary" role="button">Contacts</a> &nbsp;
+    <a href="#" class="btn-sm btn-primary" role="button">Addresses</a>        
 </div>
