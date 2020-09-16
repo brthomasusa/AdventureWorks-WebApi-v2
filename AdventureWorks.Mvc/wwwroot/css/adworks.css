@@ -1,9 +1,21 @@
-﻿h1, h2, h3, h4, h5, h6, .nav, .navbar {
+﻿h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.nav,
+.navbar {
     font-family: 'Josefin Sans', 'Poiret One', cursive;
 }
 
 body {
     font-family: 'Roboto', 'Lato', cursive;
+    background-color: #e6e5e3;
+}
+
+.body-content {
+    background-color: #e6e5e3;
 }
 
 .bg-adworks-dark {
@@ -55,54 +67,57 @@ body {
     font-weight: bold;
 }
 
-    .navbar-adworks .nav-item > .nav-link {
-        color: white;
-    }
+.navbar-adworks .nav-item > .nav-link {
+    color: white;
+}
 
-        .navbar-adworks .nav-item > .nav-link:hover {
-            background-color: #504747;
-            color: gray;
-        }
+.navbar-adworks .nav-item > .nav-link:hover {
+    background-color: #504747;
+    color: gray;
+}
 
-    .navbar-adworks .nav-pills > li.active > a {
-        background-color: #504747;
-        color: gray;
-    }
+.navbar-adworks .nav-pills > li.active > a {
+    background-color: #504747;
+    color: gray;
+}
 
-    .navbar-adworks .dropdown-menu {
-        background-color: #504747;
-        border-color: black;
-    }
+.navbar-adworks .dropdown-menu {
+    background-color: #504747;
+    border-color: black;
+}
 
-        .navbar-adworks .dropdown-menu > a {
-            color: white;
-            background-color: #504747;
-        }
+.navbar-adworks .dropdown-menu > a {
+    color: white;
+    background-color: #504747;
+}
 
-            .navbar-adworks .dropdown-menu > a:hover {
-                color: gray;
-                background-color: #504747;
-            }
+.navbar-adworks .dropdown-menu > a:hover {
+    color: gray;
+    background-color: #504747;
+}
 
-            .navbar-adworks .dropdown-menu > a:focus {
-                color: gray;
-                background-color: #504747;
-            }
+.navbar-adworks .dropdown-menu > a:focus {
+    color: gray;
+    background-color: #504747;
+}
 
-        .navbar-adworks .dropdown-menu > .active > a:focus {
-            color: gray;
-            background-color: #504747;
-        }
+.navbar-adworks .dropdown-menu > .active > a:focus {
+    color: gray;
+    background-color: #504747;
+}
 
-    .navbar-adworks > .navbar-toggler {
-        color: white;
-    }
+.navbar-adworks > .navbar-toggler {
+    color: white;
+}
 
-.nav-pills > .active > a, .nav-pills > .active > a:hover {
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover {
     background-color: grey;
 }
 
-.nav-pills .nav-link.active, .nav-pills .nav-link.active:focus, .nav-pills .nav-link.active:hover,
+.nav-pills .nav-link.active,
+.nav-pills .nav-link.active:focus,
+.nav-pills .nav-link.active:hover,
 .nav-pills .nav-item.open .nav-link,
 .nav-pills .nav-item.open .nav-link:focus,
 .nav-pills .nav-item.open .nav-link:hover {

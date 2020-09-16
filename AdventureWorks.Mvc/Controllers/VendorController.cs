@@ -21,7 +21,7 @@ namespace AdventureWorks.Mvc.Controllers
             _repository = repository;
         }
 
-        public ViewResult List(int? pageNumber, int? pageSize)
+        public IActionResult List([FromQuery] int? pageNumber, int? pageSize)
         {
             var pagingParams = new VendorParameters
             {
@@ -32,9 +32,14 @@ namespace AdventureWorks.Mvc.Controllers
             return View(pagedList);
         }
 
-        public ViewResult Details(int id)
+        public IActionResult Details(int id)
         {
             var vendor = _repository.Vendor.GetVendorByID(id);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+
             return View(vendor);
         }
 
@@ -43,18 +48,56 @@ namespace AdventureWorks.Mvc.Controllers
             var creditRatingLookup = CreditRatingLookupCollection.CreditRatingStatuses();
             ViewBag.CreditRatingLookup = creditRatingLookup;
 
-            var vendor = new VendorDomainObj { };
+            return View(new VendorDomainObj { });
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var vendor = _repository.Vendor.GetVendorByID(id);
+
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+
+            var creditRatingLookup = CreditRatingLookupCollection.CreditRatingStatuses();
+            ViewBag.CreditRatingLookup = creditRatingLookup;
+
             return View(vendor);
         }
 
-        public ViewResult Edit()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromForm] VendorDomainObj vendor)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _repository.Vendor.UpdateVendor(vendor);
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return View(vendor);
+            }
+
+            return RedirectToAction(nameof(List));
         }
 
-        public ViewResult Delete()
+        public IActionResult Delete(int id)
         {
-            return View();
+            var vendor = _repository.Vendor.GetVendorByID(id);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+
+            return View(vendor);
         }
     }
 }

@@ -1,7 +1,76 @@
-﻿
+﻿@model VendorDomainObj
 @{
     ViewData["Title"] = "Edit Vendor";
 }
 
-<h2>Edit Vendor</h2>
+<div class="row-m">
+    <form asp-action="Edit" method="POST" asp-antiforgery="true">
+        <h4> Edit Vendor</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="BusinessEntityID" />
+
+        <div class="form-group">
+            <label asp-for="AccountNumber"></label>
+            <div class="col-md-10">
+                <input asp-for="AccountNumber" class="form-control" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span> 
+            </div>           
+        </div> 
+
+            <div class="form-group">
+                <label asp-for="CreditRating"></label>
+                <div class="col-md-10">
+                    <select asp-for="CreditRating" 
+                            asp-items="ViewBag.CreditRatingLookup">
+                    </select>
+                    <span asp-validation-for="CreditRating" class="text-danger"></span>
+                </div>
+            </div>
+
+        <div class="checkbox">
+            <label asp-for="PreferredVendor">
+                <input asp-for="PreferredVendor" />  Preferred Vendor? 
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label asp-for="IsActive">
+                <input asp-for="IsActive" />  Active Vendor? 
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PurchasingWebServiceURL"></label>
+            <div class="col-md-10">
+                <input asp-for="PurchasingWebServiceURL" class="form-control" />
+                <span asp-validation-for="PurchasingWebServiceURL" class="text-danger"></span>  
+            </div>          
+        </div> 
+
+        <div class="form-group">
+            <div class="text-center">
+                <input type="submit" value="Save Vendor Info" class="btn btn-primary" />
+            </div>
+        </div>
+                        
+    </form>
+   
+    <div>
+        <a class="h5" asp-action="List">Back to List</a>
+    </div> 
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+    
 

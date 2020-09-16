@@ -4,76 +4,68 @@
 }
 
 <div class="row-m">
-    <div class="col-md-12">
-        <form asp-controller="Vendor" asp-action="Create">
-            <div class="form-horizontal">
-                <h4>Vendor</h4>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="Create" method="POST" asp-antiforgery="true">
+        <h4>Create Vendor</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <div class="form-group">
-                    <label asp-for="AccountNumber" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="AccountNumber" class="form-control" />
-                        <span asp-validation-for="AccountNumber" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Name" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="CreditRating" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <select asp-for="CreditRating" 
-                                asp-items="ViewBag.CreditRatingLookup">
-                        </select>
-                        <span asp-validation-for="CreditRating" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PreferredVendor" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input type="checkbox" asp-for="PreferredVendor" class="form-control" />
-                        <span asp-validation-for="PreferredVendor" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="IsActive" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input type="checkbox" asp-for="IsActive" class="form-control" />
-                        <span asp-validation-for="IsActive" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PurchasingWebServiceURL" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="PurchasingWebServiceURL" class="form-control" />
-                        <span asp-validation-for="PurchasingWebServiceURL" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
-                    </div>
-                </div>
-
+        <div class="form-group">
+            <label asp-for="AccountNumber"></label>
+            <div class="col-md-10">
+                <input asp-for="AccountNumber" class="form-control" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
             </div>
-        </form>
+        </div>
 
-        <div>
-            <a asp-action="List">Back to List</a>
-        </div>        
-    </div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span> 
+            </div>           
+        </div> 
+
+            <div class="form-group">
+                <label asp-for="CreditRating"></label>
+                <div class="col-md-10">
+                    <select asp-for="CreditRating" 
+                            asp-items="ViewBag.CreditRatingLookup">
+                    </select>
+                    <span asp-validation-for="CreditRating" class="text-danger"></span>
+                </div>
+            </div>
+
+        <div class="checkbox">
+            <label asp-for="PreferredVendor">
+                <input asp-for="PreferredVendor" />  Preferred Vendor? 
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label asp-for="IsActive">
+                <input asp-for="IsActive" />  Active Vendor? 
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PurchasingWebServiceURL"></label>
+            <div class="col-md-10">
+                <input asp-for="PurchasingWebServiceURL" class="form-control" />
+                <span asp-validation-for="PurchasingWebServiceURL" class="text-danger"></span>  
+            </div>          
+        </div> 
+
+        <div class="form-group">
+            <div class="text-center">
+                <input type="submit" value="Save Vendor Info" class="btn btn-primary" />
+            </div>
+        </div>
+                        
+    </form>
+   
+    <div>
+        <a class="h5" asp-action="List">Back to List</a>
+    </div> 
 </div>
 
 @section Scripts {
