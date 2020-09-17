@@ -1,7 +1,64 @@
-﻿
+﻿@model VendorDomainObj
 @{
     ViewData["Title"] = "Delete Vendor";
 }
 
-<h2>Delete Vendor</h2>
+<div class="row-m bg-light">
+    <form asp-action="Delete" method="POST" asp-antiforgery="true">
+        <h4> Delete Vendor</h4>
+        <hr />
+
+        <input type="hidden" asp-for="BusinessEntityID" />
+
+        <div class="form-group">
+            <label asp-for="AccountNumber"></label>
+            <div class="col-md-10">
+                <input asp-for="AccountNumber" class="form-control" ReadOnly="true" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" ReadOnly="true" />
+            </div>           
+        </div> 
+
+        <div class="form-group">
+            <label asp-for="CreditRating"></label>
+            <div class="col-md-10">
+                <input asp-for="CreditRating" class="form-control" ReadOnly="true" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayFor(model => model.PreferredVendor) Preferred Vendor?
+        </div>
+
+        <div class="form-group">
+            @Html.DisplayFor(model => model.IsActive) Active Vendor?
+        </div>        
+
+        <div class="form-group">
+            <label asp-for="PurchasingWebServiceURL"></label>
+            <div class="col-md-10">
+                <input asp-for="PurchasingWebServiceURL" class="form-control" ReadOnly="true" /> 
+            </div>          
+        </div> 
+
+        <div class="form-group">
+            <div class="text-center">
+                <input type="submit" value="Delete Vendor Info" class="btn btn-danger" />
+            </div>
+        </div>
+                        
+    </form>
+    <hr />
+   
+    <div>
+        <a href="/Vendor/List" class="btn-sm btn-primary" role="button">Back to List</a> &nbsp;
+    </div> 
+</div>
+
+    
 

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Mvc.Views.Shared.LookupData;
+using AdventureWorks.Mvc.Infrastructure;
+using LoggerService;
 
 namespace AdventureWorks.Mvc.Controllers
 {
@@ -72,14 +75,7 @@ namespace AdventureWorks.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _repository.Vendor.UpdateVendor(vendor);
-                }
-                catch
-                {
-                    throw;
-                }
+                _repository.Vendor.UpdateVendor(vendor);
             }
             else
             {
