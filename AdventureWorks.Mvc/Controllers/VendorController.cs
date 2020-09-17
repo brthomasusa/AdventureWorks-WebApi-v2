@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -46,7 +47,7 @@ namespace AdventureWorks.Mvc.Controllers
             return View(vendor);
         }
 
-        public ViewResult Create()
+        public IActionResult Create()
         {
             var creditRatingLookup = CreditRatingLookupCollection.CreditRatingStatuses();
             ViewBag.CreditRatingLookup = creditRatingLookup;
@@ -75,7 +76,18 @@ namespace AdventureWorks.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Vendor.UpdateVendor(vendor);
+                try
+                {
+                    _repository.Vendor.UpdateVendor(vendor);
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError(nameof(VendorDomainObj), ex.Message);
+                    var creditRatingLookup = CreditRatingLookupCollection.CreditRatingStatuses();
+                    ViewBag.CreditRatingLookup = creditRatingLookup;
+                    return View(vendor);
+                }
+                
             }
             else
             {
