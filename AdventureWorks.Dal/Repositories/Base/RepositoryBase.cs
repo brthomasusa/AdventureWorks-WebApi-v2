@@ -47,11 +47,11 @@ namespace AdventureWorks.Dal.Repositories.Base
             DbContext.Set<T>().Remove(entity);
         }
 
-        public void Save()
+        public async void Save()
         {
             try
             {
-                DbContext.SaveChanges();
+                await DbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
             {
