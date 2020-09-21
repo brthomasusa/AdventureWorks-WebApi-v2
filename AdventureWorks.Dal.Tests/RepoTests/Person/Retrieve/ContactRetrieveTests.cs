@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -24,9 +25,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
         [InlineData(5, 1)]
         [InlineData(6, 1)]
         [InlineData(7, 3)]
-        public void ShouldRetrieveAllContactDomainObjsForEachVendor(int vendorID, int numberOfContacts)
+        public async Task ShouldRetrieveAllContactDomainObjsForEachVendor(int vendorID, int numberOfContacts)
         {
-            var contactDomainObjs = _contactRepo.GetContacts(vendorID, new ContactParameters { PageNumber = 1, PageSize = 10 });
+            var contactDomainObjs = await _contactRepo.GetContacts(vendorID, new ContactParameters { PageNumber = 1, PageSize = 10 });
             var count = contactDomainObjs.Count();
             Assert.Equal(count, numberOfContacts);
         }
@@ -39,9 +40,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
         [InlineData(12, "william3@adventure-works.com")]
         [InlineData(13, "paula2@adventure-works.com")]
         [InlineData(19, "charelene0@adventure-works.com")]
-        public void ShouldRetrieveEachVendorContactDomainObj(int contactID, string emailAddress)
+        public async Task ShouldRetrieveEachVendorContactDomainObj(int contactID, string emailAddress)
         {
-            var contactDomainObj = _contactRepo.GetContactByID(contactID);
+            var contactDomainObj = await _contactRepo.GetContactByID(contactID);
             Assert.Equal(emailAddress, contactDomainObj.EmailAddress);
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -19,7 +20,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldCreateOnePhoneRecord()
+        public async Task ShouldCreateOnePhoneRecord()
         {
             var phone = new PersonPhone
             {
@@ -30,7 +31,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
             _phoneRepo.CreatePhone(phone);
 
-            var result = _phoneRepo.GetPhoneByID(phone.BusinessEntityID, phone.PhoneNumber, phone.PhoneNumberTypeID);
+            var result = await _phoneRepo.GetPhoneByID(phone.BusinessEntityID, phone.PhoneNumber, phone.PhoneNumberTypeID);
             Assert.Equal(phone.BusinessEntityID, result.BusinessEntityID);
             Assert.Equal(phone.PhoneNumber, result.PhoneNumber);
             Assert.Equal(phone.PhoneNumberTypeID, result.PhoneNumberTypeID);

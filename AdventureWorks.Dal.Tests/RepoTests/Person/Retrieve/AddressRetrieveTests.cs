@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -24,10 +25,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
         [InlineData(5, 1)]
         [InlineData(6, 1)]
         [InlineData(7, 1)]
-        public void ShouldLoadAddressDomainObjectsForEachVendor(int vendorID, int numberOfRecords)
+        public async Task ShouldLoadAddressDomainObjectsForEachVendor(int vendorID, int numberOfRecords)
         {
             var addressParams = new AddressParameters { PageNumber = 1, PageSize = 10 };
-            var vendorAddressDomainObjs = _addressRepo.GetAddresses(vendorID, addressParams);
+            var vendorAddressDomainObjs = await _addressRepo.GetAddresses(vendorID, addressParams);
             int count = vendorAddressDomainObjs.Count();
             Assert.Equal(count, numberOfRecords);
         }
@@ -39,9 +40,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Retrieve
         [InlineData(4, "1900 Desoto Court")]
         [InlineData(5, "211 East Pleasant Run Rd")]
         [InlineData(6, "6266 Melody Lane")]
-        public void ShouldGetAddressDomainObjByAddressID(int addressID, string line1)
+        public async Task ShouldGetAddressDomainObjByAddressID(int addressID, string line1)
         {
-            var vendorAddressDomainObj = _addressRepo.GetAddressByID(addressID);
+            var vendorAddressDomainObj = await _addressRepo.GetAddressByID(addressID);
             Assert.Equal(line1, vendorAddressDomainObj.AddressLine1);
         }
     }

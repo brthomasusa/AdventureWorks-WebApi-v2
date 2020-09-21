@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -24,9 +25,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         [InlineData(16, 1)]
         [InlineData(17, 1)]
         [InlineData(18, 2)]
-        public void ShouldGetPayHistoriesForEachEmployee(int employeeID, int numberOfRecords)
+        public async Task ShouldGetPayHistoriesForEachEmployee(int employeeID, int numberOfRecords)
         {
-            var payHistories = _payHistoryRepo.GetPayHistories(employeeID, new PayHistoryParameters { PageNumber = 1, PageSize = 10 });
+            var payHistories = await _payHistoryRepo.GetPayHistories(employeeID, new PayHistoryParameters { PageNumber = 1, PageSize = 10 });
             var count = payHistories.Count;
             Assert.Equal(count, numberOfRecords);
         }
@@ -39,9 +40,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         [InlineData(17, "2008-01-06", 32.6923)]
         [InlineData(18, "2008-01-31", 40.0000)]
         [InlineData(18, "2010-11-03", 63.4615)]
-        public void ShouldRetrieveEachEmployeePayHistoryRecord(int employeeID, string rateChangeDate, decimal rate)
+        public async Task ShouldRetrieveEachEmployeePayHistoryRecord(int employeeID, string rateChangeDate, decimal rate)
         {
-            var payHistory = _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
+            var payHistory = await _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
             Assert.Equal(rate, payHistory.Rate);
         }
     }

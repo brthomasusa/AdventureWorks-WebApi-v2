@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -24,9 +25,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         [InlineData(16, 1)]
         [InlineData(17, 1)]
         [InlineData(18, 2)]
-        public void ShouldGetDeptHistoriesForEachEmployee(int employeeID, int numberOfRecords)
+        public async Task ShouldGetDeptHistoriesForEachEmployee(int employeeID, int numberOfRecords)
         {
-            var records = _deptHistoryRepo.GetDepartmentHistories(employeeID, new DepartmentHistoryParameters { PageNumber = 1, PageSize = 10 });
+            var departmentHistoryParameters = new DepartmentHistoryParameters { PageNumber = 1, PageSize = 10 };
+            var records = await _deptHistoryRepo.GetDepartmentHistories(employeeID, departmentHistoryParameters);
             var count = records.Count;
             Assert.Equal(count, numberOfRecords);
         }

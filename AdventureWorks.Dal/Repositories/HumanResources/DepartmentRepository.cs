@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
@@ -19,20 +20,22 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public DepartmentRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<Department> GetDepartments(DepartmentParameters deptParameters)
+        public async Task<PagedList<Department>> GetDepartments(DepartmentParameters deptParameters)
         {
-            return PagedList<Department>.ToPagedList(
+            var pagedList = await PagedList<Department>.ToPagedList(
                 FindAll().OrderBy(dept => dept.Name),
                 deptParameters.PageNumber,
                 deptParameters.PageSize);
+
+            return pagedList;
         }
 
-        public Department GetDepartmentByID(int departmentID)
+        public async Task<Department> GetDepartmentByID(int departmentID)
         {
-            return DbContext.Department
+            return await DbContext.Department
                 .Where(dept => dept.DepartmentID == departmentID)
                 .AsNoTracking()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
         public void CreateDepartment(Department department)

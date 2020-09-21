@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
@@ -21,9 +22,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet("{employeeID}/payhistory")]
-        public IActionResult GetPayHistories(int employeeID, [FromQuery] PayHistoryParameters payHistoryParameters)
+        public async Task<IActionResult> GetPayHistories(int employeeID, [FromQuery] PayHistoryParameters payHistoryParameters)
         {
-            var payHistories = _repository.PayHistory.GetPayHistories(employeeID, payHistoryParameters);
+            var payHistories = await _repository.PayHistory.GetPayHistories(employeeID, payHistoryParameters);
 
             var metadata = new
             {

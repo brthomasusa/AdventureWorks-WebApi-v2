@@ -1,5 +1,6 @@
-using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -18,21 +19,24 @@ namespace AdventureWorks.Dal.Repositories.Person
         public PersonPhoneRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<PersonPhone> GetPhones(int entityID, PersonPhoneParameters phoneParameters)
+        public async Task<PagedList<PersonPhone>> GetPhones(int entityID, PersonPhoneParameters phoneParameters)
         {
-            return PagedList<PersonPhone>.ToPagedList(
+            var pagedList = await PagedList<PersonPhone>.ToPagedList(
                 FindByCondition(ph => ph.BusinessEntityID == entityID),
                 phoneParameters.PageNumber,
                 phoneParameters.PageSize);
+
+            return pagedList;
         }
 
-        public PersonPhone GetPhoneByID(int entityID, string phoneNumber, int phoneNumberTypeID)
+        public async Task<PersonPhone> GetPhoneByID(int entityID, string phoneNumber, int phoneNumberTypeID)
         {
-            return FindByCondition(ph =>
+            return await DbContext.PersonPhone.Where(ph =>
                 ph.BusinessEntityID == entityID &&
                 ph.PhoneNumber == phoneNumber &&
-                ph.PhoneNumberTypeID == phoneNumberTypeID
-            ).FirstOrDefault();
+                ph.PhoneNumberTypeID == phoneNumberTypeID)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
         }
 
         public void CreatePhone(PersonPhone telephone)

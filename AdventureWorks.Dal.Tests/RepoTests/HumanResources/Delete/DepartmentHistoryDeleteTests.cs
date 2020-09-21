@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -17,17 +18,17 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOneEmployeeDepartmentHistoryRecord()
+        public async Task ShouldDeleteOneEmployeeDepartmentHistoryRecord()
         {
             int employeeID = 1;
             short deptID = 10;
             byte shiftID = 3;
             DateTime startDate = new DateTime(2009, 1, 14);
-            var deptHistory = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
+            var deptHistory = await _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
 
             _deptHistoryRepo.DeleteDepartmentHistory(deptHistory);
 
-            var result = _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
+            var result = await _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
             Assert.Null(result);
         }
     }

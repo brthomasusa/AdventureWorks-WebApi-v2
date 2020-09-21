@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -19,15 +20,15 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOneDepartmentRecord()
+        public async Task ShouldDeleteOneDepartmentRecord()
         {
             var deptID = 4;
-            var dept = _deptRepo.GetDepartmentByID(deptID);
+            var dept = await _deptRepo.GetDepartmentByID(deptID);
             Assert.NotNull(dept);
 
             _deptRepo.DeleteDepartment(dept);
 
-            var result = _deptRepo.GetDepartmentByID(deptID);
+            var result = await _deptRepo.GetDepartmentByID(deptID);
             Assert.Null(result);
         }
     }

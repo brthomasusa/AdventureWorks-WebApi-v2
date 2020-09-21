@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -19,7 +20,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldCreateOneAddressUsingAddressDomainObj()
+        public async Task ShouldCreateOneAddressUsingAddressDomainObj()
         {
             var vendorID = 4;
             var addressDomainObj = new AddressDomainObj
@@ -35,10 +36,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
             _addressRepo.CreateAddress(addressDomainObj);
 
-            var result = _addressRepo.GetAddressByID(addressDomainObj.AddressID);
+            var result = await _addressRepo.GetAddressByID(addressDomainObj.AddressID);
             Assert.Equal(addressDomainObj.AddressLine1, result.AddressLine1);
 
-            var addressDomainObjs = _addressRepo.GetAddresses(vendorID, new AddressParameters { PageNumber = 1, PageSize = 10 });
+            var addressDomainObjs = await _addressRepo.GetAddresses(vendorID, new AddressParameters { PageNumber = 1, PageSize = 10 });
             Assert.Equal(addressDomainObjs[0].AddressLine1, addressDomainObj.AddressLine1);
         }
 
@@ -114,10 +115,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionWhileCreatingAddressWithInvalidStateID()
+        public async Task ShouldRaiseExceptionWhileCreatingAddressWithInvalidStateID()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
 
             addressdomainObj.StateProvinceID = 632;
 

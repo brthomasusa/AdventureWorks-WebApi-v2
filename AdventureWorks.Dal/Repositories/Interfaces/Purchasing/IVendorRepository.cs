@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Helpers;
@@ -6,11 +7,11 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 {
     public interface IVendorRepository
     {
-        PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters);
+        Task<PagedList<VendorDomainObj>> GetVendors(VendorParameters vendorParameters);
 
-        VendorDomainObj GetVendorByID(int businessEntityID);
+        Task<VendorDomainObj> GetVendorByID(int businessEntityID);
 
-        VendorDomainObj GetVendorWithDetails(int businessEntityID);
+        Task<VendorDomainObj> GetVendorWithDetails(int businessEntityID);
 
         void CreateVendor(VendorDomainObj vendor);
 

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
@@ -19,11 +20,11 @@ namespace AdventureWorks.Dal.Repositories.Person
         public ContactRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters)
+        public async Task<PagedList<ContactDomainObj>> GetContacts(int entityID, ContactParameters contactParameters)
         {
             if (DbContext.BusinessEntity.Where(v => v.BusinessEntityID == entityID).Any())
             {
-                return PagedList<ContactDomainObj>.ToPagedList(
+                var pagedList = await PagedList<ContactDomainObj>.ToPagedList(
                     DbContext.ContactDomainObj
                         .Where(contact => contact.ParentEntityID == entityID)
                         .AsQueryable()
@@ -32,6 +33,8 @@ namespace AdventureWorks.Dal.Repositories.Person
                         .ThenBy(p => p.MiddleName),
                     contactParameters.PageNumber,
                     contactParameters.PageSize);
+
+                return pagedList;
             }
             else
             {
@@ -43,24 +46,22 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         }
 
-        public ContactDomainObj GetContactByID(int contactID)
+        public async Task<ContactDomainObj> GetContactByID(int contactID)
         {
-            return DbContext.ContactDomainObj
+            return await DbContext.ContactDomainObj
                 .Where(contact => contact.BusinessEntityID == contactID)
-                .AsQueryable()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public ContactDomainObj GetContactByIDWithPhones(int contactID)
+        public async Task<ContactDomainObj> GetContactByIDWithPhones(int contactID)
         {
             if (DbContext.ContactDomainObj.Where(p => p.BusinessEntityID == contactID).Any())
             {
-                var contact = DbContext.ContactDomainObj
+                var contact = await DbContext.ContactDomainObj
                     .Where(contact => contact.BusinessEntityID == contactID)
-                    .AsQueryable()
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
-                contact.Phones.AddRange(DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactID).ToList());
+                contact.Phones.AddRange(await DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactID).ToListAsync());
                 return contact;
             }
             else

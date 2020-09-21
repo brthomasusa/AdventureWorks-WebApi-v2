@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
@@ -20,9 +21,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet]
-        public IActionResult GetDepartments([FromQuery] DepartmentParameters deptParameters)
+        public async Task<IActionResult> GetDepartments([FromQuery] DepartmentParameters deptParameters)
         {
-            var departments = _repository.Department.GetDepartments(deptParameters);
+            var departments = await _repository.Department.GetDepartments(deptParameters);
 
             var metadata = new
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -19,7 +20,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
         }
 
         [Fact]
-        public void ShouldCreateEmployeeDepartmentHistoryRecord()
+        public async Task ShouldCreateEmployeeDepartmentHistoryRecord()
         {
             var deptHistory = new EmployeeDepartmentHistory
             {
@@ -31,7 +32,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
 
             _deptHistoryRepo.CreateDepartmentHistory(deptHistory);
 
-            var result = _deptHistoryRepo.GetDepartmentHistoryByID(deptHistory.BusinessEntityID, deptHistory.DepartmentID, deptHistory.ShiftID, deptHistory.StartDate);
+            var result = await _deptHistoryRepo.GetDepartmentHistoryByID(deptHistory.BusinessEntityID, deptHistory.DepartmentID, deptHistory.ShiftID, deptHistory.StartDate);
             Assert.Equal(result.StartDate, new DateTime(2020, 8, 18));
         }
 

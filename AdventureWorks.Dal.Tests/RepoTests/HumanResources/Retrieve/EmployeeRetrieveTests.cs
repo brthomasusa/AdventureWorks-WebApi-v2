@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -17,10 +18,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         }
 
         [Fact]
-        public void ShouldGetAllEmployeeDomainObjs()
+        public async Task ShouldGetAllEmployeeDomainObjs()
         {
             var employeeParams = new EmployeeParameters { PageNumber = 1, PageSize = 10 };
-            var employees = _employeeRepo.GetEmployees(employeeParams);
+            var employees = await _employeeRepo.GetEmployees(employeeParams);
             var count = employees.Count;
 
             Assert.Equal(6, count);
@@ -33,9 +34,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Retrieve
         [InlineData(16, "jossef@adventure-works.com")]
         [InlineData(17, "gail@adventure-works.com")]
         [InlineData(18, "terri@adventure-works.com")]
-        public void ShouldRetrieveEachEmployeeDomainObj(int employeeID, string emailAddress)
+        public async Task ShouldRetrieveEachEmployeeDomainObj(int employeeID, string emailAddress)
         {
-            var employeeDomainObj = _employeeRepo.GetEmployeeByID(employeeID);
+            var employeeDomainObj = await _employeeRepo.GetEmployeeByID(employeeID);
             Assert.Equal(emailAddress, employeeDomainObj.EmailAddress);
         }
     }

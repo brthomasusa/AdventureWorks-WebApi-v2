@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -20,7 +21,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldCreateOneVendorContactUsingContactDomainObj()
+        public async Task ShouldCreateOneVendorContactUsingContactDomainObj()
         {
             var contact = new ContactDomainObj
             {
@@ -39,7 +40,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
             _contactRepo.CreateContact(contact);
 
-            var result = _contactRepo.GetContactByID(contact.BusinessEntityID);
+            var result = await _contactRepo.GetContactByID(contact.BusinessEntityID);
             Assert.NotNull(result);
             Assert.Equal(contact.EmailPasswordHash, result.EmailPasswordHash);
         }

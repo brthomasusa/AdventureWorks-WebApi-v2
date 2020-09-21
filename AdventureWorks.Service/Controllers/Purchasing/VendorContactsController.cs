@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
@@ -23,9 +24,9 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{vendorId}/contact")]
-        public IActionResult GetContactsForVendor(int vendorId, [FromQuery] ContactParameters contactParameters)
+        public async Task<IActionResult> GetContactsForVendor(int vendorId, [FromQuery] ContactParameters contactParameters)
         {
-            var contacts = _repository.Contact.GetContacts(vendorId, contactParameters);
+            var contacts = await _repository.Contact.GetContacts(vendorId, contactParameters);
 
             var metadata = new
             {
@@ -44,9 +45,9 @@ namespace AdventureWorks.Service.Controllers
 
 
         [HttpGet("contact/{contactID}", Name = "GetVendorContactByID")]
-        public IActionResult GetVendorContactByID(int contactID)
+        public async Task<IActionResult> GetVendorContactByID(int contactID)
         {
-            var contact = _repository.Contact.GetContactByID(contactID);
+            var contact = await _repository.Contact.GetContactByID(contactID);
             if (contact == null)
             {
                 return NotFound();
@@ -56,8 +57,8 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("contact/{contactID}/phones")]
-        public IActionResult GetVendorContactByIDWithPhones(int contactID)
-            => Ok(_repository.Contact.GetContactByIDWithPhones(contactID));
+        public async Task<IActionResult> GetVendorContactByIDWithPhones(int contactID)
+            => Ok(await _repository.Contact.GetContactByIDWithPhones(contactID));
 
         [HttpGet("contact/phone/{entityID}/{phoneNumber}/{phoneTypeID}", Name = "GetVendorContactPhone")]
         public IActionResult GetVendorContactPhone(int entityID, string phoneNumber, int phoneTypeID)

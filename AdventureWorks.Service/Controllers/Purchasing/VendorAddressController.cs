@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
@@ -22,9 +23,9 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{vendorId}/addresses")]
-        public IActionResult GetAddressesForVendor(int vendorId, [FromQuery] AddressParameters addressParameters)
+        public async Task<IActionResult> GetAddressesForVendor(int vendorId, [FromQuery] AddressParameters addressParameters)
         {
-            var addresses = _repository.Address.GetAddresses(vendorId, addressParameters);
+            var addresses = await _repository.Address.GetAddresses(vendorId, addressParameters);
 
             var metadata = new
             {

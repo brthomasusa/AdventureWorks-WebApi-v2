@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -19,29 +20,29 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOnePhoneRecord()
+        public async Task ShouldDeleteOnePhoneRecord()
         {
             int entityID = 1;
             var phoneNumber = "697-555-0142";
             var phoneTypeID = 1;
 
-            var phone = _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
+            var phone = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             Assert.NotNull(phone);
 
             _phoneRepo.DeletePhone(phone);
 
-            var result = _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
+            var result = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             Assert.Null(result);
         }
 
         [Fact]
-        public void ShouldFailToDeletePhoneWithNullEntityObjectException()
+        public async Task ShouldFailToDeletePhoneWithNullEntityObjectException()
         {
             int entityID = 13;
             var phoneNumber = "273-555-0100";
             var phoneTypeID = 1;
 
-            var phone = _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
+            var phone = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             phone.BusinessEntityID = 300;
 
             Action testCode = () =>

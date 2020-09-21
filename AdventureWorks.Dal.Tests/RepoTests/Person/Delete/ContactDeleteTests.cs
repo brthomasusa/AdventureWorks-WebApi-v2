@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -16,16 +17,16 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOneVendorContactUsingContactDomainObj()
+        public async Task ShouldDeleteOneVendorContactUsingContactDomainObj()
         {
             var contactID = 9;
-            var contact = _contactRepo.GetContactByID(contactID);
+            var contact = await _contactRepo.GetContactByID(contactID);
 
             Assert.NotNull(contact);
 
             _contactRepo.DeleteContact(contact);
 
-            var result = _contactRepo.GetContactByID(contactID);
+            var result = await _contactRepo.GetContactByID(contactID);
             Assert.Null(result);
         }
     }

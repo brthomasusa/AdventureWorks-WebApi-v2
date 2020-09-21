@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Helpers;
 
@@ -5,11 +6,11 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 {
     public interface IContactRepository
     {
-        PagedList<ContactDomainObj> GetContacts(int entityID, ContactParameters contactParameters);
+        Task<PagedList<ContactDomainObj>> GetContacts(int entityID, ContactParameters contactParameters);
 
-        ContactDomainObj GetContactByID(int contactID);
+        Task<ContactDomainObj> GetContactByID(int contactID);
 
-        ContactDomainObj GetContactByIDWithPhones(int contactID);
+        Task<ContactDomainObj> GetContactByIDWithPhones(int contactID);
 
         void CreateContact(ContactDomainObj contactDomainObj);
 

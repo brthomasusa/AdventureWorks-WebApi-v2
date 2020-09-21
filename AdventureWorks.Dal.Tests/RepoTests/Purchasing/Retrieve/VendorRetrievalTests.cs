@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -18,10 +19,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         }
 
         [Fact]
-        public void ShouldGetAllVendorDomainObjsUsingRepositoryBase()
+        public async Task ShouldGetAllVendorDomainObjsUsingRepositoryBase()
         {
             var vendorParams = new VendorParameters { PageNumber = 1, PageSize = 10 };
-            var vendors = _vendorRepo.GetVendors(vendorParams);
+            var vendors = await _vendorRepo.GetVendors(vendorParams);
             var count = vendors.Count();
             Assert.Equal(6, count);
         }
@@ -33,9 +34,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         [InlineData(5, "LIGHTSP0001")]
         [InlineData(6, "TRIKES0001")]
         [InlineData(7, "AUSTRALI0001")]
-        public void GetEachVendorDomainObjByID(int vendorID, string acctNumber)
+        public async Task GetEachVendorDomainObjByID(int vendorID, string acctNumber)
         {
-            var vendor = _vendorRepo.GetVendorByID(vendorID);
+            var vendor = await _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal(acctNumber, vendor.AccountNumber);
         }
 
@@ -46,9 +47,9 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Retrieve
         [InlineData(5, 1, 1)]
         [InlineData(6, 1, 1)]
         [InlineData(7, 1, 3)]
-        public void GetEachVendorDomainObjByIdWithDetails(int vendorID, int numberOfAddresses, int numberOfContacts)
+        public async Task GetEachVendorDomainObjByIdWithDetails(int vendorID, int numberOfAddresses, int numberOfContacts)
         {
-            var vendor = _vendorRepo.GetVendorWithDetails(vendorID);
+            var vendor = await _vendorRepo.GetVendorWithDetails(vendorID);
             var addressCount = vendor.Addresses.Count;
             var contactCount = vendor.Contacts.Count;
 

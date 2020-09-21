@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Helpers;
@@ -6,11 +7,11 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
     public interface IEmployeeRepository
     {
-        PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters);
+        Task<PagedList<EmployeeDomainObj>> GetEmployees(EmployeeParameters employeeParameters);
 
-        EmployeeDomainObj GetEmployeeByID(int businessEntityID);
+        Task<EmployeeDomainObj> GetEmployeeByID(int businessEntityID);
 
-        EmployeeDomainObj GetEmployeeByIDWithDetails(int businessEntityID);
+        Task<EmployeeDomainObj> GetEmployeeByIDWithDetails(int businessEntityID);
 
         void CreateEmployee(EmployeeDomainObj employeeDomainObj);
 

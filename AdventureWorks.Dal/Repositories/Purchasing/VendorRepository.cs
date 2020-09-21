@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -21,9 +22,9 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
         public VendorRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<VendorDomainObj> GetVendors(VendorParameters vendorParameters)
+        public async Task<PagedList<VendorDomainObj>> GetVendors(VendorParameters vendorParameters)
         {
-            Expression<Func<VendorDomainObj, bool>> filterCriteria;
+            Func<VendorDomainObj, bool> filterCriteria;
             var vendorStatus = vendorParameters.VendorStatus.ToUpper();
 
             if (vendorStatus == "ACTIVE")
@@ -43,27 +44,27 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
             SearchByName(ref vendorList, vendorParameters.Name);
 
-            return PagedList<VendorDomainObj>.ToPagedList(
+            return await PagedList<VendorDomainObj>.ToPagedList(
                 vendorList.OrderBy(v => v.Name),
                 vendorParameters.PageNumber,
                 vendorParameters.PageSize);
         }
 
-        public VendorDomainObj GetVendorByID(int businessEntityID)
+        public async Task<VendorDomainObj> GetVendorByID(int businessEntityID)
         {
-            return DbContext.VendorDomainObj.Where(vendor => vendor.BusinessEntityID == businessEntityID)
-                .AsQueryable()
-                .FirstOrDefault();
+            return await DbContext.VendorDomainObj
+                .Where(vendor => vendor.BusinessEntityID == businessEntityID)
+                .FirstOrDefaultAsync();
         }
 
-        public VendorDomainObj GetVendorWithDetails(int businessEntityID)
+        public async Task<VendorDomainObj> GetVendorWithDetails(int businessEntityID)
         {
-            var vendor = DbContext.VendorDomainObj.Where(vendor => vendor.BusinessEntityID == businessEntityID)
-                .AsQueryable()
-                .FirstOrDefault();
+            var vendor = await DbContext.VendorDomainObj
+                .Where(vendor => vendor.BusinessEntityID == businessEntityID)
+                .FirstOrDefaultAsync();
 
-            vendor.Addresses.AddRange(DbContext.AddressDomainObj.Where(a => a.ParentEntityID == vendor.BusinessEntityID).ToList());
-            vendor.Contacts.AddRange(DbContext.ContactDomainObj.Where(c => c.ParentEntityID == vendor.BusinessEntityID).ToList());
+            vendor.Addresses.AddRange(await DbContext.AddressDomainObj.Where(a => a.ParentEntityID == vendor.BusinessEntityID).ToListAsync());
+            vendor.Contacts.AddRange(await DbContext.ContactDomainObj.Where(c => c.ParentEntityID == vendor.BusinessEntityID).ToListAsync());
 
             return vendor;
         }

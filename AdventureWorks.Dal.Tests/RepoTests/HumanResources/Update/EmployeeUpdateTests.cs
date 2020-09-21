@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -18,10 +19,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
         }
 
         [Fact]
-        public void ShouldUpdatePersonAndEmployeeUsingEmployeeDomainObj()
+        public async Task ShouldUpdatePersonAndEmployeeUsingEmployeeDomainObj()
         {
             var employeeID = 1;
-            var employee = _employeeRepo.GetEmployeeByID(employeeID);
+            var employee = await _employeeRepo.GetEmployeeByID(employeeID);
 
             employee.Title = "Mr.";
             employee.MiddleName = "James";
@@ -30,7 +31,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
 
             _employeeRepo.UpdateEmployee(employee);
 
-            var result = _employeeRepo.GetEmployeeByID(employeeID);
+            var result = await _employeeRepo.GetEmployeeByID(employeeID);
 
             Assert.Equal("Mr.", result.Title);
             Assert.Equal("James", result.MiddleName);
@@ -39,10 +40,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeeLoginDuringUpdate()
+        public async Task ShouldRaiseExceptionDuplicateEmployeeLoginDuringUpdate()
         {
             var employeeID = 15;
-            var employee = _employeeRepo.GetEmployeeByID(employeeID);
+            var employee = await _employeeRepo.GetEmployeeByID(employeeID);
             employee.LoginID = "adventure-works\\terri0";
 
             Action testCode = () =>
@@ -55,10 +56,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeeNationalIDNumberDuringUpdate()
+        public async Task ShouldRaiseExceptionDuplicateEmployeeNationalIDNumberDuringUpdate()
         {
             var employeeID = 15;
-            var employee = _employeeRepo.GetEmployeeByID(employeeID);
+            var employee = await _employeeRepo.GetEmployeeByID(employeeID);
             employee.NationalIDNumber = "245797967";
 
             Action testCode = () =>

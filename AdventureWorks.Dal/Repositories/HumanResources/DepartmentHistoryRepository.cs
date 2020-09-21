@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -18,14 +20,20 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public DepartmentHistoryRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<EmployeeDepartmentHistory> GetDepartmentHistories(int employeeID, DepartmentHistoryParameters deptHistoryParameters)
+        public async Task<PagedList<EmployeeDepartmentHistory>> GetDepartmentHistories(int employeeID, DepartmentHistoryParameters deptHistoryParameters)
         {
             if (IsValidEmployeeID(employeeID))
             {
-                return PagedList<EmployeeDepartmentHistory>.ToPagedList(
-                    FindByCondition(hist => hist.BusinessEntityID == employeeID).OrderBy(hist => hist.StartDate),
+                var pagedList = await PagedList<EmployeeDepartmentHistory>.ToPagedList(
+                    DbContext.EmployeeDepartmentHistory
+                        .AsNoTracking()
+                        .Where(hist => hist.BusinessEntityID == employeeID)
+                        .OrderBy(hist => hist.StartDate)
+                        .AsQueryable(),
                     deptHistoryParameters.PageNumber,
                     deptHistoryParameters.PageSize);
+
+                return pagedList;
             }
             else
             {
@@ -35,14 +43,16 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public EmployeeDepartmentHistory GetDepartmentHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate)
+        public async Task<EmployeeDepartmentHistory> GetDepartmentHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate)
         {
-            return FindByCondition(hist =>
+            return await DbContext.EmployeeDepartmentHistory
+                .Where(hist =>
                    hist.BusinessEntityID == employeeID &&
                    hist.DepartmentID == deptID &&
                    hist.ShiftID == shiftID &&
                    hist.StartDate == startDate)
-                .FirstOrDefault();
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void CreateDepartmentHistory(EmployeeDepartmentHistory departmentHistory)

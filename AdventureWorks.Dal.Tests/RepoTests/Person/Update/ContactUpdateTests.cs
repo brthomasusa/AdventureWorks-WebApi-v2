@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -18,10 +19,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldUpdateVendorContactUsingContactDomainObj()
+        public async Task ShouldUpdateVendorContactUsingContactDomainObj()
         {
             var contactID = 8;
-            var contact = _contactRepo.GetContactByID(contactID);
+            var contact = await _contactRepo.GetContactByID(contactID);
             Assert.Equal("Dwayne", contact.MiddleName);
             Assert.Null(contact.Suffix);
             Assert.Equal("j.dough@adventure-works.com", contact.EmailAddress);
@@ -32,17 +33,17 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
             _contactRepo.UpdateContact(contact);
 
-            var result = _contactRepo.GetContactByID(contactID);
+            var result = await _contactRepo.GetContactByID(contactID);
             Assert.Equal("Wayne", result.MiddleName);
             Assert.Equal("Jr.", result.Suffix);
             Assert.Equal("j.w.dough@adventure-works.com", result.EmailAddress);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionContactWithInvalidParentEntityID()
+        public async Task ShouldRaiseExceptionContactWithInvalidParentEntityID()
         {
             var contactID = 8;
-            var contact = _contactRepo.GetContactByID(contactID);
+            var contact = await _contactRepo.GetContactByID(contactID);
             contact.ParentEntityID = 567;
 
             Action testCode = () =>
@@ -55,10 +56,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionContactWithInvalidContactType()
+        public async Task ShouldRaiseExceptionContactWithInvalidContactType()
         {
             var contactID = 8;
-            var contact = _contactRepo.GetContactByID(contactID);
+            var contact = await _contactRepo.GetContactByID(contactID);
             contact.ContactTypeID = 171;
 
             Action testCode = () =>

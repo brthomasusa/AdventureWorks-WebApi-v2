@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using LoggerService;

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.HumanResources;
@@ -22,9 +23,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet("{employeeID}/depthistory")]
-        public IActionResult GetDeptHistories(int employeeID, [FromQuery] DepartmentHistoryParameters deptHistoryParameters)
+        public async Task<IActionResult> GetDeptHistories(int employeeID, [FromQuery] DepartmentHistoryParameters deptHistoryParameters)
         {
-            var deptHistories = _repository.DepartmentHistory.GetDepartmentHistories(employeeID, deptHistoryParameters);
+            var deptHistories = await _repository.DepartmentHistory.GetDepartmentHistories(employeeID, deptHistoryParameters);
 
             var metadata = new
             {
@@ -42,9 +43,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpGet("depthistory/{employeeID}/{deptID}/{shiftID}/{startDate}", Name = "GetDeptHistoryByID")]
-        public IActionResult GetDeptHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate)
+        public async Task<IActionResult> GetDeptHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate)
         {
-            var depthistory = _repository.DepartmentHistory.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
+            var depthistory = await _repository.DepartmentHistory.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
             if (depthistory == null)
             {
                 return NotFound();

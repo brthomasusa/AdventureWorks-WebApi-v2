@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
@@ -21,14 +22,14 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllEmployees([FromQuery] EmployeeParameters employeeParameters)
+        public async Task<IActionResult> GetAllEmployees([FromQuery] EmployeeParameters employeeParameters)
         {
             if (employeeParameters.EmployeeStatus != null && !employeeParameters.IsValidEmployeeStatus)
             {
                 return BadRequest(new { message = "Valid employee status codes are 'Active', 'Inactive', and 'All'." });
             }
 
-            var employees = _repository.Employee.GetEmployees(employeeParameters);
+            var employees = await _repository.Employee.GetEmployees(employeeParameters);
 
             var metadata = new
             {
@@ -46,9 +47,9 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{employeeID}", Name = "GetEmployeeByID")]
-        public IActionResult GetEmployeeByID(int employeeID)
+        public async Task<IActionResult> GetEmployeeByID(int employeeID)
         {
-            var employee = _repository.Employee.GetEmployeeByID(employeeID);
+            var employee = await _repository.Employee.GetEmployeeByID(employeeID);
             if (employee == null)
             {
                 return NotFound();
@@ -58,9 +59,9 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{employeeID}/details")]
-        public IActionResult GetEmployeeByIDWithDetails(int employeeID)
+        public async Task<IActionResult> GetEmployeeByIDWithDetails(int employeeID)
         {
-            var employee = _repository.Employee.GetEmployeeByIDWithDetails(employeeID);
+            var employee = await _repository.Employee.GetEmployeeByIDWithDetails(employeeID);
             if (employee == null)
             {
                 return NotFound();
@@ -70,9 +71,9 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{employeeID}/phones")]
-        public IActionResult GetEmployeePhones(int employeeID, [FromQuery] PersonPhoneParameters phoneParameters)
+        public async Task<IActionResult> GetEmployeePhones(int employeeID, [FromQuery] PersonPhoneParameters phoneParameters)
         {
-            var phones = _repository.Telephone.GetPhones(employeeID, phoneParameters);
+            var phones = await _repository.Telephone.GetPhones(employeeID, phoneParameters);
 
             var metadata = new
             {
@@ -91,9 +92,9 @@ namespace AdventureWorks.Service.Controllers
 
 
         [HttpGet("{employeeID}/phones/{phoneNumber}/{phoneNumberTypeID}", Name = "GetEmployeePhoneByID")]
-        public IActionResult GetEmployeePhoneByID(int employeeID, string phoneNumber, int phoneNumberTypeID)
+        public async Task<IActionResult> GetEmployeePhoneByID(int employeeID, string phoneNumber, int phoneNumberTypeID)
         {
-            var phone = _repository.Telephone.GetPhoneByID(employeeID, phoneNumber, phoneNumberTypeID);
+            var phone = await _repository.Telephone.GetPhoneByID(employeeID, phoneNumber, phoneNumberTypeID);
 
             if (phone == null)
             {

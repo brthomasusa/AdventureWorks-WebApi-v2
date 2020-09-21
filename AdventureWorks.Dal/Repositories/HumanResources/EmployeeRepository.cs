@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
@@ -21,7 +22,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public EmployeeRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<EmployeeDomainObj> GetEmployees(EmployeeParameters employeeParameters)
+        public async Task<PagedList<EmployeeDomainObj>> GetEmployees(EmployeeParameters employeeParameters)
         {
             Func<EmployeeDomainObj, bool> filter;
 
@@ -44,39 +45,49 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
             SearchByName(ref employeeList, employeeParameters.FirstName, employeeParameters.LastName);
 
-            return PagedList<EmployeeDomainObj>.ToPagedList(
-                employeeList.OrderBy(ee => ee.LastName).ThenBy(ee => ee.FirstName).ThenBy(ee => ee.MiddleName),
+            var pagedList = await PagedList<EmployeeDomainObj>.ToPagedList(
+                employeeList
+                    .OrderBy(ee => ee.LastName)
+                    .ThenBy(ee => ee.FirstName)
+                    .ThenBy(ee => ee.MiddleName),
                 employeeParameters.PageNumber,
                 employeeParameters.PageSize
             );
+
+            return pagedList;
         }
 
-        public EmployeeDomainObj GetEmployeeByID(int businessEntityID)
+        public async Task<EmployeeDomainObj> GetEmployeeByID(int businessEntityID)
         {
-            return DbContext.EmployeeDomainObj
+            return await DbContext.EmployeeDomainObj
                 .Where(employee => employee.BusinessEntityID == businessEntityID)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public EmployeeDomainObj GetEmployeeByIDWithDetails(int businessEntityID)
+        public async Task<EmployeeDomainObj> GetEmployeeByIDWithDetails(int businessEntityID)
         {
-            var employee = DbContext.EmployeeDomainObj
+            var employee = await DbContext.EmployeeDomainObj
                 .Where(employee => employee.BusinessEntityID == businessEntityID)
-                .AsQueryable()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (employee != null)
             {
                 employee.DepartmentHistories.AddRange(
-                    DbContext.EmployeeDepartmentHistory.Where(dh => dh.BusinessEntityID == businessEntityID).ToList()
+                    await DbContext.EmployeeDepartmentHistory
+                        .Where(dh => dh.BusinessEntityID == businessEntityID)
+                        .ToListAsync()
                 );
 
                 employee.PayHistories.AddRange(
-                    DbContext.EmployeePayHistory.Where(ph => ph.BusinessEntityID == businessEntityID).ToList()
+                    await DbContext.EmployeePayHistory
+                        .Where(ph => ph.BusinessEntityID == businessEntityID)
+                        .ToListAsync()
                 );
 
                 employee.Addresses.AddRange(
-                    DbContext.AddressDomainObj.Where(a => a.ParentEntityID == businessEntityID).ToList()
+                    await DbContext.AddressDomainObj
+                        .Where(a => a.ParentEntityID == businessEntityID)
+                        .ToListAsync()
                 );
             }
 

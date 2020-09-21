@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
@@ -17,17 +18,17 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOneEmployeePayHistoryRecord()
+        public async Task ShouldDeleteOneEmployeePayHistoryRecord()
         {
             var employeeID = 18;
             var rateChangeDate = "2008-01-31";
-            var payHistory = _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
+            var payHistory = await _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
 
             Assert.NotNull(payHistory);
 
             _payHistoryRepo.DeletePayHistory(payHistory);
 
-            payHistory = _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
+            payHistory = await _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
             Assert.Null(payHistory);
         }
     }

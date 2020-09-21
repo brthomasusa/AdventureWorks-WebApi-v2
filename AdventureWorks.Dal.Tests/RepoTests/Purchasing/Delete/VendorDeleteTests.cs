@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Dal.Tests.RepoTests.Base;
-using AdventureWorks.Models.CustomTypes;
-using AdventureWorks.Models.DomainModels;
-using PersonClass = AdventureWorks.Models.Person;
 using Xunit;
 
 namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Delete
@@ -22,24 +19,24 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Delete
         }
 
         [Fact]
-        public void ShouldDeleteOneVendorBySettingIsActiveToFalse()
+        public async Task ShouldDeleteOneVendorBySettingIsActiveToFalse()
         {
             int vendorID = 5;
-            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             Assert.True(vendorDomainObj.IsActive);
 
             _vendorRepo.DeleteVendor(vendorDomainObj);
 
-            var result = _vendorRepo.GetVendorByID(vendorID);
+            var result = await _vendorRepo.GetVendorByID(vendorID);
             Assert.False(vendorDomainObj.IsActive);
         }
 
 
         [Fact]
-        public void ShouldRaiseExceptionUnableToLocateVendorWithIDWhileDeleting()
+        public async Task ShouldRaiseExceptionUnableToLocateVendorWithIDWhileDeleting()
         {
             int vendorID = 5;
-            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             vendorDomainObj.BusinessEntityID = 500;
 
             Action testCode = () =>

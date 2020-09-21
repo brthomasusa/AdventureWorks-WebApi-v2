@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Base;
@@ -18,14 +20,17 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         public PayHistoryRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<EmployeePayHistory> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters)
+        public async Task<PagedList<EmployeePayHistory>> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters)
         {
             if (IsValidEmployeeID(employeeID))
             {
-                return PagedList<EmployeePayHistory>.ToPagedList(
-                    FindByCondition(hist => hist.BusinessEntityID == employeeID).OrderBy(ph => ph.RateChangeDate),
+                var pageList = await PagedList<EmployeePayHistory>.ToPagedList(
+                    FindByCondition(hist => hist.BusinessEntityID == employeeID)
+                        .OrderBy(ph => ph.RateChangeDate),
                     payHistoryParameters.PageNumber,
                     payHistoryParameters.PageSize);
+
+                return pageList;
             }
             else
             {
@@ -35,14 +40,16 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public EmployeePayHistory GetPayHistoryByID(int employeeID, DateTime rateChangeDate)
+        public async Task<EmployeePayHistory> GetPayHistoryByID(int employeeID, DateTime rateChangeDate)
         {
             if (IsValidEmployeeID(employeeID))
             {
-                return FindByCondition(hist =>
+                return await DbContext.EmployeePayHistory
+                    .Where(hist =>
                         hist.BusinessEntityID == employeeID &&
                         hist.RateChangeDate == rateChangeDate)
-                    .FirstOrDefault();
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
             }
             else
             {

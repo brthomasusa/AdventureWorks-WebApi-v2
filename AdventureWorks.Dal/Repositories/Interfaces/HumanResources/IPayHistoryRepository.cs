@@ -1,5 +1,5 @@
 using System;
-using AdventureWorks.Dal.Repositories.Base;
+using System.Threading.Tasks;
 using AdventureWorks.Models.HumanResources;
 using AdventureWorks.Models.Helpers;
 
@@ -7,9 +7,9 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 {
     public interface IPayHistoryRepository
     {
-        PagedList<EmployeePayHistory> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters);
+        Task<PagedList<EmployeePayHistory>> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters);
 
-        EmployeePayHistory GetPayHistoryByID(int employeeID, DateTime rateChangeDate);
+        Task<EmployeePayHistory> GetPayHistoryByID(int employeeID, DateTime rateChangeDate);
 
         void CreatePayHistory(EmployeePayHistory payHistory);
 

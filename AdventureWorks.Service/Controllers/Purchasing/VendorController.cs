@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
@@ -22,14 +23,14 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVendors([FromQuery] VendorParameters vendorParameters)
+        public async Task<IActionResult> GetAllVendors([FromQuery] VendorParameters vendorParameters)
         {
             if (vendorParameters.VendorStatus != null && !vendorParameters.IsValidVendorStatus)
             {
                 return BadRequest(new { message = "Valid vendor status codes are 'Active', 'Inactive', and 'All'." });
             }
 
-            var vendors = _repository.Vendor.GetVendors(vendorParameters);
+            var vendors = await _repository.Vendor.GetVendors(vendorParameters);
 
             var metadata = new
             {
@@ -51,8 +52,8 @@ namespace AdventureWorks.Service.Controllers
             => Ok(_repository.Vendor.GetVendorByID(id));
 
         [HttpGet("{id}/details")]
-        public IActionResult GetVendorByIdWithDetails(int id)
-            => Ok(_repository.Vendor.GetVendorWithDetails(id));
+        public async Task<IActionResult> GetVendorByIdWithDetails(int id)
+            => Ok(await _repository.Vendor.GetVendorWithDetails(id));
 
 
         [HttpPost]

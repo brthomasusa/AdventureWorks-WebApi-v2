@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -19,16 +20,16 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
         }
 
         [Fact]
-        public void ShouldUpdateOneDepartmentRecord()
+        public async Task ShouldUpdateOneDepartmentRecord()
         {
             var deptID = 12;
-            var dept = _deptRepo.GetDepartmentByID(deptID);
+            var dept = await _deptRepo.GetDepartmentByID(deptID);
             Assert.Equal("Sales and Marketing", dept.GroupName);
 
             dept.GroupName = "Sales and Marketing and More!";
             _deptRepo.UpdateDepartment(dept);
 
-            var result = _deptRepo.GetDepartmentByID(deptID);
+            var result = await _deptRepo.GetDepartmentByID(deptID);
             Assert.Equal(dept.GroupName, result.GroupName);
         }
     }

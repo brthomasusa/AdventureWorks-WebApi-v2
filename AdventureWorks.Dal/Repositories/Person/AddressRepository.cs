@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdventureWorks.Dal.EfCode;
 using AdventureWorks.Dal.Exceptions;
@@ -19,24 +20,25 @@ namespace AdventureWorks.Dal.Repositories.Person
         public AddressRepository(AdventureWorksContext context, ILoggerManager logger)
          : base(context, logger) { }
 
-        public PagedList<AddressDomainObj> GetAddresses(int entityID, AddressParameters addressParameters)
+        public async Task<PagedList<AddressDomainObj>> GetAddresses(int entityID, AddressParameters addressParameters)
         {
-            return PagedList<AddressDomainObj>.ToPagedList(
+            var pagedList = await PagedList<AddressDomainObj>.ToPagedList(
                 DbContext.AddressDomainObj
                     .Where(address => address.ParentEntityID == entityID)
                     .AsQueryable()
-                        .OrderBy(a => a.StateProvinceID)
-                        .ThenBy(a => a.City)
-                        .ThenBy(a => a.AddressLine1),
+                    .OrderBy(a => a.StateProvinceID)
+                    .ThenBy(a => a.City)
+                    .ThenBy(a => a.AddressLine1),
                 addressParameters.PageNumber,
                 addressParameters.PageSize);
+
+            return pagedList;
         }
 
-        public AddressDomainObj GetAddressByID(int addressID)
+        public async Task<AddressDomainObj> GetAddressByID(int addressID)
         {
-            return DbContext.AddressDomainObj.Where(address => address.AddressID == addressID)
-                .AsQueryable()
-                .FirstOrDefault();
+            return await DbContext.AddressDomainObj.Where(address => address.AddressID == addressID)
+                .FirstOrDefaultAsync();
         }
 
         public void CreateAddress(AddressDomainObj addressDomainObj)

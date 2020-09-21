@@ -1,5 +1,5 @@
 using System;
-using AdventureWorks.Models.DomainModels;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.Person;
@@ -19,37 +19,37 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldUpdateVendorAddressUsingAddressDomainObj()
+        public async Task ShouldUpdateVendorAddressUsingAddressDomainObj()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
             Assert.Null(addressdomainObj.AddressLine2);
 
             addressdomainObj.AddressLine2 = "Suite ZZZ";
             _addressRepo.UpdateAddress(addressdomainObj);
 
-            var result = _addressRepo.GetAddressByID(addressID);
+            var result = await _addressRepo.GetAddressByID(addressID);
             Assert.Equal("Suite ZZZ", result.AddressLine2);
         }
 
         [Fact]
-        public void ShouldUpdateVendorAddressAndRelatedBusinessEntityContact()
+        public async Task ShouldUpdateVendorAddressAndRelatedBusinessEntityContact()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
             addressdomainObj.AddressTypeID = 7;
 
             _addressRepo.UpdateAddress(addressdomainObj);
 
-            var result = _addressRepo.GetAddressByID(addressID);
+            var result = await _addressRepo.GetAddressByID(addressID);
             Assert.Equal(7, result.AddressTypeID);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionForDuplicateEntityAddress()
+        public async Task ShouldRaiseExceptionForDuplicateEntityAddress()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
 
             Assert.NotNull(addressdomainObj);
 
@@ -68,10 +68,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionWhileUpdatingAddressWithInvalidAddressID()
+        public async Task ShouldRaiseExceptionWhileUpdatingAddressWithInvalidAddressID()
         {
             var addressID = 6;
-            var addressDomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressDomainObj = await _addressRepo.GetAddressByID(addressID);
             addressDomainObj.AddressID = 99;
 
             Action testCode = () =>
@@ -84,10 +84,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionWhileUpdatingAddressWithInvalidAddressTypeID()
+        public async Task ShouldRaiseExceptionWhileUpdatingAddressWithInvalidAddressTypeID()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
 
             addressdomainObj.AddressTypeID = 632;
 
@@ -101,10 +101,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionWhileUpdatingAddressWithInvalidParentEntityID()
+        public async Task ShouldRaiseExceptionWhileUpdatingAddressWithInvalidParentEntityID()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
 
             addressdomainObj.ParentEntityID = 632;
 
@@ -118,10 +118,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionWhileUpdatingAddressWithInvalidStateID()
+        public async Task ShouldRaiseExceptionWhileUpdatingAddressWithInvalidStateID()
         {
             var addressID = 6;
-            var addressdomainObj = _addressRepo.GetAddressByID(addressID);
+            var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
 
             addressdomainObj.StateProvinceID = 632;
 

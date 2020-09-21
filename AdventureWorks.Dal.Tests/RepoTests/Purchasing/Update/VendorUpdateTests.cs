@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Purchasing;
@@ -22,24 +23,24 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
         }
 
         [Fact]
-        public void ShouldUpdateOneVendorViaVendorDomainObj()
+        public async Task ShouldUpdateOneVendorViaVendorDomainObj()
         {
             int vendorID = 5;
-            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal("Light Speed", vendorDomainObj.Name);
 
             vendorDomainObj.Name = "Dark Speed";
             _vendorRepo.UpdateVendor(vendorDomainObj);
 
-            var result = _vendorRepo.GetVendorByID(vendorID);
+            var result = await _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal("Dark Speed", result.Name);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionBecauseOfInvalidVendorID()
+        public async Task ShouldRaiseExceptionBecauseOfInvalidVendorID()
         {
             int vendorID = 5;
-            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             vendorDomainObj.BusinessEntityID = 500;
 
             Action testCode = () =>
@@ -52,10 +53,10 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateVendorAccountNumberWhileUpdating()
+        public async Task ShouldRaiseExceptionDuplicateVendorAccountNumberWhileUpdating()
         {
             int vendorID = 5;
-            var vendorDomainObj = _vendorRepo.GetVendorByID(vendorID);
+            var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal("LIGHTSP0001", vendorDomainObj.AccountNumber);
 
             vendorDomainObj.AccountNumber = "DFWBIRE0001";
