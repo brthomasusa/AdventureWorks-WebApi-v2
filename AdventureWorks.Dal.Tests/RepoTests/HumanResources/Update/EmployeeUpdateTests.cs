@@ -29,7 +29,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             employee.EmailAddress = "kennethadventure-works.com";
             employee.LoginID = "adventure-works\\kenneth";
 
-            _employeeRepo.UpdateEmployee(employee);
+            await _employeeRepo.UpdateEmployee(employee);
 
             var result = await _employeeRepo.GetEmployeeByID(employeeID);
 

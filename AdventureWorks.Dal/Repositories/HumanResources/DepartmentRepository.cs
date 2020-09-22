@@ -38,7 +38,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 .FirstOrDefaultAsync();
         }
 
-        public async void CreateDepartment(Department department)
+        public async Task CreateDepartment(Department department)
         {
             if (IsDuplicateDeptRecord(department))
             {
@@ -54,7 +54,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             department.DepartmentID = dept.DepartmentID;
         }
 
-        public async void UpdateDepartment(Department department)
+        public async Task UpdateDepartment(Department department)
         {
             if (IsDuplicateDeptRecord(department))
             {
@@ -79,7 +79,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             await Save();
         }
 
-        public async void DeleteDepartment(Department department)
+        public async Task DeleteDepartment(Department department)
         {
             var dept = await DbContext.Department
                 .Where(dept => dept.DepartmentID == department.DepartmentID)

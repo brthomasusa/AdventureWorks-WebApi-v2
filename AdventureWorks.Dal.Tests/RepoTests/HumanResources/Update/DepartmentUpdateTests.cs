@@ -27,7 +27,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             Assert.Equal("Sales and Marketing", dept.GroupName);
 
             dept.GroupName = "Sales and Marketing and More!";
-            _deptRepo.UpdateDepartment(dept);
+            await _deptRepo.UpdateDepartment(dept);
 
             var result = await _deptRepo.GetDepartmentByID(deptID);
             Assert.Equal(dept.GroupName, result.GroupName);

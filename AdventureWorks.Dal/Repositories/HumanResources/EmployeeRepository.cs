@@ -94,44 +94,52 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             return employee;
         }
 
-        public void CreateEmployee(EmployeeDomainObj employeeDomainObj)
+        public async Task CreateEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            ExecuteInATransaction(DoWork);
-
-            async void DoWork()
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var bizEntity = new BusinessEntity { };
-                DbContext.BusinessEntity.Add(bizEntity);
-                await Save();
-
-                employeeDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
-
-                var person = new AdventureWorks.Models.Person.Person { };
-                person.BusinessEntityID = bizEntity.BusinessEntityID;
-                person.Map(employeeDomainObj);
-                person.EmailAddressObj = new EmailAddress
+                try
                 {
-                    BusinessEntityID = bizEntity.BusinessEntityID,
-                    PersonEmailAddress = employeeDomainObj.EmailAddress
-                };
-                person.PasswordObj = new PersonPWord
+
+                    var bizEntity = new BusinessEntity { };
+                    DbContext.BusinessEntity.Add(bizEntity);
+                    await Save();
+
+                    employeeDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
+
+                    var person = new AdventureWorks.Models.Person.Person { };
+                    person.BusinessEntityID = bizEntity.BusinessEntityID;
+                    person.Map(employeeDomainObj);
+                    person.EmailAddressObj = new EmailAddress
+                    {
+                        BusinessEntityID = bizEntity.BusinessEntityID,
+                        PersonEmailAddress = employeeDomainObj.EmailAddress
+                    };
+                    person.PasswordObj = new PersonPWord
+                    {
+                        BusinessEntityID = bizEntity.BusinessEntityID,
+                        PasswordHash = employeeDomainObj.PasswordHash,
+                        PasswordSalt = employeeDomainObj.PasswordSalt
+                    };
+
+                    var employee = new Employee { };
+                    employee.Map(employeeDomainObj);
+                    employee.BusinessEntityID = bizEntity.BusinessEntityID;
+
+                    person.EmployeeObj = employee;
+                    DbContext.Person.Add(person);
+                    await Save();
+
+                    transaction.Commit();
+                }
+                catch (System.Exception ex)
                 {
-                    BusinessEntityID = bizEntity.BusinessEntityID,
-                    PasswordHash = employeeDomainObj.PasswordHash,
-                    PasswordSalt = employeeDomainObj.PasswordSalt
-                };
-
-                var employee = new Employee { };
-                employee.Map(employeeDomainObj);
-                employee.BusinessEntityID = bizEntity.BusinessEntityID;
-
-                person.EmployeeObj = employee;
-                DbContext.Person.Add(person);
-                await Save();
+                    RepoLogger.LogError($" {CLASSNAME}.CreateEmployee {ex.Message}");
+                }
             }
         }
 
-        public async void UpdateEmployee(EmployeeDomainObj employeeDomainObj)
+        public async Task UpdateEmployee(EmployeeDomainObj employeeDomainObj)
         {
             var person = await DbContext.Person
                 .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)
@@ -157,7 +165,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             await Save();
         }
 
-        public async void DeleteEmployee(EmployeeDomainObj employeeDomainObj)
+        public async Task DeleteEmployee(EmployeeDomainObj employeeDomainObj)
         {
             var person = await DbContext.Person
                 .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)

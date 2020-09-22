@@ -26,7 +26,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
             var dept = await _deptRepo.GetDepartmentByID(deptID);
             Assert.NotNull(dept);
 
-            _deptRepo.DeleteDepartment(dept);
+            await _deptRepo.DeleteDepartment(dept);
 
             var result = await _deptRepo.GetDepartmentByID(deptID);
             Assert.Null(result);

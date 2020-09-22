@@ -26,7 +26,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
 
             Assert.NotNull(payHistory);
 
-            _payHistoryRepo.DeletePayHistory(payHistory);
+            await _payHistoryRepo.DeletePayHistory(payHistory);
 
             payHistory = await _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
             Assert.Null(payHistory);

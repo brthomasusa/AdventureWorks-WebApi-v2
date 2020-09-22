@@ -23,7 +23,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
             var employee = await _employeeRepo.GetEmployeeByID(employeeID);
             Assert.True(employee.IsActive);
 
-            _employeeRepo.DeleteEmployee(employee);
+            await _employeeRepo.DeleteEmployee(employee);
 
             var result = await _employeeRepo.GetEmployeeByID(employeeID);
             Assert.False(result.IsActive);

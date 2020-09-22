@@ -13,10 +13,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         Task<EmployeeDomainObj> GetEmployeeByIDWithDetails(int businessEntityID);
 
-        void CreateEmployee(EmployeeDomainObj employeeDomainObj);
+        Task CreateEmployee(EmployeeDomainObj employeeDomainObj);
 
-        void UpdateEmployee(EmployeeDomainObj employeeDomainObj);
+        Task UpdateEmployee(EmployeeDomainObj employeeDomainObj);
 
-        void DeleteEmployee(EmployeeDomainObj employeeDomainObj);
+        Task DeleteEmployee(EmployeeDomainObj employeeDomainObj);
     }
 }

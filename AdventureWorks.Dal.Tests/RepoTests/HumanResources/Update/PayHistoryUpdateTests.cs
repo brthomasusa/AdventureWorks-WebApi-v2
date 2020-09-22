@@ -28,7 +28,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
 
             payHistory.Rate = 75.0000M;
 
-            _payHistoryRepo.UpdatePayHistory(payHistory);
+            await _payHistoryRepo.UpdatePayHistory(payHistory);
 
             var result = await _payHistoryRepo.GetPayHistoryByID(employeeID, DateTime.Parse(rateChangeDate));
             Assert.Equal(75.0000M, result.Rate);

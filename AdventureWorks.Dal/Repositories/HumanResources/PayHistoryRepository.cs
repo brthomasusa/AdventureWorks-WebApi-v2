@@ -22,7 +22,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task<PagedList<EmployeePayHistory>> GetPayHistories(int employeeID, PayHistoryParameters payHistoryParameters)
         {
-            if (IsValidEmployeeID(employeeID))
+            if (await IsValidEmployeeID(employeeID))
             {
                 var pageList = await PagedList<EmployeePayHistory>.ToPagedList(
                     FindByCondition(hist => hist.BusinessEntityID == employeeID)
@@ -42,7 +42,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task<EmployeePayHistory> GetPayHistoryByID(int employeeID, DateTime rateChangeDate)
         {
-            if (IsValidEmployeeID(employeeID))
+            if (await IsValidEmployeeID(employeeID))
             {
                 return await DbContext.EmployeePayHistory
                     .Where(hist =>
@@ -59,11 +59,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public async void CreatePayHistory(EmployeePayHistory payHistory)
+        public async Task CreatePayHistory(EmployeePayHistory payHistory)
         {
-            if (IsValidEmployeeID(payHistory.BusinessEntityID))
+            if (await IsValidEmployeeID(payHistory.BusinessEntityID))
             {
-                if (!IsExistingPayHistory(payHistory))
+                if (await IsExistingPayHistory(payHistory) == false)
                 {
                     var history = new EmployeePayHistory { };
                     history.Map(payHistory);

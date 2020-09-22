@@ -11,10 +11,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         Task<EmployeePayHistory> GetPayHistoryByID(int employeeID, DateTime rateChangeDate);
 
-        void CreatePayHistory(EmployeePayHistory payHistory);
+        Task CreatePayHistory(EmployeePayHistory payHistory);
 
-        void UpdatePayHistory(EmployeePayHistory payHistory);
+        Task UpdatePayHistory(EmployeePayHistory payHistory);
 
-        void DeletePayHistory(EmployeePayHistory payHistory);
+        Task DeletePayHistory(EmployeePayHistory payHistory);
     }
 }
