@@ -26,7 +26,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Delete
             DateTime startDate = new DateTime(2009, 1, 14);
             var deptHistory = await _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
 
-            _deptHistoryRepo.DeleteDepartmentHistory(deptHistory);
+            await _deptHistoryRepo.DeleteDepartmentHistory(deptHistory);
 
             var result = await _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
             Assert.Null(result);

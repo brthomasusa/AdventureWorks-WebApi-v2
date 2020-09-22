@@ -32,7 +32,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
                 IsActive = true
             };
 
-            _vendorRepo.CreateVendor(vendorDomainObj);
+            await _vendorRepo.CreateVendor(vendorDomainObj);
 
             var vendor = await _vendorRepo.GetVendorByID(vendorDomainObj.BusinessEntityID);
             Assert.NotNull(vendor);

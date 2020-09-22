@@ -29,7 +29,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
                 PhoneNumberTypeID = 2
             };
 
-            _phoneRepo.UpdatePhone(phone);
+            await _phoneRepo.UpdatePhone(phone);
 
             var result = await _phoneRepo.GetPhoneByID(phone.BusinessEntityID, phone.PhoneNumber, phone.PhoneNumberTypeID);
             Assert.Equal(phone.BusinessEntityID, result.BusinessEntityID);

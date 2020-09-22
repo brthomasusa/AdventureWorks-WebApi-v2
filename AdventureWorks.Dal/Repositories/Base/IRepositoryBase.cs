@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Linq.Expressions;
 
 namespace AdventureWorks.Dal.Repositories.Base
@@ -18,6 +19,6 @@ namespace AdventureWorks.Dal.Repositories.Base
 
         void ExecuteInATransaction(Action actionToExecute);
 
-        void Save();
+        Task Save();
     }
 }

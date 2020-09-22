@@ -59,7 +59,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public void CreatePayHistory(EmployeePayHistory payHistory)
+        public async void CreatePayHistory(EmployeePayHistory payHistory)
         {
             if (IsValidEmployeeID(payHistory.BusinessEntityID))
             {
@@ -68,7 +68,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                     var history = new EmployeePayHistory { };
                     history.Map(payHistory);
                     Create(history);
-                    Save();
+                    await Save();
                 }
                 else
                 {
@@ -85,12 +85,12 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public void UpdatePayHistory(EmployeePayHistory payHistory)
+        public async void UpdatePayHistory(EmployeePayHistory payHistory)
         {
-            var history = DbContext.EmployeePayHistory.Where(hist =>
+            var history = await DbContext.EmployeePayHistory.Where(hist =>
                    hist.BusinessEntityID == payHistory.BusinessEntityID &&
                    hist.RateChangeDate == payHistory.RateChangeDate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (history == null)
             {
@@ -101,15 +101,15 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
             history.Map(payHistory);
             Update(history);
-            Save();
+            await Save();
         }
 
-        public void DeletePayHistory(EmployeePayHistory payHistory)
+        public async void DeletePayHistory(EmployeePayHistory payHistory)
         {
-            var history = DbContext.EmployeePayHistory.Where(hist =>
+            var history = await DbContext.EmployeePayHistory.Where(hist =>
                 hist.BusinessEntityID == payHistory.BusinessEntityID &&
                 hist.RateChangeDate == payHistory.RateChangeDate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (history == null)
             {
@@ -119,7 +119,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
 
             Delete(history);
-            Save();
+            await Save();
         }
 
         private bool IsValidEmployeeID(int employeeID)

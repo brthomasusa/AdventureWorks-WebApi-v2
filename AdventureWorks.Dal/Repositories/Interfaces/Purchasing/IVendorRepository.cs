@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using AdventureWorks.Dal.Repositories.Base;
 using AdventureWorks.Models.DomainModels;
 using AdventureWorks.Models.Helpers;
 
@@ -13,10 +12,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Purchasing
 
         Task<VendorDomainObj> GetVendorWithDetails(int businessEntityID);
 
-        void CreateVendor(VendorDomainObj vendor);
+        Task CreateVendor(VendorDomainObj vendor);
 
-        void UpdateVendor(VendorDomainObj vendor);
+        Task UpdateVendor(VendorDomainObj vendor);
 
-        void DeleteVendor(VendorDomainObj vendor);
+        Task DeleteVendor(VendorDomainObj vendor);
     }
 }

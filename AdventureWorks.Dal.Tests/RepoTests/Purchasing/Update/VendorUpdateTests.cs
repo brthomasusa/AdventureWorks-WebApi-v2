@@ -30,7 +30,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
             Assert.Equal("Light Speed", vendorDomainObj.Name);
 
             vendorDomainObj.Name = "Dark Speed";
-            _vendorRepo.UpdateVendor(vendorDomainObj);
+            await _vendorRepo.UpdateVendor(vendorDomainObj);
 
             var result = await _vendorRepo.GetVendorByID(vendorID);
             Assert.Equal("Dark Speed", result.Name);

@@ -38,7 +38,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = 2
             };
 
-            _contactRepo.CreateContact(contact);
+            await _contactRepo.CreateContact(contact);
 
             var result = await _contactRepo.GetContactByID(contact.BusinessEntityID);
             Assert.NotNull(result);

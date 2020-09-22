@@ -24,7 +24,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
 
             Assert.NotNull(contact);
 
-            _contactRepo.DeleteContact(contact);
+            await _contactRepo.DeleteContact(contact);
 
             var result = await _contactRepo.GetContactByID(contactID);
             Assert.Null(result);

@@ -29,7 +29,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
             var phone = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             Assert.NotNull(phone);
 
-            _phoneRepo.DeletePhone(phone);
+            await _phoneRepo.DeletePhone(phone);
 
             var result = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             Assert.Null(result);

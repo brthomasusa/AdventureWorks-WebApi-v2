@@ -39,38 +39,38 @@ namespace AdventureWorks.Dal.Repositories.Person
             .FirstOrDefaultAsync();
         }
 
-        public void CreatePhone(PersonPhone telephone)
+        public async Task CreatePhone(PersonPhone telephone)
         {
-            DoDatabaseValidation(telephone, "CreatePhone");
+            await DoDatabaseValidation(telephone, "CreatePhone");
 
             var phone = new PersonPhone { };
             phone.Map(telephone);
             Create(phone);
-            Save();
+            await Save();
         }
 
-        public void UpdatePhone(PersonPhone telephone)
+        public async Task UpdatePhone(PersonPhone telephone)
         {
-            DoDatabaseValidation(telephone, "UpdatePhone");
+            await DoDatabaseValidation(telephone, "UpdatePhone");
 
             var phone = new PersonPhone { };
             phone.Map(telephone);
             Create(phone);
-            Save();
+            await Save();
         }
 
-        public void DeletePhone(PersonPhone telephone)
+        public async Task DeletePhone(PersonPhone telephone)
         {
-            if (IsExistingPhoneRecord(telephone))
+            if (await IsExistingPhoneRecord(telephone))
             {
-                var phone = DbContext.PersonPhone
+                var phone = await DbContext.PersonPhone
                     .Where(p => p.BusinessEntityID == telephone.BusinessEntityID &&
                                 p.PhoneNumber == telephone.PhoneNumber &&
                                 p.PhoneNumberTypeID == telephone.PhoneNumberTypeID)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 Delete(phone);
-                Save();
+                await Save();
             }
             else
             {
@@ -80,23 +80,24 @@ namespace AdventureWorks.Dal.Repositories.Person
             }
         }
 
-        private void DoDatabaseValidation(PersonPhone telephone, string operation)
+        private async Task DoDatabaseValidation(PersonPhone telephone, string operation)
         {
-            if (!IsValidPersonID(telephone.BusinessEntityID))
+            if (await IsValidPersonID(telephone.BusinessEntityID) == false)
             {
                 var msg = "Error: Unable to determine what person this phone number should be associated with.";
                 RepoLogger.LogError($"{CLASSNAME}.{operation} " + msg);
                 throw new AdventureWorksInvalidEntityIdException(msg);
             }
 
-            if (!IsValidPhoneNumberTypeID(telephone.PhoneNumberTypeID))
+
+            if (await IsValidPhoneNumberTypeID(telephone.PhoneNumberTypeID) == false)
             {
                 var msg = $"Error: The PhoneNumberTypeID '{telephone.PhoneNumberTypeID}' is not valid.";
                 RepoLogger.LogError($"{CLASSNAME}.{operation} " + msg);
                 throw new AdventureWorksInvalidPhoneTypeException(msg);
             }
 
-            if (IsExistingPhoneRecord(telephone))
+            if (await IsExistingPhoneRecord(telephone))
             {
                 var msg = "Error: This operation would result in a duplicate phone record.";
                 RepoLogger.LogError($"{CLASSNAME}.{operation} " + msg);
@@ -104,19 +105,19 @@ namespace AdventureWorks.Dal.Repositories.Person
             }
         }
 
-        private bool IsValidPersonID(int entityID)
+        private async Task<bool> IsValidPersonID(int entityID)
         {
-            return (DbContext.Person.Find(entityID) != null);
+            return await DbContext.Person.Where(p => p.BusinessEntityID == entityID).AnyAsync();
         }
 
-        public bool IsExistingPhoneRecord(PersonPhone telephone)
+        public async Task<bool> IsExistingPhoneRecord(PersonPhone telephone)
         {
-            return (GetPhoneByID(telephone.BusinessEntityID, telephone.PhoneNumber, telephone.PhoneNumberTypeID) != null);
+            return (await GetPhoneByID(telephone.BusinessEntityID, telephone.PhoneNumber, telephone.PhoneNumberTypeID) != null);
         }
 
-        public bool IsValidPhoneNumberTypeID(int phoneNumberTypeID)
+        public async Task<bool> IsValidPhoneNumberTypeID(int phoneNumberTypeID)
         {
-            return (DbContext.PhoneNumberType.Find(phoneNumberTypeID) != null);
+            return await DbContext.PhoneNumberType.Where(ph => ph.PhoneNumberTypeID == phoneNumberTypeID).AnyAsync();
         }
     }
 }

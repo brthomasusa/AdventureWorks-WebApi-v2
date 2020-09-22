@@ -48,7 +48,7 @@ namespace AdventureWorks.Dal.Repositories.Base
             DbContext.Set<T>().Remove(entity);
         }
 
-        public async void Save()
+        public async Task Save()
         {
             try
             {

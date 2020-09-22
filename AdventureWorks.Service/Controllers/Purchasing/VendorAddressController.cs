@@ -44,8 +44,8 @@ namespace AdventureWorks.Service.Controllers
 
 
         [HttpGet("address/{addressID}", Name = "GetVendorAddressByID")]
-        public IActionResult GetVendorContactByID(int addressID)
-            => Ok(_repository.Address.GetAddressByID(addressID));
+        public async Task<IActionResult> GetVendorContactByID(int addressID)
+            => Ok(await _repository.Address.GetAddressByID(addressID));
 
         [HttpPost("address")]
         public IActionResult CreateVendorAddress([FromBody] AddressDomainObj address)

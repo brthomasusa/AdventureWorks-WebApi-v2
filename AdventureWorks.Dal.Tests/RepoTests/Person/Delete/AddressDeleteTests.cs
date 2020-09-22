@@ -29,7 +29,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
 
             Assert.Equal(2, count);
 
-            _addressRepo.DeleteAddress(vendorAddressDomainObjs[0]);
+            await _addressRepo.DeleteAddress(vendorAddressDomainObjs[0]);
             vendorAddressDomainObjs = await _addressRepo.GetAddresses(vendorID, addressParams);
 
             Assert.Equal(count - 1, vendorAddressDomainObjs.Count);

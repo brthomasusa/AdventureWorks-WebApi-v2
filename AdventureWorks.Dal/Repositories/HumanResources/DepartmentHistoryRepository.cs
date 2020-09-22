@@ -22,7 +22,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task<PagedList<EmployeeDepartmentHistory>> GetDepartmentHistories(int employeeID, DepartmentHistoryParameters deptHistoryParameters)
         {
-            if (IsValidEmployeeID(employeeID))
+            if (await IsValidEmployeeID(employeeID))
             {
                 var pagedList = await PagedList<EmployeeDepartmentHistory>.ToPagedList(
                     DbContext.EmployeeDepartmentHistory
@@ -55,23 +55,23 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 .FirstOrDefaultAsync();
         }
 
-        public void CreateDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
+        public async Task CreateDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
         {
-            if (IsValidEmployeeID(departmentHistory.BusinessEntityID))
+            if (await IsValidEmployeeID(departmentHistory.BusinessEntityID))
             {
-                var existingRecord = DbContext.EmployeeDepartmentHistory.Where(hist =>
+                var existingRecord = await DbContext.EmployeeDepartmentHistory.Where(hist =>
                     hist.BusinessEntityID == departmentHistory.BusinessEntityID &&
                     hist.DepartmentID == departmentHistory.DepartmentID &&
                     hist.ShiftID == departmentHistory.ShiftID &&
                     hist.StartDate == departmentHistory.StartDate)
-                    .Any();
+                    .AnyAsync();
 
                 if (!existingRecord)
                 {
                     var deptHistory = new EmployeeDepartmentHistory { };
                     deptHistory.Map(departmentHistory);
                     Create(deptHistory);
-                    Save();
+                    await Save();
                 }
                 else
                 {
@@ -88,14 +88,14 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public void UpdateDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
+        public async Task UpdateDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
         {
-            var deptHistory = DbContext.EmployeeDepartmentHistory.Where(hist =>
+            var deptHistory = await DbContext.EmployeeDepartmentHistory.Where(hist =>
                    hist.BusinessEntityID == departmentHistory.BusinessEntityID &&
                    hist.DepartmentID == departmentHistory.DepartmentID &&
                    hist.ShiftID == departmentHistory.ShiftID &&
                    hist.StartDate == departmentHistory.StartDate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (deptHistory != null)
             {
@@ -103,7 +103,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 // therefore, only the EndDate field can be edited.
                 deptHistory.EndDate = departmentHistory.EndDate;
                 Update(deptHistory);
-                Save();
+                await Save();
             }
             else
             {
@@ -116,14 +116,14 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public void DeleteDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
+        public async Task DeleteDepartmentHistory(EmployeeDepartmentHistory departmentHistory)
         {
-            var deptHistory = DbContext.EmployeeDepartmentHistory.Where(hist =>
+            var deptHistory = await DbContext.EmployeeDepartmentHistory.Where(hist =>
                    hist.BusinessEntityID == departmentHistory.BusinessEntityID &&
                    hist.DepartmentID == departmentHistory.DepartmentID &&
                    hist.ShiftID == departmentHistory.ShiftID &&
                    hist.StartDate == departmentHistory.StartDate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (deptHistory == null)
             {
@@ -136,12 +136,12 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
 
             Delete(deptHistory);
-            Save();
+            await Save();
         }
 
-        private bool IsValidEmployeeID(int employeeID)
+        private async Task<bool> IsValidEmployeeID(int employeeID)
         {
-            return DbContext.Employee.Where(ee => ee.BusinessEntityID == employeeID).Any();
+            return await DbContext.Employee.Where(ee => ee.BusinessEntityID == employeeID).AnyAsync();
         }
     }
 }

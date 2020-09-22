@@ -38,7 +38,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 .FirstOrDefaultAsync();
         }
 
-        public void CreateDepartment(Department department)
+        public async void CreateDepartment(Department department)
         {
             if (IsDuplicateDeptRecord(department))
             {
@@ -50,11 +50,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             var dept = new Department { };
             dept.Map(department);
             Create(dept);
-            Save();
+            await Save();
             department.DepartmentID = dept.DepartmentID;
         }
 
-        public void UpdateDepartment(Department department)
+        public async void UpdateDepartment(Department department)
         {
             if (IsDuplicateDeptRecord(department))
             {
@@ -63,9 +63,9 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
                 throw new AdventureWorksUniqueIndexException(msg);
             }
 
-            var dept = DbContext.Department
+            var dept = await DbContext.Department
                 .Where(dept => dept.DepartmentID == department.DepartmentID)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (dept == null)
             {
@@ -76,14 +76,14 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
             dept.Map(department);
             Update(dept);
-            Save();
+            await Save();
         }
 
-        public void DeleteDepartment(Department department)
+        public async void DeleteDepartment(Department department)
         {
-            var dept = DbContext.Department
+            var dept = await DbContext.Department
                 .Where(dept => dept.DepartmentID == department.DepartmentID)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (dept == null)
             {
@@ -93,7 +93,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
 
             Delete(dept);
-            Save();
+            await Save();
         }
 
         private bool IsDuplicateDeptRecord(Department dept)

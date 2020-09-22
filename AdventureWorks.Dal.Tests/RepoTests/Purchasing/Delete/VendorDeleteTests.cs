@@ -25,7 +25,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Delete
             var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             Assert.True(vendorDomainObj.IsActive);
 
-            _vendorRepo.DeleteVendor(vendorDomainObj);
+            await _vendorRepo.DeleteVendor(vendorDomainObj);
 
             var result = await _vendorRepo.GetVendorByID(vendorID);
             Assert.False(vendorDomainObj.IsActive);

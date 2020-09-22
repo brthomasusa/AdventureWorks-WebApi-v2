@@ -42,8 +42,6 @@ namespace AdventureWorks.Dal.Repositories.Person
                 RepoLogger.LogError(CLASSNAME + ".GetContacts " + msg);
                 throw new AdventureWorksInvalidEntityIdException(msg);
             }
-
-
         }
 
         public async Task<ContactDomainObj> GetContactByID(int contactID)
@@ -55,7 +53,7 @@ namespace AdventureWorks.Dal.Repositories.Person
 
         public async Task<ContactDomainObj> GetContactByIDWithPhones(int contactID)
         {
-            if (DbContext.ContactDomainObj.Where(p => p.BusinessEntityID == contactID).Any())
+            if (await DbContext.ContactDomainObj.Where(p => p.BusinessEntityID == contactID).AnyAsync())
             {
                 var contact = await DbContext.ContactDomainObj
                     .Where(contact => contact.BusinessEntityID == contactID)
@@ -72,57 +70,66 @@ namespace AdventureWorks.Dal.Repositories.Person
             }
         }
 
-        public void CreateContact(ContactDomainObj contactDomainObj)
+        public async Task CreateContact(ContactDomainObj contactDomainObj)
         {
-            DoDatabaseValidation(contactDomainObj);
+            await DoDatabaseValidation(contactDomainObj);
 
-            ExecuteInATransaction(DoWork);
-
-            void DoWork()
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var bizEntity = new BusinessEntity { };
-                DbContext.BusinessEntity.Add(bizEntity);
-                Save();
-
-                contactDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
-                var contact = new AdventureWorks.Models.Person.Person { };
-                contact.Map(contactDomainObj);
-
-                contact.EmailAddressObj = new EmailAddress
+                try
                 {
-                    BusinessEntityID = bizEntity.BusinessEntityID,
-                    PersonEmailAddress = contactDomainObj.EmailAddress
-                };
 
-                contact.PasswordObj = new PersonPWord
+                    var bizEntity = new BusinessEntity { };
+                    DbContext.BusinessEntity.Add(bizEntity);
+                    await Save();
+
+                    contactDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
+                    var contact = new AdventureWorks.Models.Person.Person { };
+                    contact.Map(contactDomainObj);
+
+                    contact.EmailAddressObj = new EmailAddress
+                    {
+                        BusinessEntityID = bizEntity.BusinessEntityID,
+                        PersonEmailAddress = contactDomainObj.EmailAddress
+                    };
+
+                    contact.PasswordObj = new PersonPWord
+                    {
+                        PasswordHash = contactDomainObj.EmailPasswordHash,
+                        PasswordSalt = contactDomainObj.EmailPasswordSalt
+                    };
+
+                    DbContext.Person.Add(contact);
+                    await Save();
+
+                    var bec = new BusinessEntityContact
+                    {
+                        BusinessEntityID = contactDomainObj.ParentEntityID,
+                        PersonID = contact.BusinessEntityID,
+                        ContactTypeID = contactDomainObj.ContactTypeID
+                    };
+                    DbContext.BusinessEntityContact.Add(bec);
+                    await Save();
+
+                    transaction.Commit();
+
+                }
+                catch (System.Exception ex)
                 {
-                    PasswordHash = contactDomainObj.EmailPasswordHash,
-                    PasswordSalt = contactDomainObj.EmailPasswordSalt
-                };
-
-                DbContext.Person.Add(contact);
-                Save();
-
-                var bec = new BusinessEntityContact
-                {
-                    BusinessEntityID = contactDomainObj.ParentEntityID,
-                    PersonID = contact.BusinessEntityID,
-                    ContactTypeID = contactDomainObj.ContactTypeID
-                };
-                DbContext.BusinessEntityContact.Add(bec);
-                Save();
+                    RepoLogger.LogError($" {CLASSNAME}.CreateContact {ex.Message}");
+                }
             }
         }
 
-        public void UpdateContact(ContactDomainObj contactDomainObj)
+        public async Task UpdateContact(ContactDomainObj contactDomainObj)
         {
-            DoDatabaseValidation(contactDomainObj);
+            await DoDatabaseValidation(contactDomainObj);
 
-            var contact = DbContext.Person
+            var contact = await DbContext.Person
                 .Where(c => c.BusinessEntityID == contactDomainObj.BusinessEntityID)
                 .Include(c => c.EmailAddressObj)
                 .Include(c => c.PasswordObj)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (contact != null)
             {
@@ -131,7 +138,8 @@ namespace AdventureWorks.Dal.Repositories.Person
                 contact.PasswordObj.PasswordHash = contactDomainObj.EmailPasswordHash;
                 contact.PasswordObj.PasswordSalt = contactDomainObj.EmailPasswordSalt;
                 DbContext.Person.Update(contact);
-                Save();
+
+                await Save();
             }
             else
             {
@@ -139,67 +147,74 @@ namespace AdventureWorks.Dal.Repositories.Person
                 RepoLogger.LogError(CLASSNAME + ".UpdateContact " + msg);
                 throw new AdventureWorksNullEntityObjectException(msg);
             }
-
         }
 
-        public void DeleteContact(ContactDomainObj contactDomainObj)
+        public async Task DeleteContact(ContactDomainObj contactDomainObj)
         {
-            var checkExistence = GetContactByID(contactDomainObj.BusinessEntityID);
 
-            if (checkExistence == null)
+            if (await DbContext.Person.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).AnyAsync())
             {
                 string msg = $"Error: Delete failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".DeleteContact " + msg);
                 throw new AdventureWorksNullEntityObjectException(msg);
             }
 
-            ExecuteInATransaction(DoWork);
-
-            void DoWork()
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var pword = DbContext.Password.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
-                if (pword != null)
+                try
                 {
-                    DbContext.Password.Remove(pword);
-                    Save();
-                }
 
-                var email = DbContext.EmailAddress.Where(e => e.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
-                if (email != null)
+                    var pword = DbContext.Password.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
+                    if (pword != null)
+                    {
+                        DbContext.Password.Remove(pword);
+                        await Save();
+                    }
+
+                    var email = DbContext.EmailAddress.Where(e => e.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
+                    if (email != null)
+                    {
+                        DbContext.EmailAddress.Remove(email);
+                        await Save();
+                    }
+
+                    var phones = DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).ToList();
+                    if (phones != null)
+                    {
+                        DbContext.PersonPhone.RemoveRange(phones);
+                        await Save();
+                    }
+
+                    var bec = DbContext.BusinessEntityContact
+                        .Find(contactDomainObj.ParentEntityID, contactDomainObj.BusinessEntityID, contactDomainObj.ContactTypeID);
+
+                    if (bec != null)
+                    {
+                        DbContext.BusinessEntityContact.Remove(bec);
+                        await Save();
+                    }
+
+                    var contact = await DbContext.Person.FindAsync(contactDomainObj.BusinessEntityID);
+                    DbContext.Person.Remove(contact);
+                    await Save();
+
+                    var bizEntity = DbContext.BusinessEntity.Find(contactDomainObj.BusinessEntityID);
+                    DbContext.BusinessEntity.Remove(bizEntity);
+                    await Save();
+
+                    transaction.Commit();
+
+                }
+                catch (System.Exception ex)
                 {
-                    DbContext.EmailAddress.Remove(email);
-                    Save();
+                    RepoLogger.LogError($" {CLASSNAME}.DeleteContact {ex.Message}");
                 }
-
-                var phones = DbContext.PersonPhone.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).ToList();
-                if (phones != null)
-                {
-                    DbContext.PersonPhone.RemoveRange(phones);
-                    Save();
-                }
-
-                var bec = DbContext.BusinessEntityContact
-                    .Find(contactDomainObj.ParentEntityID, contactDomainObj.BusinessEntityID, contactDomainObj.ContactTypeID);
-
-                if (bec != null)
-                {
-                    DbContext.BusinessEntityContact.Remove(bec);
-                    Save();
-                }
-
-                var contact = DbContext.Person.Find(contactDomainObj.BusinessEntityID);
-                DbContext.Person.Remove(contact);
-                Save();
-
-                var bizEntity = DbContext.BusinessEntity.Find(contactDomainObj.BusinessEntityID);
-                DbContext.BusinessEntity.Remove(bizEntity);
-                Save();
             }
         }
 
-        private void DoDatabaseValidation(ContactDomainObj contactDomainObj)
+        private async Task DoDatabaseValidation(ContactDomainObj contactDomainObj)
         {
-            if (!IsValidContactTypeID(contactDomainObj.ContactTypeID))
+            if (await IsValidContactTypeID(contactDomainObj.ContactTypeID) == false)
             {
                 var msg = "Error: Invalid contact type detected.";
                 RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
@@ -220,9 +235,9 @@ namespace AdventureWorks.Dal.Repositories.Person
             }
         }
 
-        private bool IsValidContactTypeID(int contactTypeID)
+        private async Task<bool> IsValidContactTypeID(int contactTypeID)
         {
-            return DbContext.ContactType.Where(ct => ct.ContactTypeID == contactTypeID).Any();
+            return await DbContext.ContactType.Where(ct => ct.ContactTypeID == contactTypeID).AnyAsync();
         }
 
         private bool IsValidParentEntityID(int entityID, string personType)

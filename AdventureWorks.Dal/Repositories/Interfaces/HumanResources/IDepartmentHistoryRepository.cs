@@ -12,10 +12,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         Task<EmployeeDepartmentHistory> GetDepartmentHistoryByID(int employeeID, short deptID, byte shiftID, DateTime startDate);
 
-        void CreateDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
+        Task CreateDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
 
-        void UpdateDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
+        Task UpdateDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
 
-        void DeleteDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
+        Task DeleteDepartmentHistory(EmployeeDepartmentHistory departmentHistory);
     }
 }

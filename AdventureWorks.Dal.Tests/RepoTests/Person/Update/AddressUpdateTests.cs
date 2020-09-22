@@ -26,7 +26,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             Assert.Null(addressdomainObj.AddressLine2);
 
             addressdomainObj.AddressLine2 = "Suite ZZZ";
-            _addressRepo.UpdateAddress(addressdomainObj);
+            await _addressRepo.UpdateAddress(addressdomainObj);
 
             var result = await _addressRepo.GetAddressByID(addressID);
             Assert.Equal("Suite ZZZ", result.AddressLine2);
@@ -39,7 +39,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             var addressdomainObj = await _addressRepo.GetAddressByID(addressID);
             addressdomainObj.AddressTypeID = 7;
 
-            _addressRepo.UpdateAddress(addressdomainObj);
+            await _addressRepo.UpdateAddress(addressdomainObj);
 
             var result = await _addressRepo.GetAddressByID(addressID);
             Assert.Equal(7, result.AddressTypeID);

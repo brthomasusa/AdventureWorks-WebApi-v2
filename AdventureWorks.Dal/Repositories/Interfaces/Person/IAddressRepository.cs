@@ -11,10 +11,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 
         Task<AddressDomainObj> GetAddressByID(int addressID);
 
-        void CreateAddress(AddressDomainObj addressDomainObj);
+        Task CreateAddress(AddressDomainObj addressDomainObj);
 
-        void UpdateAddress(AddressDomainObj addressDomainObj);
+        Task UpdateAddress(AddressDomainObj addressDomainObj);
 
-        void DeleteAddress(AddressDomainObj addressDomainObj);
+        Task DeleteAddress(AddressDomainObj addressDomainObj);
     }
 }

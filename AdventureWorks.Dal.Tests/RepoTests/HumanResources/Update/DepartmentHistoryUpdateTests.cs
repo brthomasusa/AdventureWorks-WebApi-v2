@@ -29,7 +29,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             var endDate = new DateTime(2019, 1, 1);
             deptHistory.EndDate = endDate;
 
-            _deptHistoryRepo.UpdateDepartmentHistory(deptHistory);
+            await _deptHistoryRepo.UpdateDepartmentHistory(deptHistory);
 
             var result = await _deptHistoryRepo.GetDepartmentHistoryByID(employeeID, deptID, shiftID, startDate);
             Assert.Equal(endDate, result.EndDate);

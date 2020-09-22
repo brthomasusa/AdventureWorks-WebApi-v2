@@ -34,7 +34,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = vendorID
             };
 
-            _addressRepo.CreateAddress(addressDomainObj);
+            await _addressRepo.CreateAddress(addressDomainObj);
 
             var result = await _addressRepo.GetAddressByID(addressDomainObj.AddressID);
             Assert.Equal(addressDomainObj.AddressLine1, result.AddressLine1);

@@ -69,27 +69,35 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
             return vendor;
         }
 
-        public void CreateVendor(VendorDomainObj vendorDomainObj)
+        public async Task CreateVendor(VendorDomainObj vendorDomainObj)
         {
-            ExecuteInATransaction(DoWork);
-
-            void DoWork()
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var bizEntity = new BusinessEntity { };
-                DbContext.BusinessEntity.Add(bizEntity);
-                Save();
+                try
+                {
 
-                vendorDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
-                var vendor = new Vendor { };
-                vendor.Map(vendorDomainObj);
-                DbContext.Vendor.Add(vendor);
-                Save();
+                    var bizEntity = new BusinessEntity { };
+                    DbContext.BusinessEntity.Add(bizEntity);
+                    await Save();
+
+                    vendorDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
+                    var vendor = new Vendor { };
+                    vendor.Map(vendorDomainObj);
+                    DbContext.Vendor.Add(vendor);
+                    await Save();
+
+                    transaction.Commit();
+                }
+                catch (System.Exception ex)
+                {
+                    RepoLogger.LogError($" {CLASSNAME}.CreateVendor {ex.Message}");
+                }
             }
         }
 
-        public void UpdateVendor(VendorDomainObj vendorDomainObj)
+        public async Task UpdateVendor(VendorDomainObj vendorDomainObj)
         {
-            var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+            var vendor = await DbContext.Vendor.FindAsync(vendorDomainObj.BusinessEntityID);
 
             if (vendor == null)
             {
@@ -100,14 +108,14 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
             vendor.Map(vendorDomainObj);
             DbContext.Vendor.Update(vendor);
-            Save();
+            await Save();
         }
 
-        public void DeleteVendor(VendorDomainObj vendorDomainObj)
+        public async Task DeleteVendor(VendorDomainObj vendorDomainObj)
         {
             // There is a tsql trigger that prevents deletion of vendors!
             vendorDomainObj.IsActive = false;
-            var vendor = DbContext.Vendor.Find(vendorDomainObj.BusinessEntityID);
+            var vendor = await DbContext.Vendor.FindAsync(vendorDomainObj.BusinessEntityID);
 
             if (vendor == null)
             {
@@ -118,7 +126,7 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
             vendor.Map(vendorDomainObj);
             DbContext.Vendor.Update(vendor);
-            Save();
+            await Save();
         }
 
         private void SearchByName(ref IQueryable<VendorDomainObj> vendors, string vendorName)

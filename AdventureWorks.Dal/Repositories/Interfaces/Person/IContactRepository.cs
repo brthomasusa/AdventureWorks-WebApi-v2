@@ -12,10 +12,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 
         Task<ContactDomainObj> GetContactByIDWithPhones(int contactID);
 
-        void CreateContact(ContactDomainObj contactDomainObj);
+        Task CreateContact(ContactDomainObj contactDomainObj);
 
-        void UpdateContact(ContactDomainObj contactDomainObj);
+        Task UpdateContact(ContactDomainObj contactDomainObj);
 
-        void DeleteContact(ContactDomainObj contactDomainObj);
+        Task DeleteContact(ContactDomainObj contactDomainObj);
     }
 }

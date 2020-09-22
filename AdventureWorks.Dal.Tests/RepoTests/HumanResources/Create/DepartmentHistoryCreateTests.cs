@@ -30,7 +30,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 StartDate = new DateTime(2020, 8, 18)
             };
 
-            _deptHistoryRepo.CreateDepartmentHistory(deptHistory);
+            await _deptHistoryRepo.CreateDepartmentHistory(deptHistory);
 
             var result = await _deptHistoryRepo.GetDepartmentHistoryByID(deptHistory.BusinessEntityID, deptHistory.DepartmentID, deptHistory.ShiftID, deptHistory.StartDate);
             Assert.Equal(result.StartDate, new DateTime(2020, 8, 18));

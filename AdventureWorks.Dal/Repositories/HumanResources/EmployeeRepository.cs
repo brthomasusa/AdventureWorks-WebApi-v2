@@ -98,11 +98,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
         {
             ExecuteInATransaction(DoWork);
 
-            void DoWork()
+            async void DoWork()
             {
                 var bizEntity = new BusinessEntity { };
                 DbContext.BusinessEntity.Add(bizEntity);
-                Save();
+                await Save();
 
                 employeeDomainObj.BusinessEntityID = bizEntity.BusinessEntityID;
 
@@ -127,18 +127,18 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
                 person.EmployeeObj = employee;
                 DbContext.Person.Add(person);
-                Save();
+                await Save();
             }
         }
 
-        public void UpdateEmployee(EmployeeDomainObj employeeDomainObj)
+        public async void UpdateEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            var person = DbContext.Person
+            var person = await DbContext.Person
                 .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)
                 .Include(p => p.EmployeeObj)
                 .Include(p => p.EmailAddressObj)
                 .Include(p => p.PasswordObj)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (person == null)
             {
@@ -154,15 +154,15 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             person.PasswordObj.PasswordSalt = employeeDomainObj.PasswordSalt;
 
             DbContext.Person.Update(person);
-            Save();
+            await Save();
         }
 
-        public void DeleteEmployee(EmployeeDomainObj employeeDomainObj)
+        public async void DeleteEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            var person = DbContext.Person
+            var person = await DbContext.Person
                 .Where(p => p.BusinessEntityID == employeeDomainObj.BusinessEntityID)
                 .Include(p => p.EmployeeObj)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (person == null)
             {
@@ -174,7 +174,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             person.EmployeeObj.IsActive = false;
 
             DbContext.Person.Update(person);
-            Save();
+            await Save();
         }
 
         private void SearchByName(ref IQueryable<EmployeeDomainObj> employees, string firstName, string lastName)

@@ -31,7 +31,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             contact.Suffix = "Jr.";
             contact.EmailAddress = "j.w.dough@adventure-works.com";
 
-            _contactRepo.UpdateContact(contact);
+            await _contactRepo.UpdateContact(contact);
 
             var result = await _contactRepo.GetContactByID(contactID);
             Assert.Equal("Wayne", result.MiddleName);

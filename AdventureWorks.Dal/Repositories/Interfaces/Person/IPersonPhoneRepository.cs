@@ -12,10 +12,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.Person
 
         Task<PersonPhone> GetPhoneByID(int entityID, string phoneNumber, int phoneNumberTypeID);
 
-        void CreatePhone(PersonPhone telephone);
+        Task CreatePhone(PersonPhone telephone);
 
-        void UpdatePhone(PersonPhone telephone);
+        Task UpdatePhone(PersonPhone telephone);
 
-        void DeletePhone(PersonPhone telephone);
+        Task DeletePhone(PersonPhone telephone);
     }
 }

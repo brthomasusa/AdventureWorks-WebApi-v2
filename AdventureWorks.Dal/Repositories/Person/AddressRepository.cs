@@ -41,9 +41,9 @@ namespace AdventureWorks.Dal.Repositories.Person
                 .FirstOrDefaultAsync();
         }
 
-        public void CreateAddress(AddressDomainObj addressDomainObj)
+        public async Task CreateAddress(AddressDomainObj addressDomainObj)
         {
-            DoDatabaseValidation(addressDomainObj);
+            await DoDatabaseValidation(addressDomainObj);
 
             var address = new Address { };
             address.Map(addressDomainObj);
@@ -54,30 +54,30 @@ namespace AdventureWorks.Dal.Repositories.Person
             };
 
             DbContext.Address.Add(address);
-            Save();
+            await Save();
 
             addressDomainObj.AddressID = address.AddressID;
         }
 
-        public void UpdateAddress(AddressDomainObj addressDomainObj)
+        public async Task UpdateAddress(AddressDomainObj addressDomainObj)
         {
-            if (DbContext.Address.Find(addressDomainObj.AddressID) == null)
+            if (await DbContext.Address.FindAsync(addressDomainObj.AddressID) == null)
             {
                 string msg = $"Error: Update failed; unable to locate an address in the database with ID '{addressDomainObj.AddressID}'.";
                 RepoLogger.LogError(CLASSNAME + ".UpdateAddress " + msg);
                 throw new AdventureWorksNullEntityObjectException(msg);
             }
 
-            DoDatabaseValidation(addressDomainObj);
+            await DoDatabaseValidation(addressDomainObj);
 
             ExecuteInATransaction(DoWork);
 
-            void DoWork()
+            async void DoWork()
             {
-                var address = DbContext.Address
+                var address = await DbContext.Address
                     .Where(a => a.AddressID == addressDomainObj.AddressID)
                     .Include(a => a.BusinessEntityAddressObj)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 if (addressDomainObj.AddressTypeID != address.BusinessEntityAddressObj.AddressTypeID)
                 {
@@ -97,13 +97,13 @@ namespace AdventureWorks.Dal.Repositories.Person
                 address.Map(addressDomainObj);
                 DbContext.Address.Update(address);
 
-                Save();
+                await Save();
             }
         }
 
-        public void DeleteAddress(AddressDomainObj addressDomainObj)
+        public async Task DeleteAddress(AddressDomainObj addressDomainObj)
         {
-            if (DbContext.Address.Find(addressDomainObj.AddressID) == null)
+            if (await DbContext.Address.FindAsync(addressDomainObj.AddressID) == null)
             {
                 string msg = $"Error: Update failed; unable to locate an address in the database with ID '{addressDomainObj.AddressID}'.";
                 RepoLogger.LogError(CLASSNAME + ".DeleteAddress " + msg);
@@ -112,37 +112,37 @@ namespace AdventureWorks.Dal.Repositories.Person
 
             ExecuteInATransaction(DoWork);
 
-            void DoWork()
+            async void DoWork()
             {
-                var bea = DbContext.BusinessEntityAddress
-                    .Find(addressDomainObj.ParentEntityID, addressDomainObj.AddressID, addressDomainObj.AddressTypeID);
+                var bea = await DbContext.BusinessEntityAddress
+                    .FindAsync(addressDomainObj.ParentEntityID, addressDomainObj.AddressID, addressDomainObj.AddressTypeID);
 
                 DbContext.BusinessEntityAddress.Remove(bea);
-                Save();
+                await Save();
 
-                var address = DbContext.Address.Find(addressDomainObj.AddressID);
+                var address = await DbContext.Address.FindAsync(addressDomainObj.AddressID);
                 DbContext.Address.Remove(address);
-                Save();
+                await Save();
             }
         }
 
-        private void DoDatabaseValidation(AddressDomainObj addressDomainObj)
+        private async Task DoDatabaseValidation(AddressDomainObj addressDomainObj)
         {
-            if (!IsValidAddressTypeID(addressDomainObj.AddressTypeID))
+            if (await IsValidAddressTypeID(addressDomainObj.AddressTypeID) == false)
             {
                 var msg = "Error: Invalid address type detected.";
                 RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
                 throw new AdventureWorksInvalidAddressTypeException(msg);
             }
 
-            if (!IsValidParentEntityID(addressDomainObj.ParentEntityID))
+            if (await IsValidParentEntityID(addressDomainObj.ParentEntityID) == false)
             {
                 var msg = "Error: Unable to determine the entity that this address belongs to.";
                 RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
                 throw new AdventureWorksInvalidEntityIdException(msg);
             }
 
-            if (!IsValidStateProvinceID(addressDomainObj.StateProvinceID))
+            if (await IsValidStateProvinceID(addressDomainObj.StateProvinceID) == false)
             {
                 var msg = "Error: Invalid state/province ID detected.";
                 RepoLogger.LogError(CLASSNAME + ".DoDatabaseValidation " + msg);
@@ -150,19 +150,19 @@ namespace AdventureWorks.Dal.Repositories.Person
             }
         }
 
-        private bool IsValidAddressTypeID(int addressTypeID)
+        private async Task<bool> IsValidAddressTypeID(int addressTypeID)
         {
-            return DbContext.AddressType.Where(ct => ct.AddressTypeID == addressTypeID).Any();
+            return await DbContext.AddressType.Where(ct => ct.AddressTypeID == addressTypeID).AnyAsync();
         }
 
-        private bool IsValidParentEntityID(int entityID)
+        private async Task<bool> IsValidParentEntityID(int entityID)
         {
-            return DbContext.BusinessEntity.Where(v => v.BusinessEntityID == entityID).Any();
+            return await DbContext.BusinessEntity.Where(v => v.BusinessEntityID == entityID).AnyAsync();
         }
 
-        private bool IsValidStateProvinceID(int stateProvinceID)
+        private async Task<bool> IsValidStateProvinceID(int stateProvinceID)
         {
-            return DbContext.StateProvince.Where(s => s.StateProvinceID == stateProvinceID).Any();
+            return await DbContext.StateProvince.Where(s => s.StateProvinceID == stateProvinceID).AnyAsync();
         }
     }
 }
