@@ -12,10 +12,10 @@ namespace AdventureWorks.Dal.Repositories.Interfaces.HumanResources
 
         Task<Department> GetDepartmentByID(int departmentID);
 
-        void CreateDepartment(Department department);
+        Task CreateDepartment(Department department);
 
-        void UpdateDepartment(Department department);
+        Task UpdateDepartment(Department department);
 
-        void DeleteDepartment(Department department);
+        Task DeleteDepartment(Department department);
     }
 }

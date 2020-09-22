@@ -85,7 +85,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             }
         }
 
-        public async void UpdatePayHistory(EmployeePayHistory payHistory)
+        public async Task UpdatePayHistory(EmployeePayHistory payHistory)
         {
             var history = await DbContext.EmployeePayHistory.Where(hist =>
                    hist.BusinessEntityID == payHistory.BusinessEntityID &&
@@ -104,7 +104,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             await Save();
         }
 
-        public async void DeletePayHistory(EmployeePayHistory payHistory)
+        public async Task DeletePayHistory(EmployeePayHistory payHistory)
         {
             var history = await DbContext.EmployeePayHistory.Where(hist =>
                 hist.BusinessEntityID == payHistory.BusinessEntityID &&
@@ -122,15 +122,15 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             await Save();
         }
 
-        private bool IsValidEmployeeID(int employeeID)
+        private async Task<bool> IsValidEmployeeID(int employeeID)
         {
-            return DbContext.Employee.Where(ee => ee.BusinessEntityID == employeeID).Any();
+            return await DbContext.Employee.Where(ee => ee.BusinessEntityID == employeeID).AnyAsync();
         }
 
-        private bool IsExistingPayHistory(EmployeePayHistory payHistory)
+        private async Task<bool> IsExistingPayHistory(EmployeePayHistory payHistory)
         {
-            return DbContext.EmployeePayHistory
-                .Where(ph => ph.BusinessEntityID == payHistory.BusinessEntityID && ph.RateChangeDate == payHistory.RateChangeDate).Any();
+            return await DbContext.EmployeePayHistory
+                .Where(ph => ph.BusinessEntityID == payHistory.BusinessEntityID && ph.RateChangeDate == payHistory.RateChangeDate).AnyAsync();
         }
     }
 }
