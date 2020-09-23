@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -19,7 +19,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
         }
 
         [Fact]
-        public void ShouldCreateOneDepartmentRecord()
+        public async Task ShouldCreateOneDepartmentRecord()
         {
             var dept = new Department
             {
@@ -27,14 +27,14 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 GroupName = "Test Groupname"
             };
 
-            _deptRepo.CreateDepartment(dept);
+            await _deptRepo.CreateDepartment(dept);
 
             var result = _deptRepo.GetDepartmentByID(dept.DepartmentID);
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateDepartment()
+        public async Task ShouldRaiseExceptionDuplicateDepartment()
         {
             var dept = new Department
             {
@@ -42,13 +42,8 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 GroupName = "Executive General and Administration"
             };
 
-            Action testCode = () =>
-            {
-                _deptRepo.CreateDepartment(dept);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
-            Assert.Equal("Error: This operation would result in a duplicate HR department!", exception.Message);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _deptRepo.CreateDepartment(dept));
+            Assert.Equal("Error: Create department failed; there is already a department named 'Finance'.", exception.Message);
         }
     }
 }

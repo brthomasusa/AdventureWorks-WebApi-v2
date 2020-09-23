@@ -70,35 +70,39 @@ namespace AdventureWorks.Dal.Repositories.Person
 
             await DoDatabaseValidation(addressDomainObj);
 
-            ExecuteInATransaction(DoWork);
-
-            async void DoWork()
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                var address = await DbContext.Address
-                    .Where(a => a.AddressID == addressDomainObj.AddressID)
-                    .Include(a => a.BusinessEntityAddressObj)
-                    .FirstOrDefaultAsync();
-
-                if (addressDomainObj.AddressTypeID != address.BusinessEntityAddressObj.AddressTypeID)
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-                    // AddressTypeID is part of the primary key; it can't be edited. Delete
-                    // BusinessEntity record and insert new one with the updated AddressTypeID
-                    DbContext.BusinessEntityAddress.Remove(address.BusinessEntityAddressObj);
-                    DbContext.BusinessEntityAddress.Add(
-                        new BusinessEntityAddress
-                        {
-                            BusinessEntityID = addressDomainObj.ParentEntityID,
-                            AddressID = addressDomainObj.AddressID,
-                            AddressTypeID = addressDomainObj.AddressTypeID
-                        }
-                    );
+                    var address = await DbContext.Address
+                        .Where(a => a.AddressID == addressDomainObj.AddressID)
+                        .Include(a => a.BusinessEntityAddressObj)
+                        .FirstOrDefaultAsync();
+
+                    if (addressDomainObj.AddressTypeID != address.BusinessEntityAddressObj.AddressTypeID)
+                    {
+                        // AddressTypeID is part of the primary key; it can't be edited. Delete
+                        // BusinessEntity record and insert new one with the updated AddressTypeID
+                        DbContext.BusinessEntityAddress.Remove(address.BusinessEntityAddressObj);
+                        DbContext.BusinessEntityAddress.Add(
+                            new BusinessEntityAddress
+                            {
+                                BusinessEntityID = addressDomainObj.ParentEntityID,
+                                AddressID = addressDomainObj.AddressID,
+                                AddressTypeID = addressDomainObj.AddressTypeID
+                            }
+                        );
+                    }
+
+                    address.Map(addressDomainObj);
+                    DbContext.Address.Update(address);
+
+                    await Save();
+
+                    transaction.Commit();
                 }
-
-                address.Map(addressDomainObj);
-                DbContext.Address.Update(address);
-
-                await Save();
-            }
+            });
         }
 
         public async Task DeleteAddress(AddressDomainObj addressDomainObj)
@@ -110,20 +114,24 @@ namespace AdventureWorks.Dal.Repositories.Person
                 throw new AdventureWorksNullEntityObjectException(msg);
             }
 
-            ExecuteInATransaction(DoWork);
-
-            async void DoWork()
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                var bea = await DbContext.BusinessEntityAddress
-                    .FindAsync(addressDomainObj.ParentEntityID, addressDomainObj.AddressID, addressDomainObj.AddressTypeID);
+                using (var transaction = DbContext.Database.BeginTransaction())
+                {
+                    var bea = await DbContext.BusinessEntityAddress
+                        .FindAsync(addressDomainObj.ParentEntityID, addressDomainObj.AddressID, addressDomainObj.AddressTypeID);
 
-                DbContext.BusinessEntityAddress.Remove(bea);
-                await Save();
+                    DbContext.BusinessEntityAddress.Remove(bea);
+                    await Save();
 
-                var address = await DbContext.Address.FindAsync(addressDomainObj.AddressID);
-                DbContext.Address.Remove(address);
-                await Save();
-            }
+                    var address = await DbContext.Address.FindAsync(addressDomainObj.AddressID);
+                    DbContext.Address.Remove(address);
+                    await Save();
+
+                    transaction.Commit();
+                }
+            });
         }
 
         private async Task DoDatabaseValidation(AddressDomainObj addressDomainObj)

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -20,7 +21,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
         }
 
         [Fact]
-        public void ShouldCreateEmployeePayHistoryRecord()
+        public async Task ShouldCreateEmployeePayHistoryRecord()
         {
             var payHistory = new EmployeePayHistory
             {
@@ -30,14 +31,14 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 PayFrequency = PayFrequency.Biweekly
             };
 
-            _payHistoryRepo.CreatePayHistory(payHistory);
+            await _payHistoryRepo.CreatePayHistory(payHistory);
 
-            var result = _payHistoryRepo.GetPayHistoryByID(payHistory.BusinessEntityID, payHistory.RateChangeDate);
+            var result = await _payHistoryRepo.GetPayHistoryByID(payHistory.BusinessEntityID, payHistory.RateChangeDate);
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeePayHistory()
+        public async Task ShouldRaiseExceptionDuplicateEmployeePayHistory()
         {
             var payHistory = new EmployeePayHistory
             {
@@ -47,12 +48,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 PayFrequency = PayFrequency.Biweekly
             };
 
-            Action testCode = () =>
-            {
-                _payHistoryRepo.CreatePayHistory(payHistory);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _payHistoryRepo.CreatePayHistory(payHistory));
             Assert.Equal("Error: This operation would result in a duplicate employee pay history record.", exception.Message);
         }
     }

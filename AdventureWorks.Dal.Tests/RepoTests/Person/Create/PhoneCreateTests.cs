@@ -38,7 +38,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicatePhoneRecord()
+        public async Task ShouldRaiseExceptionDuplicatePhoneRecord()
         {
             var phone = new PersonPhone
             {
@@ -47,17 +47,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 PhoneNumberTypeID = 3
             };
 
-            Action testCode = () =>
-            {
-                _phoneRepo.CreatePhone(phone);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _phoneRepo.CreatePhone(phone));
             Assert.Equal("Error: This operation would result in a duplicate phone record.", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionInvalidBusinessEntityID()
+        public async Task ShouldRaiseExceptionInvalidBusinessEntityID()
         {
             var phone = new PersonPhone
             {
@@ -66,17 +61,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 PhoneNumberTypeID = 3
             };
 
-            Action testCode = () =>
-            {
-                _phoneRepo.CreatePhone(phone);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidEntityIdException>(() => _phoneRepo.CreatePhone(phone));
             Assert.Equal("Error: Unable to determine what person this phone number should be associated with.", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionInvalidPhoneNumberTypeID()
+        public async Task ShouldRaiseExceptionInvalidPhoneNumberTypeID()
         {
             var phone = new PersonPhone
             {
@@ -85,12 +75,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 PhoneNumberTypeID = 73
             };
 
-            Action testCode = () =>
-            {
-                _phoneRepo.CreatePhone(phone);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidPhoneTypeException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidPhoneTypeException>(() => _phoneRepo.CreatePhone(phone));
             Assert.Equal("Error: The PhoneNumberTypeID '73' is not valid.", exception.Message);
         }
     }

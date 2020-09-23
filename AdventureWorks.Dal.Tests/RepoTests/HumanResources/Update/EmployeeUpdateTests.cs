@@ -46,12 +46,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             var employee = await _employeeRepo.GetEmployeeByID(employeeID);
             employee.LoginID = "adventure-works\\terri0";
 
-            Action testCode = () =>
-            {
-                _employeeRepo.UpdateEmployee(employee);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _employeeRepo.UpdateEmployee(employee));
             Assert.Equal("Error: This operation would result in a duplicate employee login!", exception.Message);
         }
 
@@ -62,12 +57,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Update
             var employee = await _employeeRepo.GetEmployeeByID(employeeID);
             employee.NationalIDNumber = "245797967";
 
-            Action testCode = () =>
-            {
-                _employeeRepo.UpdateEmployee(employee);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _employeeRepo.UpdateEmployee(employee));
             Assert.Equal("Error: This operation would result in a duplicate employee national ID number!", exception.Message);
         }
     }

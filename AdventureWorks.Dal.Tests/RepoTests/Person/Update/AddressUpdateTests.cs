@@ -58,12 +58,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             addressdomainObj.StateProvinceID = 79;
             addressdomainObj.PostalCode = "98004";
 
-            Action testCode = () =>
-            {
-                _addressRepo.UpdateAddress(addressdomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _addressRepo.UpdateAddress(addressdomainObj));
             Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
         }
 
@@ -74,12 +69,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             var addressDomainObj = await _addressRepo.GetAddressByID(addressID);
             addressDomainObj.AddressID = 99;
 
-            Action testCode = () =>
-            {
-                _addressRepo.UpdateAddress(addressDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksNullEntityObjectException>(() => _addressRepo.UpdateAddress(addressDomainObj));
             Assert.Equal("Error: Update failed; unable to locate an address in the database with ID '99'.", exception.Message);
         }
 
@@ -91,12 +81,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
             addressdomainObj.AddressTypeID = 632;
 
-            Action testCode = () =>
-            {
-                _addressRepo.UpdateAddress(addressdomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidAddressTypeException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidAddressTypeException>(() => _addressRepo.UpdateAddress(addressdomainObj));
             Assert.Equal("Error: Invalid address type detected.", exception.Message);
         }
 
@@ -108,12 +93,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
             addressdomainObj.ParentEntityID = 632;
 
-            Action testCode = () =>
-            {
-                _addressRepo.UpdateAddress(addressdomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidEntityIdException>(() => _addressRepo.UpdateAddress(addressdomainObj));
             Assert.Equal("Error: Unable to determine the entity that this address belongs to.", exception.Message);
         }
 
@@ -125,12 +105,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
 
             addressdomainObj.StateProvinceID = 632;
 
-            Action testCode = () =>
-            {
-                _addressRepo.UpdateAddress(addressdomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidStateProvinceIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidStateProvinceIdException>(() => _addressRepo.UpdateAddress(addressdomainObj));
             Assert.Equal("Error: Invalid state/province ID detected.", exception.Message);
         }
     }

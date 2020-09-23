@@ -43,12 +43,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
             var vendorDomainObj = await _vendorRepo.GetVendorByID(vendorID);
             vendorDomainObj.BusinessEntityID = 500;
 
-            Action testCode = () =>
-            {
-                _vendorRepo.UpdateVendor(vendorDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksNullEntityObjectException>(() => _vendorRepo.UpdateVendor(vendorDomainObj));
             Assert.Equal("Error: Update failed; unable to locate a vendor in the database with ID '500'.", exception.Message);
         }
 
@@ -61,12 +56,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Update
 
             vendorDomainObj.AccountNumber = "DFWBIRE0001";
 
-            Action testCode = () =>
-            {
-                _vendorRepo.UpdateVendor(vendorDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _vendorRepo.UpdateVendor(vendorDomainObj));
             Assert.Equal("Error: This operation would result in a duplicate vendor account number!", exception.Message);
         }
     }

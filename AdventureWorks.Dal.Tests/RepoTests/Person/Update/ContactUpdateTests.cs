@@ -46,12 +46,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             var contact = await _contactRepo.GetContactByID(contactID);
             contact.ParentEntityID = 567;
 
-            Action testCode = () =>
-            {
-                _contactRepo.UpdateContact(contact);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidEntityIdException>(() => _contactRepo.UpdateContact(contact));
             Assert.Equal("Error: Unable to determine the vendor that this contact is to be assigned to.", exception.Message);
         }
 
@@ -62,12 +57,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Update
             var contact = await _contactRepo.GetContactByID(contactID);
             contact.ContactTypeID = 171;
 
-            Action testCode = () =>
-            {
-                _contactRepo.UpdateContact(contact);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidContactTypeException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidContactTypeException>(() => _contactRepo.UpdateContact(contact));
             Assert.Equal("Error: Invalid contact type detected.", exception.Message);
         }
     }

@@ -46,7 +46,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionContactDomainObjWithInvalidParentEntityID()
+        public async Task ShouldRaiseExceptionContactDomainObjWithInvalidParentEntityID()
         {
             var contact = new ContactDomainObj
             {
@@ -63,17 +63,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = 42
             };
 
-            Action testCode = () =>
-            {
-                _contactRepo.CreateContact(contact);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidEntityIdException>(() => _contactRepo.CreateContact(contact));
             Assert.Equal("Error: Unable to determine the vendor that this contact is to be assigned to.", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionContactDomainObjWithInvalidContactType()
+        public async Task ShouldRaiseExceptionContactDomainObjWithInvalidContactType()
         {
             var contact = new ContactDomainObj
             {
@@ -90,12 +85,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = 2
             };
 
-            Action testCode = () =>
-            {
-                _contactRepo.CreateContact(contact);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidContactTypeException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidContactTypeException>(() => _contactRepo.CreateContact(contact));
             Assert.Equal("Error: Invalid contact type detected.", exception.Message);
         }
     }

@@ -37,7 +37,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeeDepartmentHistory()
+        public async Task ShouldRaiseExceptionDuplicateEmployeeDepartmentHistory()
         {
             var deptHistory = new EmployeeDepartmentHistory
             {
@@ -48,12 +48,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 EndDate = new DateTime(2009, 1, 15)
             };
 
-            Action testCode = () =>
-            {
-                _deptHistoryRepo.CreateDepartmentHistory(deptHistory);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _deptHistoryRepo.CreateDepartmentHistory(deptHistory));
             Assert.Equal("Error: This operation would result in a duplicate employee department history record.", exception.Message);
         }
     }

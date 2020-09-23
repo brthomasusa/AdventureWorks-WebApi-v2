@@ -36,18 +36,13 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
         }
 
         [Fact]
-        public async Task ShouldRaiseExceptionWhileDeletingAddressWithInvalidAddressID()
+        public async Task ShouldRaiseExceptionAtemptingToDeleteAddressUsingInvalidAddressID()
         {
             var addressID = 6;
             var addressDomainObj = await _addressRepo.GetAddressByID(addressID);
             addressDomainObj.AddressID = 99;
 
-            Action testCode = () =>
-            {
-                _addressRepo.DeleteAddress(addressDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksNullEntityObjectException>(() => _addressRepo.DeleteAddress(addressDomainObj));
             Assert.Equal("Error: Update failed; unable to locate an address in the database with ID '99'.", exception.Message);
         }
     }

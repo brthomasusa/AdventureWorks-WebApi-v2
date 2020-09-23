@@ -44,7 +44,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateAddressInAddressDomainObj()
+        public async Task ShouldRaiseExceptionDuplicateAddressInAddressDomainObj()
         {
             var vendorID = 4;
             var addressDomainObj = new AddressDomainObj
@@ -57,17 +57,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = vendorID
             };
 
-            Action testCode = () =>
-            {
-                _addressRepo.CreateAddress(addressDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _addressRepo.CreateAddress(addressDomainObj));
             Assert.Equal("Error: There is an existing entity with this address!", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionAddressDomainObjWithInvalidParentEntityID()
+        public async Task ShouldRaiseExceptionAddressDomainObjWithInvalidParentEntityID()
         {
             var vendorID = 4333;
             var addressDomainObj = new AddressDomainObj
@@ -81,17 +76,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = vendorID
             };
 
-            Action testCode = () =>
-            {
-                _addressRepo.CreateAddress(addressDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidEntityIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidEntityIdException>(() => _addressRepo.CreateAddress(addressDomainObj));
             Assert.Equal("Error: Unable to determine the entity that this address belongs to.", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionAddressDomainObjWithInvalidAddressType()
+        public async Task ShouldRaiseExceptionAddressDomainObjWithInvalidAddressType()
         {
             var vendorID = 4;
             var addressDomainObj = new AddressDomainObj
@@ -105,12 +95,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
                 ParentEntityID = vendorID
             };
 
-            Action testCode = () =>
-            {
-                _addressRepo.CreateAddress(addressDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidAddressTypeException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidAddressTypeException>(() => _addressRepo.CreateAddress(addressDomainObj));
             Assert.Equal("Error: Invalid address type detected.", exception.Message);
         }
 
@@ -122,12 +107,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Create
 
             addressdomainObj.StateProvinceID = 632;
 
-            Action testCode = () =>
-            {
-                _addressRepo.CreateAddress(addressdomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksInvalidStateProvinceIdException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksInvalidStateProvinceIdException>(() => _addressRepo.CreateAddress(addressdomainObj));
             Assert.Equal("Error: Invalid state/province ID detected.", exception.Message);
         }
     }

@@ -74,9 +74,10 @@ namespace AdventureWorks.Dal.Repositories.Person
         {
             await DoDatabaseValidation(contactDomainObj);
 
-            using (var transaction = DbContext.Database.BeginTransaction())
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                try
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
 
                     var bizEntity = new BusinessEntity { };
@@ -110,15 +111,9 @@ namespace AdventureWorks.Dal.Repositories.Person
                     };
                     DbContext.BusinessEntityContact.Add(bec);
                     await Save();
-
                     transaction.Commit();
-
                 }
-                catch (System.Exception ex)
-                {
-                    RepoLogger.LogError($" {CLASSNAME}.CreateContact {ex.Message}");
-                }
-            }
+            });
         }
 
         public async Task UpdateContact(ContactDomainObj contactDomainObj)
@@ -152,18 +147,18 @@ namespace AdventureWorks.Dal.Repositories.Person
         public async Task DeleteContact(ContactDomainObj contactDomainObj)
         {
 
-            if (await DbContext.Person.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).AnyAsync())
+            if (await DbContext.Person.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).AnyAsync() == false)
             {
                 string msg = $"Error: Delete failed; unable to locate a contact in the database with ID '{contactDomainObj.BusinessEntityID}'.";
                 RepoLogger.LogError(CLASSNAME + ".DeleteContact " + msg);
                 throw new AdventureWorksNullEntityObjectException(msg);
             }
 
-            using (var transaction = DbContext.Database.BeginTransaction())
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                try
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-
                     var pword = DbContext.Password.Where(p => p.BusinessEntityID == contactDomainObj.BusinessEntityID).FirstOrDefault();
                     if (pword != null)
                     {
@@ -203,13 +198,8 @@ namespace AdventureWorks.Dal.Repositories.Person
                     await Save();
 
                     transaction.Commit();
-
                 }
-                catch (System.Exception ex)
-                {
-                    RepoLogger.LogError($" {CLASSNAME}.DeleteContact {ex.Message}");
-                }
-            }
+            });
         }
 
         private async Task DoDatabaseValidation(ContactDomainObj contactDomainObj)

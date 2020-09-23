@@ -5,7 +5,7 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": ".NET Core Launch (console) Dal.Test",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -17,6 +17,32 @@
             "console": "internalConsole",
             "stopAtEntry": false
         },
+        {
+            "name": ".NET Core Launch (console) Service.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/AdventureWorks.Service.Tests/bin/Debug/netcoreapp2.1/AdventureWorks.Service.Tests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AdventureWorks.Service.Tests",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Launch (console) Service",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/AdventureWorks.Service/bin/Debug/netcoreapp2.1/AdventureWorks.Service.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AdventureWorks.Service",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },                
         {
             "name": ".NET Core Attach",
             "type": "coreclr",

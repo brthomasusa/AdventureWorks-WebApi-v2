@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AdventureWorks.Dal.Exceptions;
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.HumanResources;
@@ -20,7 +21,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
         }
 
         [Fact]
-        public void ShouldCreatePersonAndEmployeeFromAEmployeeDomainObj()
+        public async Task ShouldCreatePersonAndEmployeeFromAEmployeeDomainObj()
         {
             var employeeDomainObj = new EmployeeDomainObj
             {
@@ -47,14 +48,14 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 IsActive = true
             };
 
-            _employeeRepo.CreateEmployee(employeeDomainObj);
+            await _employeeRepo.CreateEmployee(employeeDomainObj);
 
-            var result = _employeeRepo.GetEmployeeByID(employeeDomainObj.BusinessEntityID);
+            var result = await _employeeRepo.GetEmployeeByID(employeeDomainObj.BusinessEntityID);
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeeLogin()
+        public async Task ShouldRaiseExceptionCreateEmployeeDuplicateLogin()
         {
             var employeeDomainObj = new EmployeeDomainObj
             {
@@ -81,17 +82,12 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 IsActive = true
             };
 
-            Action testCode = () =>
-            {
-                _employeeRepo.CreateEmployee(employeeDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _employeeRepo.CreateEmployee(employeeDomainObj));
             Assert.Equal("Error: This operation would result in a duplicate employee login!", exception.Message);
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateEmployeeNationalIDNumber()
+        public async Task ShouldRaiseExceptionCreateEmployeeDuplicateNationalIDNumber()
         {
             var employeeDomainObj = new EmployeeDomainObj
             {
@@ -118,12 +114,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.HumanResources.Create
                 IsActive = true
             };
 
-            Action testCode = () =>
-            {
-                _employeeRepo.CreateEmployee(employeeDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _employeeRepo.CreateEmployee(employeeDomainObj));
             Assert.Equal("Error: This operation would result in a duplicate employee national ID number!", exception.Message);
         }
     }

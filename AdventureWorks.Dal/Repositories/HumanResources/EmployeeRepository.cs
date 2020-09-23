@@ -96,11 +96,11 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task CreateEmployee(EmployeeDomainObj employeeDomainObj)
         {
-            using (var transaction = DbContext.Database.BeginTransaction())
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                try
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-
                     var bizEntity = new BusinessEntity { };
                     DbContext.BusinessEntity.Add(bizEntity);
                     await Save();
@@ -132,11 +132,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
                     transaction.Commit();
                 }
-                catch (System.Exception ex)
-                {
-                    RepoLogger.LogError($" {CLASSNAME}.CreateEmployee {ex.Message}");
-                }
-            }
+            });
         }
 
         public async Task UpdateEmployee(EmployeeDomainObj employeeDomainObj)

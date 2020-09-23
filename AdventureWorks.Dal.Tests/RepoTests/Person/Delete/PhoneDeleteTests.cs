@@ -45,12 +45,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Person.Delete
             var phone = await _phoneRepo.GetPhoneByID(entityID, phoneNumber, phoneTypeID);
             phone.BusinessEntityID = 300;
 
-            Action testCode = () =>
-            {
-                _phoneRepo.DeletePhone(phone);
-            };
-
-            var exception = Assert.Throws<AdventureWorksNullEntityObjectException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksNullEntityObjectException>(() => _phoneRepo.DeletePhone(phone));
             Assert.Equal("The phone record with ID: 300, number: 273-555-0100, and type: 1 could not be located in the database.", exception.Message);
         }
     }

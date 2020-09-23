@@ -40,7 +40,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
         }
 
         [Fact]
-        public void ShouldRaiseExceptionDuplicateVendorAccountNumberWhileCreating()
+        public async Task ShouldRaiseExceptionDuplicateVendorAccountNumberWhileCreating()
         {
             var vendorDomainObj = new VendorDomainObj
             {
@@ -51,12 +51,7 @@ namespace AdventureWorks.Dal.Tests.RepoTests.Purchasing.Create
                 IsActive = true
             };
 
-            Action testCode = () =>
-            {
-                _vendorRepo.CreateVendor(vendorDomainObj);
-            };
-
-            var exception = Assert.Throws<AdventureWorksUniqueIndexException>(testCode);
+            var exception = await Assert.ThrowsAsync<AdventureWorksUniqueIndexException>(() => _vendorRepo.CreateVendor(vendorDomainObj));
             Assert.Equal("Error: This operation would result in a duplicate vendor account number!", exception.Message);
         }
     }

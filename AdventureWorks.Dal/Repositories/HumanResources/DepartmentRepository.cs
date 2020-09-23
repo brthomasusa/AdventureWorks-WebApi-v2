@@ -40,7 +40,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task CreateDepartment(Department department)
         {
-            if (IsDuplicateDeptRecord(department))
+            if (await IsDuplicateDeptRecord(department))
             {
                 var msg = $"Error: Create department failed; there is already a department named '{department.Name}'.";
                 RepoLogger.LogError(CLASSNAME + ".CreateDepartment " + msg);
@@ -56,7 +56,7 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
 
         public async Task UpdateDepartment(Department department)
         {
-            if (IsDuplicateDeptRecord(department))
+            if (await IsDuplicateDeptRecord(department))
             {
                 var msg = "Error: Update department failed; there is another department with this name.";
                 RepoLogger.LogError(CLASSNAME + ".UpdateDepartment " + msg);
@@ -96,10 +96,10 @@ namespace AdventureWorks.Dal.Repositories.HumanResources
             await Save();
         }
 
-        private bool IsDuplicateDeptRecord(Department dept)
+        private async Task<bool> IsDuplicateDeptRecord(Department dept)
         {
             var isDuplicate = false;
-            var departments = DbContext.Department.ToList();
+            var departments = await DbContext.Department.ToListAsync();
 
             foreach (var department in departments)
             {

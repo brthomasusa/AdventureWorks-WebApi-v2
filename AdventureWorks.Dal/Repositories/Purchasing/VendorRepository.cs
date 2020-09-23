@@ -29,15 +29,15 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
             if (vendorStatus == "ACTIVE")
             {
-                filterCriteria = ee => ee.IsActive == true;
+                filterCriteria = v => v.IsActive == true;
             }
             else if (vendorStatus == "INACTIVE")
             {
-                filterCriteria = ee => ee.IsActive == false;
+                filterCriteria = v => v.IsActive == false;
             }
             else
             {
-                filterCriteria = ee => ee.IsActive == true || ee.IsActive == false;
+                filterCriteria = v => v.IsActive == true || v.IsActive == false;
             }
 
             var vendorList = DbContext.VendorDomainObj.Where(filterCriteria).AsQueryable();
@@ -71,11 +71,11 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
         public async Task CreateVendor(VendorDomainObj vendorDomainObj)
         {
-            using (var transaction = DbContext.Database.BeginTransaction())
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                try
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-
                     var bizEntity = new BusinessEntity { };
                     DbContext.BusinessEntity.Add(bizEntity);
                     await Save();
@@ -88,11 +88,7 @@ namespace AdventureWorks.Dal.Repositories.Purchasing
 
                     transaction.Commit();
                 }
-                catch (System.Exception ex)
-                {
-                    RepoLogger.LogError($" {CLASSNAME}.CreateVendor {ex.Message}");
-                }
-            }
+            });
         }
 
         public async Task UpdateVendor(VendorDomainObj vendorDomainObj)
