@@ -105,16 +105,17 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployee([FromBody] EmployeeDomainObj employee)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDomainObj employee)
         {
-            _repository.Employee.CreateEmployee(employee);
+            await _repository.Employee.CreateEmployee(employee);
             return CreatedAtRoute(nameof(GetEmployeeByID), new { employeeID = employee.BusinessEntityID }, employee);
         }
 
         [HttpPost("phones")]
-        public IActionResult CreateEmployeePhone([FromBody] PersonPhone phone)
+        public async Task<IActionResult> CreateEmployeePhone([FromBody] PersonPhone phone)
         {
-            _repository.Telephone.CreatePhone(phone);
+            await _repository.Telephone.CreatePhone(phone);
+
             return CreatedAtRoute(nameof(GetEmployeePhoneByID),
                 new
                 {
@@ -126,23 +127,23 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateEmployee([FromBody] EmployeeDomainObj employee)
+        public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeDomainObj employee)
         {
-            _repository.Employee.UpdateEmployee(employee);
+            await _repository.Employee.UpdateEmployee(employee);
             return NoContent();
         }
 
         [HttpDelete]
-        public IActionResult DeleteEmployee([FromBody] EmployeeDomainObj employee)
+        public async Task<IActionResult> DeleteEmployee([FromBody] EmployeeDomainObj employee)
         {
-            _repository.Employee.DeleteEmployee(employee);
+            await _repository.Employee.DeleteEmployee(employee);
             return NoContent();
         }
 
         [HttpDelete("phones")]
-        public IActionResult DeleteEmployeePhone([FromBody] PersonPhone phone)
+        public async Task<IActionResult> DeleteEmployeePhone([FromBody] PersonPhone phone)
         {
-            _repository.Telephone.DeletePhone(phone);
+            await _repository.Telephone.DeletePhone(phone);
             return NoContent();
         }
     }

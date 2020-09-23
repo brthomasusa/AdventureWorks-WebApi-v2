@@ -43,9 +43,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
 
 
         [HttpGet("{departmentID}", Name = "GetDepartmentByID")]
-        public IActionResult GetDepartmentByID(int departmentID)
+        public async Task<IActionResult> GetDepartmentByID(int departmentID)
         {
-            var dept = _repository.Department.GetDepartmentByID(departmentID);
+            var dept = await _repository.Department.GetDepartmentByID(departmentID);
             if (dept == null)
             {
                 return NotFound();
@@ -55,31 +55,26 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpPost]
-        public IActionResult CreateDepartment([FromBody] Department dept)
+        public async Task<IActionResult> CreateDepartment([FromBody] Department dept)
         {
-            _repository.Department.CreateDepartment(dept);
+            await _repository.Department.CreateDepartment(dept);
 
             return CreatedAtRoute(nameof(GetDepartmentByID), new { departmentID = dept.DepartmentID }, dept);
         }
 
 
         [HttpPut]
-        public IActionResult UpdateDepartment([FromBody] Department dept)
+        public async Task<IActionResult> UpdateDepartment([FromBody] Department dept)
         {
-            _repository.Department.UpdateDepartment(dept);
+            await _repository.Department.UpdateDepartment(dept);
             return NoContent();
         }
 
         [HttpDelete]
-        public IActionResult DeleteDepartment([FromBody] Department dept)
+        public async Task<IActionResult> DeleteDepartment([FromBody] Department dept)
         {
-            _repository.Department.DeleteDepartment(dept);
+            await _repository.Department.DeleteDepartment(dept);
             return NoContent();
         }
-
-
-
-
-
     }
 }

@@ -48,23 +48,23 @@ namespace AdventureWorks.Service.Controllers
             => Ok(await _repository.Address.GetAddressByID(addressID));
 
         [HttpPost("address")]
-        public IActionResult CreateVendorAddress([FromBody] AddressDomainObj address)
+        public async Task<IActionResult> CreateVendorAddress([FromBody] AddressDomainObj address)
         {
-            _repository.Address.CreateAddress(address);
+            await _repository.Address.CreateAddress(address);
             return CreatedAtRoute("GetVendorAddressByID", new { addressID = address.AddressID }, address);
         }
 
         [HttpPut("address")]
-        public IActionResult UpdateVendorAddress([FromBody] AddressDomainObj address)
+        public async Task<IActionResult> UpdateVendorAddress([FromBody] AddressDomainObj address)
         {
-            _repository.Address.UpdateAddress(address);
+            await _repository.Address.UpdateAddress(address);
             return NoContent();
         }
 
         [HttpDelete("address")]
-        public IActionResult DeleteVendorAddress([FromBody] AddressDomainObj address)
+        public async Task<IActionResult> DeleteVendorAddress([FromBody] AddressDomainObj address)
         {
-            _repository.Address.DeleteAddress(address);
+            await _repository.Address.DeleteAddress(address);
             return NoContent();
         }
     }

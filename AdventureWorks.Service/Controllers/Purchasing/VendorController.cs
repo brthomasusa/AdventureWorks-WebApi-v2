@@ -48,8 +48,8 @@ namespace AdventureWorks.Service.Controllers
         }
 
         [HttpGet("{id}", Name = "VendorById")]
-        public IActionResult GetVendorByID(int id)
-            => Ok(_repository.Vendor.GetVendorByID(id));
+        public async Task<IActionResult> GetVendorByID(int id)
+            => Ok(await _repository.Vendor.GetVendorByID(id));
 
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetVendorByIdWithDetails(int id)
@@ -57,23 +57,23 @@ namespace AdventureWorks.Service.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateVendor([FromBody] VendorDomainObj vendor)
+        public async Task<IActionResult> CreateVendor([FromBody] VendorDomainObj vendor)
         {
-            _repository.Vendor.CreateVendor(vendor);
+            await _repository.Vendor.CreateVendor(vendor);
             return CreatedAtRoute("VendorById", new { id = vendor.BusinessEntityID }, vendor);
         }
 
         [HttpPut]
-        public IActionResult UpdateVendor([FromBody] VendorDomainObj vendor)
+        public async Task<IActionResult> UpdateVendor([FromBody] VendorDomainObj vendor)
         {
-            _repository.Vendor.UpdateVendor(vendor);
+            await _repository.Vendor.UpdateVendor(vendor);
             return NoContent();
         }
 
         [HttpDelete]
-        public IActionResult DeleteVendor([FromBody] VendorDomainObj vendor)
+        public async Task<IActionResult> DeleteVendor([FromBody] VendorDomainObj vendor)
         {
-            _repository.Vendor.DeleteVendor(vendor);
+            await _repository.Vendor.DeleteVendor(vendor);
             return NoContent();
         }
 

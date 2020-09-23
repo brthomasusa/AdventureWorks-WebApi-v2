@@ -43,9 +43,9 @@ namespace AdventureWorks.Service.Controllers.HumanResources
 
 
         [HttpGet("payhistory/{employeeID}/{rateChangeDate}", Name = "GetPayHistoryByID")]
-        public IActionResult GetPayHistoryByID(int employeeID, DateTime rateChangeDate)
+        public async Task<IActionResult> GetPayHistoryByID(int employeeID, DateTime rateChangeDate)
         {
-            var payhistory = _repository.PayHistory.GetPayHistoryByID(employeeID, rateChangeDate);
+            var payhistory = await _repository.PayHistory.GetPayHistoryByID(employeeID, rateChangeDate);
 
             if (payhistory == null)
             {
@@ -57,25 +57,25 @@ namespace AdventureWorks.Service.Controllers.HumanResources
 
 
         [HttpPost("payhistory")]
-        public IActionResult CreatePayHistory([FromBody] EmployeePayHistory payHistory)
+        public async Task<IActionResult> CreatePayHistory([FromBody] EmployeePayHistory payHistory)
         {
-            _repository.PayHistory.CreatePayHistory(payHistory);
+            await _repository.PayHistory.CreatePayHistory(payHistory);
             return CreatedAtRoute(nameof(GetPayHistoryByID), new { employeeID = payHistory.BusinessEntityID, rateChangeDate = payHistory.RateChangeDate }, payHistory);
         }
 
 
         [HttpPut("payhistory")]
-        public IActionResult UpdatePayHistory([FromBody] EmployeePayHistory payHistory)
+        public async Task<IActionResult> UpdatePayHistory([FromBody] EmployeePayHistory payHistory)
         {
-            _repository.PayHistory.UpdatePayHistory(payHistory);
+            await _repository.PayHistory.UpdatePayHistory(payHistory);
             return NoContent();
         }
 
 
         [HttpDelete("payhistory")]
-        public IActionResult DeletePayHistory([FromBody] EmployeePayHistory payHistory)
+        public async Task<IActionResult> DeletePayHistory([FromBody] EmployeePayHistory payHistory)
         {
-            _repository.PayHistory.DeletePayHistory(payHistory);
+            await _repository.PayHistory.DeletePayHistory(payHistory);
             return NoContent();
         }
     }

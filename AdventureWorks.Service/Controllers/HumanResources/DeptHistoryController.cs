@@ -55,9 +55,10 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpPost("depthistory")]
-        public IActionResult CreateDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
+        public async Task<IActionResult> CreateDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
         {
-            _repository.DepartmentHistory.CreateDepartmentHistory(deptHistory);
+            await _repository.DepartmentHistory.CreateDepartmentHistory(deptHistory);
+
             return CreatedAtRoute(nameof(GetDeptHistoryByID),
                                   new
                                   {
@@ -70,16 +71,16 @@ namespace AdventureWorks.Service.Controllers.HumanResources
         }
 
         [HttpPut("depthistory")]
-        public IActionResult UpdateDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
+        public async Task<IActionResult> UpdateDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
         {
-            _repository.DepartmentHistory.UpdateDepartmentHistory(deptHistory);
+            await _repository.DepartmentHistory.UpdateDepartmentHistory(deptHistory);
             return NoContent();
         }
 
         [HttpDelete("depthistory")]
-        public IActionResult DeleteDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
+        public async Task<IActionResult> DeleteDeptHistory([FromBody] EmployeeDepartmentHistory deptHistory)
         {
-            _repository.DepartmentHistory.DeleteDepartmentHistory(deptHistory);
+            await _repository.DepartmentHistory.DeleteDepartmentHistory(deptHistory);
             return NoContent();
         }
     }
