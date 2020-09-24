@@ -25,20 +25,20 @@ namespace AdventureWorks.Mvc.Controllers
             _repository = repository;
         }
 
-        public IActionResult List([FromQuery] int? pageNumber, int? pageSize)
+        public async Task<IActionResult> List([FromQuery] int? pageNumber, int? pageSize)
         {
             var pagingParams = new VendorParameters
             {
                 PageNumber = pageNumber ?? 1,
                 PageSize = pageSize ?? 10
             };
-            var pagedList = _repository.Vendor.GetVendors(pagingParams);
+            var pagedList = await _repository.Vendor.GetVendors(pagingParams);
             return View(pagedList);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var vendor = _repository.Vendor.GetVendorByID(id);
+            var vendor = await _repository.Vendor.GetVendorByID(id);
             if (vendor == null)
             {
                 return NotFound();
@@ -55,9 +55,9 @@ namespace AdventureWorks.Mvc.Controllers
             return View(new VendorDomainObj { });
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var vendor = _repository.Vendor.GetVendorByID(id);
+            var vendor = await _repository.Vendor.GetVendorByID(id);
 
             if (vendor == null)
             {
@@ -72,22 +72,22 @@ namespace AdventureWorks.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromForm] VendorDomainObj vendor)
+        public async Task<IActionResult> Edit([FromForm] VendorDomainObj vendor)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _repository.Vendor.UpdateVendor(vendor);
+                    await _repository.Vendor.UpdateVendor(vendor);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError(nameof(VendorDomainObj), ex.Message);
                     var creditRatingLookup = CreditRatingLookupCollection.CreditRatingStatuses();
                     ViewBag.CreditRatingLookup = creditRatingLookup;
                     return View(vendor);
                 }
-                
+
             }
             else
             {
@@ -97,9 +97,9 @@ namespace AdventureWorks.Mvc.Controllers
             return RedirectToAction(nameof(List));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var vendor = _repository.Vendor.GetVendorByID(id);
+            var vendor = await _repository.Vendor.GetVendorByID(id);
             if (vendor == null)
             {
                 return NotFound();

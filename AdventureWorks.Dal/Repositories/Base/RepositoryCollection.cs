@@ -5,6 +5,7 @@ using AdventureWorks.Dal.Repositories.Interfaces.Person;
 using AdventureWorks.Dal.Repositories.HumanResources;
 using AdventureWorks.Dal.Repositories.Purchasing;
 using AdventureWorks.Dal.Repositories.Person;
+using AdventureWorks.Dal.Repositories.Utility;
 using LoggerService;
 
 namespace AdventureWorks.Dal.Repositories.Base
@@ -30,6 +31,8 @@ namespace AdventureWorks.Dal.Repositories.Base
         private IAddressRepository _address;
 
         private IContactRepository _contact;
+
+        private ILookupRepository _lookup;
 
         public RepositoryCollection(AdventureWorksContext context, ILoggerManager logger)
         {
@@ -138,6 +141,19 @@ namespace AdventureWorks.Dal.Repositories.Base
                 }
 
                 return _contact;
+            }
+        }
+
+        public ILookupRepository Lookup
+        {
+            get
+            {
+                if (_lookup == null)
+                {
+                    _lookup = new LookupRepository(_repoContext, _logger);
+                }
+
+                return _lookup;
             }
         }
     }

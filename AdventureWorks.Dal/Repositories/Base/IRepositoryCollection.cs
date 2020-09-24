@@ -1,6 +1,7 @@
 using AdventureWorks.Dal.Repositories.Interfaces.HumanResources;
 using AdventureWorks.Dal.Repositories.Interfaces.Purchasing;
 using AdventureWorks.Dal.Repositories.Interfaces.Person;
+using AdventureWorks.Dal.Repositories.Utility;
 
 namespace AdventureWorks.Dal.Repositories.Base
 {
@@ -21,5 +22,7 @@ namespace AdventureWorks.Dal.Repositories.Base
         IAddressRepository Address { get; }
 
         IContactRepository Contact { get; }
+
+        ILookupRepository Lookup { get; }
     }
 }
